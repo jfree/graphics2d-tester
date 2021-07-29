@@ -6,7 +6,6 @@ import org.jfree.skija.SkijaGraphics2D;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.font.LineMetrics;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -72,18 +71,6 @@ public class Test {
 //        g2.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
         g2.setFont(new Font("Courier New", Font.PLAIN, 14));
         g2.drawString("Monospaced Font 1234567890", 15, 60);
-    }
-
-    /**
-     * Draws an ellipse that is filled with the specified paint.
-     *
-     * @param g2
-     * @param paint
-     */
-    private static void drawTileEllipseFilled(Graphics2D g2, Paint paint) {
-        Ellipse2D ellipse = new Ellipse2D.Double(5, 5, TILE_WIDTH - 10, TILE_HEIGHT - 10);
-        g2.setPaint(paint);
-        g2.fill(ellipse);
     }
 
     /**
@@ -240,37 +227,6 @@ public class Test {
     }
 
     /**
-     * This test sets rectangular clipping regions and then fills the complete
-     * tile with a color.  This tests clipping and the ability to reset a
-     * user clip completely.
-     *
-     * @param g2  the graphics target.
-     */
-    private static void fillRectangularClippingRegions(Graphics2D g2) {
-        int margin = 5;
-
-        // set a region in the top left
-        g2.clipRect(margin, margin, TILE_WIDTH / 2 - margin, TILE_HEIGHT / 2 - margin);
-        g2.setPaint(Color.BLUE);
-        g2.fill(new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH , TILE_HEIGHT ));
-
-        // set a region in the bottom right
-        g2.setClip(new Rectangle2D.Double(TILE_WIDTH / 2, TILE_HEIGHT / 2, TILE_WIDTH / 2 - margin, TILE_HEIGHT / 2 - margin));
-        g2.setPaint(Color.RED);
-        g2.fill(new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT));
-
-        // set a region in the top right
-        g2.setClip(TILE_WIDTH / 2, margin, TILE_WIDTH / 2 - margin, TILE_HEIGHT / 2 - margin);
-        g2.setPaint(new GradientPaint(0f, 0f, Color.YELLOW, TILE_WIDTH, TILE_HEIGHT, Color.GREEN));
-        g2.fill(new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH , TILE_HEIGHT));
-
-        // set a region in the bottom left
-        g2.setClip(margin, TILE_HEIGHT / 2, TILE_WIDTH / 2 - margin, TILE_HEIGHT / 2 - margin);
-        g2.setPaint(new GradientPaint(TILE_WIDTH, 0f, Color.YELLOW, -TILE_WIDTH, TILE_HEIGHT, Color.GRAY));
-        g2.fill(new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH , TILE_HEIGHT));
-    }
-
-    /**
      * Fills the specified area and then draws its outline.  This tile is used to
      * show various combinations of Constructive Area Geometry (CAG) operations.
      *
@@ -348,96 +304,13 @@ public class Test {
     }
 
     /**
-     * Draws a {@code QuadCurve2D} instance.
-     *
-     * @param g2  the graphics target.
-     * @param stroke  the stroke.
-     * @param paint  the paint.
-     */
-    private static void drawQuadCurve2D(Graphics2D g2, Stroke stroke, Paint paint) {
-        Point2D pt0 = new Point2D.Double(5.0, TILE_HEIGHT - 5.0);
-        Point2D pt1 = new Point2D.Double(TILE_WIDTH - 5.0, TILE_HEIGHT - 5.0);
-        Point2D cp = new Point2D.Double(TILE_WIDTH / 2.0, 5.0);
-        g2.setStroke(new BasicStroke(0.5f));
-        g2.setPaint(Color.GRAY);
-        g2.drawLine((int) pt0.getX(), (int) pt0.getY(), (int) cp.getX(), (int) cp.getY());
-        g2.drawLine((int) pt1.getX(), (int) pt1.getY(), (int) cp.getX(), (int) cp.getY());
-        g2.setStroke(stroke);
-        g2.setPaint(paint);
-        QuadCurve2D curve = new QuadCurve2D.Double(pt0.getX(), pt0.getY(), cp.getX(), cp.getY(), pt1.getX(), pt1.getY());
-        g2.draw(curve);
-    }
-
-    private static void fillQuadCurve2D(Graphics2D g2, Stroke stroke, Paint paint) {
-        Point2D pt0 = new Point2D.Double(5.0, TILE_HEIGHT - 5.0);
-        Point2D pt1 = new Point2D.Double(TILE_WIDTH - 5.0, TILE_HEIGHT - 5.0);
-        Point2D cp = new Point2D.Double(TILE_WIDTH / 2.0, 5.0);
-        g2.setStroke(new BasicStroke(0.5f));
-        g2.setPaint(Color.GRAY);
-        g2.drawLine((int) pt0.getX(), (int) pt0.getY(), (int) cp.getX(), (int) cp.getY());
-        g2.drawLine((int) pt1.getX(), (int) pt1.getY(), (int) cp.getX(), (int) cp.getY());
-        g2.setStroke(stroke);
-        g2.setPaint(paint);
-        QuadCurve2D curve = new QuadCurve2D.Double(pt0.getX(), pt0.getY(), cp.getX(), cp.getY(), pt1.getX(), pt1.getY());
-        g2.fill(curve);
-    }
-
-    /**
-     * Draws a {@code CubicCurve2D} instance.
-     *
-     * @param g2  the graphics target.
-     * @param stroke  the stroke.
-     * @param paint  the paint.
-     */
-    private static void drawCubicCurve2D(Graphics2D g2, Stroke stroke, Paint paint) {
-        Point2D pt0 = new Point2D.Double(5.0, TILE_HEIGHT - 5.0);
-        Point2D pt1 = new Point2D.Double(TILE_WIDTH - 20.0, 5.0);
-        Point2D cp1 = new Point2D.Double(10.0, 5.0);
-        Point2D cp2 = new Point2D.Double(TILE_WIDTH - 5.0, TILE_HEIGHT - 5.0);
-        g2.setStroke(new BasicStroke(0.5f));
-        g2.setPaint(Color.GRAY);
-        g2.drawLine((int) pt0.getX(), (int) pt0.getY(), (int) cp1.getX(), (int) cp1.getY());
-        g2.drawLine((int) pt1.getX(), (int) pt1.getY(), (int) cp2.getX(), (int) cp2.getY());
-        g2.setStroke(stroke);
-        g2.setPaint(paint);
-        CubicCurve2D.Double curve = new CubicCurve2D.Double();
-        curve.setCurve(pt0, cp1, cp2, pt1);
-        g2.draw(curve);
-    }
-
-    private static void fillCubicCurve2D(Graphics2D g2, Stroke stroke, Paint paint) {
-        Point2D pt0 = new Point2D.Double(5.0, TILE_HEIGHT - 5.0);
-        Point2D pt1 = new Point2D.Double(TILE_WIDTH - 20.0, 5.0);
-        Point2D cp1 = new Point2D.Double(10.0, 5.0);
-        Point2D cp2 = new Point2D.Double(TILE_WIDTH - 5.0, TILE_HEIGHT - 5.0);
-        g2.setStroke(new BasicStroke(0.5f));
-        g2.setPaint(Color.GRAY);
-        g2.drawLine((int) pt0.getX(), (int) pt0.getY(), (int) cp1.getX(), (int) cp1.getY());
-        g2.drawLine((int) pt1.getX(), (int) pt1.getY(), (int) cp2.getX(), (int) cp2.getY());
-        g2.setStroke(stroke);
-        g2.setPaint(paint);
-        CubicCurve2D.Double curve = new CubicCurve2D.Double();
-        curve.setCurve(pt0, cp1, cp2, pt1);
-        g2.fill(curve);
-    }
-
-    /**
      * Draws a test sheet consisting of a number of tiles, each one testing one or
      * more features of Java2D.
      *
      * @param g2  the graphics target.
      */
     private static void drawTestSheet(Graphics2D g2) {
-//        RadialGradientPaint rgp = new RadialGradientPaint(100f, 150f, 50f, new float[] {0f, 1f}, new Color[] {Color.YELLOW, Color.RED}, MultipleGradientPaint.CycleMethod.REFLECT);
-//        g2.setPaint(rgp);
-//        g2.fillRect(100 - 60, 150 - 60, 120, 120);
-//        Font f = new Font(Font.SERIF, Font.ITALIC, 32);
-//        g2.setPaint(Color.BLACK);
-//        g2.setFont(f);
-//        g2.drawString("Be BOLD!", 200, 250);
-//        g2.scale(2.0, 2.0);
-//        g2.setPaint(Color.RED);
-//        g2.fillRect(25, 25, 40, 40);
+        Rectangle2D bounds = new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT);
 
         moveTo(0, 0, g2);
         drawTileLineCaps(g2);
@@ -449,11 +322,12 @@ public class Test {
         drawTileString(g2);
 
         moveTo(0, 2, g2);
-        drawTileEllipseFilled(g2, Color.RED);
+        ShapeTests.drawEllipse2D(g2, bounds, 5, Color.RED, null);
         moveTo(1, 2, g2);
-        drawTileEllipseFilled(g2, Color.GREEN);
+        ShapeTests.drawEllipse2D(g2, bounds, 5, null, new BasicStroke(3.0f));
         moveTo(2, 2, g2);
-        drawTileEllipseFilled(g2, Color.BLUE);
+        ShapeTests.drawEllipse2D(g2, bounds, 5, Color.LIGHT_GRAY, new BasicStroke(3.0f, BasicStroke.CAP_ROUND,
+                BasicStroke.JOIN_ROUND, 4f, new float[] { 8f, 8f }, 0f));
 
         moveTo(0, 3, g2);
         fillRectangle(g2, Color.DARK_GRAY);
@@ -513,13 +387,13 @@ public class Test {
         fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REFLECT));
 
         moveTo(0, 6, g2);
-        drawQuadCurve2D(g2, new BasicStroke(3.0f), Color.RED);
+        ShapeTests.drawQuadCurve2D(g2, bounds, new BasicStroke(3.0f), Color.RED);
         moveTo(1, 6, g2);
-        fillQuadCurve2D(g2, new BasicStroke(3.0f), Color.RED);
+        ShapeTests.fillQuadCurve2D(g2, bounds, new BasicStroke(3.0f), Color.RED);
         moveTo(2, 6, g2);
-        drawCubicCurve2D(g2, new BasicStroke(3.0f), Color.RED);
+        ShapeTests.drawCubicCurve2D(g2, bounds, new BasicStroke(3.0f), Color.RED);
         moveTo(3, 6, g2);
-        fillCubicCurve2D(g2, new BasicStroke(3.0f), Color.RED);
+        ShapeTests.fillCubicCurve2D(g2, bounds, new BasicStroke(3.0f), Color.RED);
 
         moveTo(0, 7, g2);
         drawTileShapeFilledAndStroked(g2, createArc2D(Arc2D.PIE), Color.LIGHT_GRAY, new BasicStroke(1.0f), Color.BLACK);
@@ -586,7 +460,7 @@ public class Test {
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.DST_ATOP, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
 
         moveTo(0, 11, g2);
-        fillRectangularClippingRegions(g2);
+        ClippingTests.fillRectangularClippingRegions(g2, bounds);
 
         moveTo(1, 11, g2);
         drawTileArc2DWithRectangularClip(g2);
@@ -594,52 +468,6 @@ public class Test {
     }
     private static Image BUG_IMAGE;
 
-    /**
-     * Draws a small upward pointer with the tip at (x, y).
-     *
-     * @param g2
-     * @param x
-     * @param y
-     */
-    private static void drawArrowUp(Graphics2D g2, double x, double y) {
-        Path2D path = new Path2D.Double();
-        path.moveTo(x, y);
-        path.lineTo(x + 4, y + 4);
-        path.lineTo(x - 4, y + 4);
-        path.closePath();
-        g2.fill(path);
-    }
-
-    private static void drawArrowRight(Graphics2D g2, double x, double y) {
-        Path2D path = new Path2D.Double();
-        path.moveTo(x, y);
-        path.lineTo(x - 4, y - 4);
-        path.lineTo(x - 4, y + 4);
-        path.closePath();
-        g2.fill(path);
-    }
-
-    /**
-     * Draws an x and y axis with zero at the center.
-     *
-     * @param g2
-     * @param center
-     * @param length
-     * @param stroke
-     * @param paint
-     */
-    private static void drawAxes(Graphics2D g2, Point2D center, double length, Stroke stroke, Paint paint) {
-        g2.setStroke(stroke);
-        g2.setPaint(paint);
-        // draw x-axis
-        Line2D xAxis = new Line2D.Double(center.getX() - length, center.getY(), center.getX() + length, center.getY());
-        g2.draw(xAxis);
-        drawArrowRight(g2, center.getX() + length, center.getY());
-        // draw y-axis
-        Line2D yAxis = new Line2D.Double(center.getX(), center.getY() - length, center.getX(), center.getY() + length);
-        g2.draw(yAxis);
-        drawArrowUp(g2, center.getX(), center.getY() - length);
-    }
 
     /**
      * Draws a single tile - useful for testing just one feature.
@@ -661,22 +489,33 @@ public class Test {
      *
      * @param g2  the graphics target.
      */
-    private static void drawTestOutput(Graphics2D g2) {
-        //drawTestSingle(g2);
-        drawTestSheet(g2);
+    private static void drawTestOutput(Graphics2D g2, boolean single) {
+        if (single) {
+            drawTestSingle(g2);
+        } else {
+            drawTestSheet(g2);
+        }
     }
 
     /**
      * Run the tests with SkijaGraphics2D.
+     *
+     * @param fileName  the base filename.
+     * @param single  run the current single test?
      */
-    public static void testSkijaGraphics2D(String pngFileName) {
+    public static void testSkijaGraphics2D(String fileName, boolean single) {
         SkijaGraphics2D g2 = new SkijaGraphics2D(TILE_COUNT_H * TILE_WIDTH, TILE_COUNT_V * TILE_HEIGHT);
-        drawTestOutput(g2);
+        drawTestOutput(g2, single);
         org.jetbrains.skija.Image image = g2.getSurface().makeImageSnapshot();
         Data pngData = image.encodeToData(EncodedImageFormat.PNG);
         byte [] pngBytes = pngData.getBytes();
         try {
-            java.nio.file.Path path = java.nio.file.Path.of(pngFileName);
+            if (single) {
+                fileName += "-single.png";
+            } else {
+                fileName += ".png";
+            }
+            java.nio.file.Path path = java.nio.file.Path.of(fileName);
             java.nio.file.Files.write(path, pngBytes);
         }
         catch (IOException e) {
@@ -688,16 +527,21 @@ public class Test {
      * Run the tests with a Graphics2D from a Java2D BufferedImage and save
      * the results to the specified file.
      *
-     * @param pngFileName  the PNG file name.
+     * @param fileName  the PNG file name.
      *
      * @throws IOException
      */
-    public static void testJava2D(String pngFileName) throws IOException {
+    public static void testJava2D(String fileName, boolean single) throws IOException {
         BufferedImage image = new BufferedImage(TILE_WIDTH * TILE_COUNT_H, TILE_HEIGHT * TILE_COUNT_V, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        drawTestOutput(g2);
-        ImageIO.write(image, "png", new File(pngFileName));
+        drawTestOutput(g2, single);
+        if (single) {
+            fileName += "-single.png";
+        } else {
+            fileName += ".png";
+        }
+        ImageIO.write(image, "png", new File(fileName));
     }
 
     /**
@@ -707,8 +551,9 @@ public class Test {
      */
     public static void main(String[] args) throws IOException {
         //BUG_IMAGE = ImageIO.read( ClassLoader.getSystemResource( "bug.png"));
-        testSkijaGraphics2D("skija.png");
-        testJava2D("java2D.png");
+        boolean single = false;
+        testSkijaGraphics2D("skija", single);
+        testJava2D("java2D", single);
     }
 
 }

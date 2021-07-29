@@ -30,9 +30,11 @@ public class FontTests {
     }
 
     /**
-     * Draws string bounds.
+     * Draws a string then fetches and highlights the string bounds.  This tests
+     * whether or not the graphics target is supporting font metrics correctly.
      *
-     * @param g2
+     * @param g2  the graphics target.
+     * @param bounds  the cell bounds.
      */
     public static void drawStringBounds(Graphics2D g2, Rectangle2D bounds) {
         double x = 5.0;
@@ -46,6 +48,5 @@ public class FontTests {
         g2.setPaint(Color.BLUE);
         g2.translate(x, y);
         g2.draw(strBounds);
-
     }
 }
