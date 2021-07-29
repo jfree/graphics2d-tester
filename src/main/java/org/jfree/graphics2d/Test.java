@@ -6,6 +6,7 @@ import org.jfree.skija.SkijaGraphics2D;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.font.LineMetrics;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -20,7 +21,7 @@ public class Test {
 
     private static int TILE_COUNT_H = 12;
 
-    private static int TILE_COUNT_V = 11;
+    private static int TILE_COUNT_V = 12;
 
     private static int TILE_WIDTH = 100;
 
@@ -86,12 +87,12 @@ public class Test {
     }
 
     /**
-     * Draws a rectangle that is filled with the specified paint.
+     * Fills a rectangle with the specified paint.
      *
-     * @param g2
-     * @param paint
+     * @param g2  the graphics target.
+     * @param paint  the paint ({code null} not permitted).
      */
-    private static void drawTileRectangleFilled(Graphics2D g2, Paint paint) {
+    private static void fillRectangle(Graphics2D g2, Paint paint) {
         Rectangle2D rect = new Rectangle2D.Double(5, 5, TILE_WIDTH - 10, TILE_HEIGHT - 10);
         g2.setPaint(paint);
         g2.fill(rect);
@@ -347,6 +348,80 @@ public class Test {
     }
 
     /**
+     * Draws a {@code QuadCurve2D} instance.
+     *
+     * @param g2  the graphics target.
+     * @param stroke  the stroke.
+     * @param paint  the paint.
+     */
+    private static void drawQuadCurve2D(Graphics2D g2, Stroke stroke, Paint paint) {
+        Point2D pt0 = new Point2D.Double(5.0, TILE_HEIGHT - 5.0);
+        Point2D pt1 = new Point2D.Double(TILE_WIDTH - 5.0, TILE_HEIGHT - 5.0);
+        Point2D cp = new Point2D.Double(TILE_WIDTH / 2.0, 5.0);
+        g2.setStroke(new BasicStroke(0.5f));
+        g2.setPaint(Color.GRAY);
+        g2.drawLine((int) pt0.getX(), (int) pt0.getY(), (int) cp.getX(), (int) cp.getY());
+        g2.drawLine((int) pt1.getX(), (int) pt1.getY(), (int) cp.getX(), (int) cp.getY());
+        g2.setStroke(stroke);
+        g2.setPaint(paint);
+        QuadCurve2D curve = new QuadCurve2D.Double(pt0.getX(), pt0.getY(), cp.getX(), cp.getY(), pt1.getX(), pt1.getY());
+        g2.draw(curve);
+    }
+
+    private static void fillQuadCurve2D(Graphics2D g2, Stroke stroke, Paint paint) {
+        Point2D pt0 = new Point2D.Double(5.0, TILE_HEIGHT - 5.0);
+        Point2D pt1 = new Point2D.Double(TILE_WIDTH - 5.0, TILE_HEIGHT - 5.0);
+        Point2D cp = new Point2D.Double(TILE_WIDTH / 2.0, 5.0);
+        g2.setStroke(new BasicStroke(0.5f));
+        g2.setPaint(Color.GRAY);
+        g2.drawLine((int) pt0.getX(), (int) pt0.getY(), (int) cp.getX(), (int) cp.getY());
+        g2.drawLine((int) pt1.getX(), (int) pt1.getY(), (int) cp.getX(), (int) cp.getY());
+        g2.setStroke(stroke);
+        g2.setPaint(paint);
+        QuadCurve2D curve = new QuadCurve2D.Double(pt0.getX(), pt0.getY(), cp.getX(), cp.getY(), pt1.getX(), pt1.getY());
+        g2.fill(curve);
+    }
+
+    /**
+     * Draws a {@code CubicCurve2D} instance.
+     *
+     * @param g2  the graphics target.
+     * @param stroke  the stroke.
+     * @param paint  the paint.
+     */
+    private static void drawCubicCurve2D(Graphics2D g2, Stroke stroke, Paint paint) {
+        Point2D pt0 = new Point2D.Double(5.0, TILE_HEIGHT - 5.0);
+        Point2D pt1 = new Point2D.Double(TILE_WIDTH - 20.0, 5.0);
+        Point2D cp1 = new Point2D.Double(10.0, 5.0);
+        Point2D cp2 = new Point2D.Double(TILE_WIDTH - 5.0, TILE_HEIGHT - 5.0);
+        g2.setStroke(new BasicStroke(0.5f));
+        g2.setPaint(Color.GRAY);
+        g2.drawLine((int) pt0.getX(), (int) pt0.getY(), (int) cp1.getX(), (int) cp1.getY());
+        g2.drawLine((int) pt1.getX(), (int) pt1.getY(), (int) cp2.getX(), (int) cp2.getY());
+        g2.setStroke(stroke);
+        g2.setPaint(paint);
+        CubicCurve2D.Double curve = new CubicCurve2D.Double();
+        curve.setCurve(pt0, cp1, cp2, pt1);
+        g2.draw(curve);
+    }
+
+    private static void fillCubicCurve2D(Graphics2D g2, Stroke stroke, Paint paint) {
+        Point2D pt0 = new Point2D.Double(5.0, TILE_HEIGHT - 5.0);
+        Point2D pt1 = new Point2D.Double(TILE_WIDTH - 20.0, 5.0);
+        Point2D cp1 = new Point2D.Double(10.0, 5.0);
+        Point2D cp2 = new Point2D.Double(TILE_WIDTH - 5.0, TILE_HEIGHT - 5.0);
+        g2.setStroke(new BasicStroke(0.5f));
+        g2.setPaint(Color.GRAY);
+        g2.drawLine((int) pt0.getX(), (int) pt0.getY(), (int) cp1.getX(), (int) cp1.getY());
+        g2.drawLine((int) pt1.getX(), (int) pt1.getY(), (int) cp2.getX(), (int) cp2.getY());
+        g2.setStroke(stroke);
+        g2.setPaint(paint);
+        CubicCurve2D.Double curve = new CubicCurve2D.Double();
+        curve.setCurve(pt0, cp1, cp2, pt1);
+        g2.fill(curve);
+    }
+
+    /**
      * Draws a test sheet consisting of a number of tiles, each one testing one or
      * more features of Java2D.
      *
@@ -381,7 +456,7 @@ public class Test {
         drawTileEllipseFilled(g2, Color.BLUE);
 
         moveTo(0, 3, g2);
-        drawTileRectangleFilled(g2, Color.DARK_GRAY);
+        fillRectangle(g2, Color.DARK_GRAY);
 
         moveTo(1, 3, g2);
         g2.setPaint(Color.BLUE);
@@ -391,122 +466,180 @@ public class Test {
         g2.setPaint(Color.BLUE);
         drawTileRectangleFilledAndStroked(g2, Color.YELLOW, new BasicStroke(3.0f), Color.GRAY);
 
-        moveTo(0, 4, g2);
+        moveTo(3, 3, g2);
         drawTileRoundRectangleFilled(g2, Color.DARK_GRAY);
 
-        moveTo(1, 4, g2);
+        moveTo(4, 3, g2);
         g2.setPaint(Color.BLUE);
         drawTileRoundRectangleStroked(g2, new BasicStroke(3.0f));
 
-        moveTo(2, 4, g2);
+        moveTo(5, 3, g2);
         g2.setPaint(Color.BLUE);
         drawTileRoundRectangleFilledAndStroked(g2, Color.YELLOW, new BasicStroke(3.0f), Color.GRAY);
 
-        moveTo(0, 5, g2);
+        moveTo(0, 4, g2);
         GradientPaint gp = new GradientPaint(0f, 0f, Color.YELLOW, TILE_WIDTH, 0f, Color.RED);
-        drawTileRectangleFilled(g2, gp);
+        fillRectangle(g2, gp);
 
         // here we change the gradient to start one quarter of the way across the shape
         // and finish at the three quarter mark - the default should be non-cyclic
-        moveTo(1, 5, g2);
+        moveTo(1, 4, g2);
         float p = TILE_WIDTH / 4.0f;
         GradientPaint gp2 = new GradientPaint(p, 0f, Color.YELLOW, p * 3, 0f, Color.RED);
-        drawTileRectangleFilled(g2, gp2);
+        fillRectangle(g2, gp2);
+
+        moveTo(2, 4, g2);
+        GradientPaint gp3 = new GradientPaint(p, 0f, Color.YELLOW, p * 3, 0f, Color.RED, true);
+        fillRectangle(g2, gp3);
+
+        moveTo(0, 5, g2);
+        Point2D center = new Point2D.Double(TILE_WIDTH / 2, TILE_HEIGHT / 2);
+        fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}));
+
+        moveTo(1, 5, g2);
+        fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REPEAT));
 
         moveTo(2, 5, g2);
-        GradientPaint gp3 = new GradientPaint(p, 0f, Color.YELLOW, p * 3, 0f, Color.RED, true);
-        drawTileRectangleFilled(g2, gp3);
+        fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REFLECT));
+
+        moveTo(3, 5, g2);
+        Point2D focus = new Point2D.Double(TILE_WIDTH / 3, TILE_HEIGHT / 3);
+        fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.NO_CYCLE));
+
+        moveTo(4, 5, g2);
+        fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REPEAT));
+
+        moveTo(5, 5, g2);
+        fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REFLECT));
 
         moveTo(0, 6, g2);
-        drawTileShapeFilledAndStroked(g2, createArc2D(Arc2D.PIE), Color.LIGHT_GRAY, new BasicStroke(1.0f), Color.BLACK);
+        drawQuadCurve2D(g2, new BasicStroke(3.0f), Color.RED);
         moveTo(1, 6, g2);
-        drawTileShapeFilledAndStroked(g2, createArc2D(Arc2D.OPEN), Color.LIGHT_GRAY, new BasicStroke(1.0f), Color.BLACK);
+        fillQuadCurve2D(g2, new BasicStroke(3.0f), Color.RED);
         moveTo(2, 6, g2);
-        drawTileShapeFilledAndStroked(g2, createArc2D(Arc2D.CHORD), Color.LIGHT_GRAY, new BasicStroke(1.0f), Color.BLACK);
+        drawCubicCurve2D(g2, new BasicStroke(3.0f), Color.RED);
+        moveTo(3, 6, g2);
+        fillCubicCurve2D(g2, new BasicStroke(3.0f), Color.RED);
 
         moveTo(0, 7, g2);
-        drawAndFillArea(g2, createCombinedArea("add", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
+        drawTileShapeFilledAndStroked(g2, createArc2D(Arc2D.PIE), Color.LIGHT_GRAY, new BasicStroke(1.0f), Color.BLACK);
         moveTo(1, 7, g2);
-        drawAndFillArea(g2, createCombinedArea("intersect", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
+        drawTileShapeFilledAndStroked(g2, createArc2D(Arc2D.OPEN), Color.LIGHT_GRAY, new BasicStroke(1.0f), Color.BLACK);
         moveTo(2, 7, g2);
-        drawAndFillArea(g2, createCombinedArea("subtract", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
-        moveTo(3, 7, g2);
+        drawTileShapeFilledAndStroked(g2, createArc2D(Arc2D.CHORD), Color.LIGHT_GRAY, new BasicStroke(1.0f), Color.BLACK);
 
+        moveTo(0, 8, g2);
+        drawAndFillArea(g2, createCombinedArea("add", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
+        moveTo(1, 8, g2);
+        drawAndFillArea(g2, createCombinedArea("intersect", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
+        moveTo(2, 8, g2);
+        drawAndFillArea(g2, createCombinedArea("subtract", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
+        moveTo(3, 8, g2);
         drawAndFillArea(g2, createCombinedArea("exclusiveOr", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
 
         // show a set of tiles with standard AlphaComposite settings
-        moveTo(0, 8, g2);
+        moveTo(0, 9, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.Clear, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(1, 8, g2);
+        moveTo(1, 9, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.Src, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(2, 8, g2);
+        moveTo(2, 9, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.SrcOver, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(3, 8, g2);
+        moveTo(3, 9, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.DstOver, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(4, 8, g2);
+        moveTo(4, 9, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.SrcIn, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(5, 8, g2);
+        moveTo(5, 9, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.DstIn, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(6, 8, g2);
+        moveTo(6, 9, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.SrcOut, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(7, 8, g2);
+        moveTo(7, 9, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.DstOut, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(8, 8, g2);
+        moveTo(8, 9, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.Dst, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(9, 8, g2);
+        moveTo(9, 9, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.SrcAtop, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(10, 8, g2);
+        moveTo(10, 9, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.DstAtop, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
 
         // show a set of tiles with standard AlphaComposite settings
-        moveTo(0, 9, g2);
+        moveTo(0, 10, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(1, 9, g2);
+        moveTo(1, 10, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.SRC, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(2, 9, g2);
+        moveTo(2, 10, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(3, 9, g2);
+        moveTo(3, 10, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.DST_OVER, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(4, 9, g2);
+        moveTo(4, 10, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.SRC_IN, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(5, 9, g2);
+        moveTo(5, 10, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.DST_IN, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(6, 9, g2);
+        moveTo(6, 10, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.SRC_OUT, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(7, 9, g2);
+        moveTo(7, 10, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.DST_OUT, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(8, 9, g2);
+        moveTo(8, 10, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.DST, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(9, 9, g2);
+        moveTo(9, 10, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(10, 9, g2);
+        moveTo(10, 10, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.DST_ATOP, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
 
-        moveTo(0, 10, g2);
+        moveTo(0, 11, g2);
         fillRectangularClippingRegions(g2);
 
-        moveTo(1, 10, g2);
+        moveTo(1, 11, g2);
         drawTileArc2DWithRectangularClip(g2);
 
     }
+    private static Image BUG_IMAGE;
 
     /**
-     * Creates a buffered image using Java2D then exports this to a PNG image - this is
-     * the control image.
+     * Draws a small upward pointer with the tip at (x, y).
      *
-     * @param filename  the filename.
-     *
-     * @throws IOException
+     * @param g2
+     * @param x
+     * @param y
      */
-    private static void makeJava2DImage(String filename) throws IOException {
-        BufferedImage image = new BufferedImage(TILE_WIDTH * TILE_COUNT_H, TILE_HEIGHT * TILE_COUNT_V, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = image.createGraphics();
-        //drawTestSingle(g2);
-        drawTestSheet(g2);
-        ImageIO.write(image, "png", new File(filename));
+    private static void drawArrowUp(Graphics2D g2, double x, double y) {
+        Path2D path = new Path2D.Double();
+        path.moveTo(x, y);
+        path.lineTo(x + 4, y + 4);
+        path.lineTo(x - 4, y + 4);
+        path.closePath();
+        g2.fill(path);
     }
 
-    private static Image BUG_IMAGE;
+    private static void drawArrowRight(Graphics2D g2, double x, double y) {
+        Path2D path = new Path2D.Double();
+        path.moveTo(x, y);
+        path.lineTo(x - 4, y - 4);
+        path.lineTo(x - 4, y + 4);
+        path.closePath();
+        g2.fill(path);
+    }
+
+    /**
+     * Draws an x and y axis with zero at the center.
+     *
+     * @param g2
+     * @param center
+     * @param length
+     * @param stroke
+     * @param paint
+     */
+    private static void drawAxes(Graphics2D g2, Point2D center, double length, Stroke stroke, Paint paint) {
+        g2.setStroke(stroke);
+        g2.setPaint(paint);
+        // draw x-axis
+        Line2D xAxis = new Line2D.Double(center.getX() - length, center.getY(), center.getX() + length, center.getY());
+        g2.draw(xAxis);
+        drawArrowRight(g2, center.getX() + length, center.getY());
+        // draw y-axis
+        Line2D yAxis = new Line2D.Double(center.getX(), center.getY() - length, center.getX(), center.getY() + length);
+        g2.draw(yAxis);
+        drawArrowUp(g2, center.getX(), center.getY() - length);
+    }
 
     /**
      * Draws a single tile - useful for testing just one feature.
@@ -515,7 +648,12 @@ public class Test {
      */
     private static void drawTestSingle(Graphics2D g2) {
         moveTo(0, 0, g2);
-        drawShapesWithAlphaComposite(g2, AlphaComposite.DstOver, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
+        Rectangle2D bounds = new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT);
+        //drawCubicCurve2D(g2, new BasicStroke(3.0f), Color.RED);
+        Point2D center = new Point2D.Double(TILE_WIDTH / 2, TILE_HEIGHT / 2);
+        //fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.GRAY}));
+        //drawAxes(g2, center, 40.0, new BasicStroke(1f), Color.GRAY);
+        FontTests.drawStringBounds(g2, bounds);
     }
 
     /**
@@ -524,8 +662,8 @@ public class Test {
      * @param g2  the graphics target.
      */
     private static void drawTestOutput(Graphics2D g2) {
-        drawTestSingle(g2);
-        //drawTestSheet(g2);
+        //drawTestSingle(g2);
+        drawTestSheet(g2);
     }
 
     /**
@@ -557,6 +695,7 @@ public class Test {
     public static void testJava2D(String pngFileName) throws IOException {
         BufferedImage image = new BufferedImage(TILE_WIDTH * TILE_COUNT_H, TILE_HEIGHT * TILE_COUNT_V, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         drawTestOutput(g2);
         ImageIO.write(image, "png", new File(pngFileName));
     }
