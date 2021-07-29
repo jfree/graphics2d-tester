@@ -310,159 +310,171 @@ public class Test {
      * @param g2  the graphics target.
      */
     private static void drawTestSheet(Graphics2D g2) {
+        int row = 0;
         Rectangle2D bounds = new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT);
 
-        moveTo(0, 0, g2);
+        moveTo(0, row, g2);
         drawTileLineCaps(g2);
 
-        moveTo(1, 0, g2);
+        moveTo(1, row, g2);
         drawTileLineCapAndDash(g2);
 
-        moveTo(0, 1, g2);
+        row++;  // *****
+        moveTo(0, row, g2);
         drawTileString(g2);
 
-        moveTo(0, 2, g2);
+        row++;  // *****
+        moveTo(0, row, g2);
         ShapeTests.drawEllipse2D(g2, bounds, 5, Color.RED, null);
-        moveTo(1, 2, g2);
+        moveTo(1, row, g2);
         ShapeTests.drawEllipse2D(g2, bounds, 5, null, new BasicStroke(3.0f));
-        moveTo(2, 2, g2);
+        moveTo(2, row, g2);
         ShapeTests.drawEllipse2D(g2, bounds, 5, Color.LIGHT_GRAY, new BasicStroke(3.0f, BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND, 4f, new float[] { 8f, 8f }, 0f));
 
-        moveTo(0, 3, g2);
+        row++;  // *****
+        moveTo(0, row, g2);
         fillRectangle(g2, Color.DARK_GRAY);
 
-        moveTo(1, 3, g2);
+        moveTo(1, row, g2);
         g2.setPaint(Color.BLUE);
         drawTileRectangleStroked(g2, new BasicStroke(3.0f));
 
-        moveTo(2, 3, g2);
+        moveTo(2, row, g2);
         g2.setPaint(Color.BLUE);
         drawTileRectangleFilledAndStroked(g2, Color.YELLOW, new BasicStroke(3.0f), Color.GRAY);
 
-        moveTo(3, 3, g2);
+        moveTo(3, row, g2);
         drawTileRoundRectangleFilled(g2, Color.DARK_GRAY);
 
-        moveTo(4, 3, g2);
+        moveTo(4, row, g2);
         g2.setPaint(Color.BLUE);
         drawTileRoundRectangleStroked(g2, new BasicStroke(3.0f));
 
-        moveTo(5, 3, g2);
+        moveTo(5, row, g2);
         g2.setPaint(Color.BLUE);
         drawTileRoundRectangleFilledAndStroked(g2, Color.YELLOW, new BasicStroke(3.0f), Color.GRAY);
 
-        moveTo(0, 4, g2);
+        row++;  // *****
+        moveTo(0, row, g2);
         GradientPaint gp = new GradientPaint(0f, 0f, Color.YELLOW, TILE_WIDTH, 0f, Color.RED);
         fillRectangle(g2, gp);
 
         // here we change the gradient to start one quarter of the way across the shape
         // and finish at the three quarter mark - the default should be non-cyclic
-        moveTo(1, 4, g2);
+        moveTo(1, row, g2);
         float p = TILE_WIDTH / 4.0f;
         GradientPaint gp2 = new GradientPaint(p, 0f, Color.YELLOW, p * 3, 0f, Color.RED);
         fillRectangle(g2, gp2);
 
-        moveTo(2, 4, g2);
+        moveTo(2, row, g2);
         GradientPaint gp3 = new GradientPaint(p, 0f, Color.YELLOW, p * 3, 0f, Color.RED, true);
         fillRectangle(g2, gp3);
 
-        moveTo(0, 5, g2);
+        row++;  // *****
+        moveTo(0, row, g2);
         Point2D center = new Point2D.Double(TILE_WIDTH / 2, TILE_HEIGHT / 2);
         fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}));
 
-        moveTo(1, 5, g2);
+        moveTo(1, row, g2);
         fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REPEAT));
 
-        moveTo(2, 5, g2);
+        moveTo(2, row, g2);
         fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REFLECT));
 
-        moveTo(3, 5, g2);
+        moveTo(3, row, g2);
         Point2D focus = new Point2D.Double(TILE_WIDTH / 3, TILE_HEIGHT / 3);
         fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.NO_CYCLE));
 
-        moveTo(4, 5, g2);
+        moveTo(4, row, g2);
         fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REPEAT));
 
-        moveTo(5, 5, g2);
+        moveTo(5, row, g2);
         fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REFLECT));
 
-        moveTo(0, 6, g2);
+        row++;  // *****
+        moveTo(0, row, g2);
         ShapeTests.drawQuadCurve2D(g2, bounds, new BasicStroke(3.0f), Color.RED);
-        moveTo(1, 6, g2);
+        moveTo(1, row, g2);
         ShapeTests.fillQuadCurve2D(g2, bounds, new BasicStroke(3.0f), Color.RED);
-        moveTo(2, 6, g2);
+        moveTo(2, row, g2);
         ShapeTests.drawCubicCurve2D(g2, bounds, new BasicStroke(3.0f), Color.RED);
-        moveTo(3, 6, g2);
+        moveTo(3, row, g2);
         ShapeTests.fillCubicCurve2D(g2, bounds, new BasicStroke(3.0f), Color.RED);
 
-        moveTo(0, 7, g2);
+        row++;  // *****
+        moveTo(0, row, g2);
         drawTileShapeFilledAndStroked(g2, createArc2D(Arc2D.PIE), Color.LIGHT_GRAY, new BasicStroke(1.0f), Color.BLACK);
-        moveTo(1, 7, g2);
+        moveTo(1, row, g2);
         drawTileShapeFilledAndStroked(g2, createArc2D(Arc2D.OPEN), Color.LIGHT_GRAY, new BasicStroke(1.0f), Color.BLACK);
-        moveTo(2, 7, g2);
+        moveTo(2, row, g2);
         drawTileShapeFilledAndStroked(g2, createArc2D(Arc2D.CHORD), Color.LIGHT_GRAY, new BasicStroke(1.0f), Color.BLACK);
 
-        moveTo(0, 8, g2);
+        row++;  // *****
+        moveTo(0, row, g2);
         drawAndFillArea(g2, createCombinedArea("add", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
-        moveTo(1, 8, g2);
+        moveTo(1, row, g2);
         drawAndFillArea(g2, createCombinedArea("intersect", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
-        moveTo(2, 8, g2);
+        moveTo(2, row, g2);
         drawAndFillArea(g2, createCombinedArea("subtract", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
-        moveTo(3, 8, g2);
+        moveTo(3, row, g2);
         drawAndFillArea(g2, createCombinedArea("exclusiveOr", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
 
+        row++;  // *****
         // show a set of tiles with standard AlphaComposite settings
-        moveTo(0, 9, g2);
+        moveTo(0, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.Clear, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(1, 9, g2);
+        moveTo(1, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.Src, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(2, 9, g2);
+        moveTo(2, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.SrcOver, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(3, 9, g2);
+        moveTo(3, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.DstOver, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(4, 9, g2);
+        moveTo(4, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.SrcIn, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(5, 9, g2);
+        moveTo(5, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.DstIn, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(6, 9, g2);
+        moveTo(6, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.SrcOut, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(7, 9, g2);
+        moveTo(7, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.DstOut, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(8, 9, g2);
+        moveTo(8, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.Dst, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(9, 9, g2);
+        moveTo(9, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.SrcAtop, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(10, 9, g2);
+        moveTo(10, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.DstAtop, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
 
+        row++;  // *****
         // show a set of tiles with standard AlphaComposite settings
-        moveTo(0, 10, g2);
+        moveTo(0, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(1, 10, g2);
+        moveTo(1, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.SRC, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(2, 10, g2);
+        moveTo(2, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(3, 10, g2);
+        moveTo(3, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.DST_OVER, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(4, 10, g2);
+        moveTo(4, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.SRC_IN, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(5, 10, g2);
+        moveTo(5, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.DST_IN, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(6, 10, g2);
+        moveTo(6, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.SRC_OUT, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(7, 10, g2);
+        moveTo(7, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.DST_OUT, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(8, 10, g2);
+        moveTo(8, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.DST, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(9, 10, g2);
+        moveTo(9, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
-        moveTo(10, 10, g2);
+        moveTo(10, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.DST_ATOP, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
 
-        moveTo(0, 11, g2);
+        row++;  // *****
+        moveTo(0, row, g2);
         ClippingTests.fillRectangularClippingRegions(g2, bounds);
 
-        moveTo(1, 11, g2);
+        moveTo(1, row, g2);
         drawTileArc2DWithRectangularClip(g2);
 
     }
