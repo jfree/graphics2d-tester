@@ -88,24 +88,35 @@ public class ShapeTests {
     }
 
     /**
-     * Fills then strokes an ellipse.
+     * Creates an Arc2D instance with the specified style.
      *
-     * @param g2  the graphics target.
-     * @param bounds  the cell bounds.
-     * @param margin  the margin.
-     * @param fillPaint  the fill paint (if {@code null}, no fill is performed).
-     * @param stroke  the outline stroke (if {@code null}, no outline is drawn).
+     * @param style
+     *
+     * @return
      */
-    static void drawEllipse2D(Graphics2D g2, Rectangle2D bounds, int margin, Paint fillPaint, Stroke stroke) {
-        Ellipse2D ellipse = new Ellipse2D.Double(margin, margin, bounds.getWidth() - 2 * margin, bounds.getHeight() - 2 * margin);
-        if (fillPaint != null) {
-            g2.setPaint(fillPaint);
-            g2.fill(ellipse);
+    public static Arc2D createArc2D(int style, Rectangle2D bounds, int margin) {
+        Arc2D arc = new Arc2D.Double(margin, margin, bounds.getWidth() - 2 * margin, bounds.getHeight() - 2 * margin, 45, 270, style);
+        return arc;
+    }
+
+    /**
+     * Draws a shape with the specified stroke and fill.
+     *
+     * @param g2  the graphics target
+     * @param shape  the shape ({@code null} not permitted)
+     * @param paint  the paint (if {@code null}, then the shape is not filled).
+     * @param stroke  the stroke (if {@code null}, then the shape is not stroked).
+     * @param outlinePaint  the outline paint (if {@code null}, then the shape is not stroked).
+     */
+    public static void fillAndStrokeShape(Graphics2D g2, Shape shape, Paint paint, Stroke stroke, Paint outlinePaint) {
+        if (paint != null) {
+            g2.setPaint(paint);
+            g2.fill(shape);
         }
-        if (stroke != null) {
+        if (stroke != null && outlinePaint != null) {
             g2.setStroke(stroke);
-            g2.setPaint(Color.BLACK);
-            g2.draw(ellipse);
+            g2.setPaint(outlinePaint);
+            g2.draw(shape);
         }
     }
 }

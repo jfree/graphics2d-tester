@@ -49,4 +49,22 @@ public class FontTests {
         g2.translate(x, y);
         g2.draw(strBounds);
     }
+
+    /**
+     * Draws strings in SERIF, SANS_SERIF and MONOSPACED fonts.
+     *
+     * @param g2  the graphics target.
+     */
+    public static void drawString(Graphics2D g2) {
+        g2.setPaint(Color.BLACK);
+        g2.setFont(new Font(Font.SERIF, Font.PLAIN, 14));
+        g2.setFont(new Font("Times New Roman", Font.PLAIN, 14)); // remove later
+        g2.drawString("Serif Font 1234567890", 15, 20);
+        g2.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 14));
+        g2.setFont(new Font("Helvetica", Font.PLAIN, 14)); // remove later
+        g2.drawString("Sans Serif Font 1234567890", 15, 40);
+        g2.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
+        g2.setFont(new Font("Courier New", Font.PLAIN, 14)); // remove later
+        g2.drawString("Monospaced Font 1234567890", 15, 60);
+    }
 }
