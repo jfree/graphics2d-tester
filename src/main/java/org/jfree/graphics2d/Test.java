@@ -24,7 +24,7 @@ public class Test {
 
     private static int TILE_WIDTH = 100;
 
-    private static int TILE_HEIGHT = 80;
+    private static int TILE_HEIGHT = 65;
 
     private static int MARGIN = 5;
 
@@ -39,58 +39,6 @@ public class Test {
     private static void moveTo(int tileX, int tileY, Graphics2D g2) {
         AffineTransform t = AffineTransform.getTranslateInstance(tileX * TILE_WIDTH, tileY * TILE_HEIGHT);
         g2.setTransform(t);
-    }
-
-    private static void drawTileLineCaps(Graphics2D g2) {
-        g2.setPaint(Color.BLACK);
-        double delta = TILE_HEIGHT / 4.0;
-        Line2D line = new Line2D.Double(5.0, delta, TILE_WIDTH - 10.0, delta);
-        g2.setStroke(new BasicStroke(5.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
-        g2.draw(line);
-        line = new Line2D.Double(5.0, delta * 2, TILE_WIDTH - 10.0, delta * 2);
-        g2.setStroke(new BasicStroke(5.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-        g2.draw(line);
-        g2.setStroke(new BasicStroke(5.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND));
-        line = new Line2D.Double(5.0, delta * 3, TILE_WIDTH - 10.0, delta * 3);
-        g2.draw(line);
-    }
-
-    private static void drawTileLineCapAndDash(Graphics2D g2) {
-        g2.setPaint(Color.RED);
-        double delta = TILE_HEIGHT / 4.0;
-        Line2D line = new Line2D.Double(5.0, delta, TILE_WIDTH * 2 - 10.0, delta);
-        g2.setStroke(new BasicStroke(5.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 10f, new float[] { 10.0f, 5.0f, 20.0f, 10.0f }, 0f));
-        g2.draw(line);
-        line = new Line2D.Double(5.0, delta * 2, TILE_WIDTH * 2 - 10.0, delta * 2);
-        g2.setStroke(new BasicStroke(5.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10f, new float[] { 10.0f, 5.0f, 20.0f, 10.0f }, 0f));
-        g2.draw(line);
-        g2.setStroke(new BasicStroke(5.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND, 10f, new float[] { 10.0f, 5.0f, 20.0f, 10.0f }, 0f));
-        line = new Line2D.Double(5.0, delta * 3, TILE_WIDTH  * 2 - 10.0, delta * 3);
-        g2.draw(line);
-    }
-
-    /**
-     * Fills a rectangle with the specified paint.
-     *
-     * @param g2  the graphics target.
-     * @param paint  the paint ({code null} not permitted).
-     */
-    private static void fillRectangle(Graphics2D g2, Paint paint) {
-        Rectangle2D rect = new Rectangle2D.Double(5, 5, TILE_WIDTH - 10, TILE_HEIGHT - 10);
-        g2.setPaint(paint);
-        g2.fill(rect);
-    }
-
-    /**
-     * Draws a rectangle with the specified stroke.
-     *
-     * @param g2
-     * @param stroke
-     */
-    private static void drawTileRectangleStroked(Graphics2D g2, Stroke stroke) {
-        Rectangle2D rect = new Rectangle2D.Double(5, 5, TILE_WIDTH - 10, TILE_HEIGHT - 10);
-        g2.setStroke(stroke);
-        g2.draw(rect);
     }
 
     private static void drawTileImage(Graphics2D g2) {
@@ -146,22 +94,6 @@ public class Test {
         ycoords[10] = ycoords[1];
         ycoords[11] = ycoords[0];
         return ycoords;
-    }
-
-    /**
-     * Fills the specified area and then draws its outline.  This tile is used to
-     * show various combinations of Constructive Area Geometry (CAG) operations.
-     *
-     * @param g2  the graphics target.
-     * @param area  the shape.
-     */
-    private static void drawAndFillArea(Graphics2D g2, Area area) {
-        g2.setPaint(Color.LIGHT_GRAY);
-        g2.fill(area);
-
-        g2.setPaint(Color.BLACK);
-        g2.setStroke(new BasicStroke(1.0f));
-        g2.draw(area);
     }
 
     /**
@@ -232,30 +164,18 @@ public class Test {
      * @param g2  the graphics target.
      */
     private static void drawTestSheet(Graphics2D g2) {
-        int row = 0;
         Rectangle2D bounds = new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT);
 
-        moveTo(0, row, g2);
-        drawTileLineCaps(g2);
-
-        moveTo(1, row, g2);
-        drawTileLineCapAndDash(g2);
-
-        row++;  // ***** RECTANGLE2D
+        int row = 0; // ***** RECTANGLE2D
         Rectangle2D rect = new Rectangle2D.Double(5, 5, TILE_WIDTH - 10, TILE_HEIGHT - 10);
-
         moveTo(0, row, g2);
         ShapeTests.fillAndStrokeShape(g2, rect, Color.BLUE, null, null);
-
         moveTo(1, row, g2);
         ShapeTests.fillAndStrokeShape(g2, rect, null, OUTLINE, Color.BLUE);
-
         moveTo(2, row, g2);
         ShapeTests.fillAndStrokeShape(g2, rect, Color.LIGHT_GRAY, OUTLINE, Color.BLACK);
-
         moveTo(3, row, g2);
         ShapeTests.fillAndStrokeShape(g2, rect, Color.LIGHT_GRAY, DASHED, Color.BLACK);
-
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, rect, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
 
@@ -263,17 +183,50 @@ public class Test {
         RoundRectangle2D roundRect = new RoundRectangle2D.Double(5, 5, TILE_WIDTH - 10, TILE_HEIGHT - 10, 8.0, 12.0);
         moveTo(0, row, g2);
         ShapeTests.fillAndStrokeShape(g2, roundRect, Color.BLUE, null, null);
-
         moveTo(1, row, g2);
         ShapeTests.fillAndStrokeShape(g2, roundRect, null, OUTLINE, Color.BLUE);
-
         moveTo(2, row, g2);
         ShapeTests.fillAndStrokeShape(g2, roundRect, Color.LIGHT_GRAY, OUTLINE, Color.BLACK);
-
         moveTo(3, row, g2);
         ShapeTests.fillAndStrokeShape(g2, roundRect, Color.LIGHT_GRAY, DASHED, Color.BLACK);
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, roundRect, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
+
+        row++; // ***** LINE2D
+        moveTo(0, row, g2);
+        ShapeTests.drawLines(g2, bounds, 5.0, new BasicStroke(1.0f));
+        moveTo(1, row, g2);
+        ShapeTests.drawLines(g2, bounds, 5.0, new BasicStroke(0.0f));
+        moveTo(2, row, g2);
+        ShapeTests.drawLines(g2, bounds, 5.0, new BasicStroke(3.0f));
+        moveTo(3, row, g2);
+        ShapeTests.drawLines(g2, bounds, 5.0, DASHED);
+        moveTo(4, row, g2);
+        ShapeTests.drawLines(g2, bounds, 5.0, DASHED_3);
+
+        row++; // ***** QUADCURVE2D
+        moveTo(0, row, g2);
+        ShapeTests.fillAndStrokeQuadCurve2D(g2, bounds, 5.0, Color.RED, null, null);
+        moveTo(1, row, g2);
+        ShapeTests.fillAndStrokeQuadCurve2D(g2, bounds, 5.0, null, OUTLINE, Color.RED);
+        moveTo(2, row, g2);
+        ShapeTests.fillAndStrokeQuadCurve2D(g2, bounds, 5.0, Color.LIGHT_GRAY, OUTLINE, Color.RED);
+        moveTo(3, row, g2);
+        ShapeTests.fillAndStrokeQuadCurve2D(g2, bounds, 5.0, Color.LIGHT_GRAY, DASHED, Color.BLACK);
+        moveTo(4, row, g2);
+        ShapeTests.fillAndStrokeQuadCurve2D(g2, bounds, 5.0, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
+
+        row++; // ***** CUBICCURVE2D
+        moveTo(0, row, g2);
+        ShapeTests.fillAndStrokeCubicCurve2D(g2, bounds, 5.0, Color.RED, null, null);
+        moveTo(1, row, g2);
+        ShapeTests.fillAndStrokeCubicCurve2D(g2, bounds, 5.0, null, OUTLINE, Color.RED);
+        moveTo(2, row, g2);
+        ShapeTests.fillAndStrokeCubicCurve2D(g2, bounds, 5.0, Color.LIGHT_GRAY, OUTLINE, Color.RED);
+        moveTo(3, row, g2);
+        ShapeTests.fillAndStrokeCubicCurve2D(g2, bounds, 5.0, Color.LIGHT_GRAY, DASHED, Color.BLACK);
+        moveTo(4, row, g2);
+        ShapeTests.fillAndStrokeCubicCurve2D(g2, bounds, 5.0, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
 
         row++;  // ***** ELLIPSE2D
         Ellipse2D ellipse = new Ellipse2D.Double(MARGIN, MARGIN, bounds.getWidth() - 2 * MARGIN, bounds.getHeight() - 2 * MARGIN);
@@ -301,7 +254,7 @@ public class Test {
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, arc, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
 
-        row++;  // ***** ARC2D
+        row++;  // ***** ARC2D - special
         moveTo(0, row, g2);
         ShapeTests.fillAndStrokeShape(g2, ShapeTests.createArc2D(Arc2D.PIE, bounds, 5), Color.LIGHT_GRAY, new BasicStroke(1.0f), Color.BLACK);
         moveTo(1, row, g2);
@@ -309,28 +262,23 @@ public class Test {
         moveTo(2, row, g2);
         ShapeTests.fillAndStrokeShape(g2, ShapeTests.createArc2D(Arc2D.CHORD, bounds, 5), Color.LIGHT_GRAY, new BasicStroke(1.0f), Color.BLACK);
 
-
-        row++;  // ***** QUAD and CUBIC curves
-        moveTo(0, row, g2);
-        ShapeTests.drawQuadCurve2D(g2, bounds, new BasicStroke(3.0f), Color.RED);
-        moveTo(1, row, g2);
-        ShapeTests.fillQuadCurve2D(g2, bounds, new BasicStroke(3.0f), Color.RED);
-        moveTo(2, row, g2);
-        ShapeTests.drawCubicCurve2D(g2, bounds, new BasicStroke(3.0f), Color.RED);
-        moveTo(3, row, g2);
-        ShapeTests.fillCubicCurve2D(g2, bounds, new BasicStroke(3.0f), Color.RED);
-
         row++;  // *****
         moveTo(0, row, g2);
-        drawAndFillArea(g2, createCombinedArea("add", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
+        ShapeTests.drawAndFillArea(g2, createCombinedArea("add", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
         moveTo(1, row, g2);
-        drawAndFillArea(g2, createCombinedArea("intersect", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
+        ShapeTests.drawAndFillArea(g2, createCombinedArea("intersect", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
         moveTo(2, row, g2);
-        drawAndFillArea(g2, createCombinedArea("subtract", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
+        ShapeTests.drawAndFillArea(g2, createCombinedArea("subtract", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
         moveTo(3, row, g2);
-        drawAndFillArea(g2, createCombinedArea("exclusiveOr", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
+        ShapeTests.drawAndFillArea(g2, createCombinedArea("exclusiveOr", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
 
-        row++;  // *****
+        row++;  // ***** LINES SPECIAL
+        moveTo(0, row, g2);
+        ShapeTests.drawLineCaps(g2, bounds);
+        moveTo(1, row, g2);
+        ShapeTests.drawLineCapAndDash(g2, bounds);
+
+        row++;  // ***** ALPHACOMPOSITE
         // show a set of tiles with standard AlphaComposite settings
         moveTo(0, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.Clear, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
@@ -355,7 +303,7 @@ public class Test {
         moveTo(10, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.DstAtop, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
 
-        row++;  // *****
+        row++;  // ***** ALPHACOMPOSITE
         // show a set of tiles with standard AlphaComposite settings
         moveTo(0, row, g2);
         drawShapesWithAlphaComposite(g2, AlphaComposite.getInstance(AlphaComposite.CLEAR, 0.6f), new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
@@ -385,39 +333,45 @@ public class Test {
         row++;  // ***** GRADIENTPAINT
         moveTo(0, row, g2);
         GradientPaint gp = new GradientPaint(0f, 0f, Color.YELLOW, TILE_WIDTH, 0f, Color.RED);
-        fillRectangle(g2, gp);
+        ShapeTests.fillAndStrokeShape(g2, roundRect, gp, null, null);
 
         // here we change the gradient to start one quarter of the way across the shape
         // and finish at the three quarter mark - the default should be non-cyclic
         moveTo(1, row, g2);
         float p = TILE_WIDTH / 4.0f;
         GradientPaint gp2 = new GradientPaint(p, 0f, Color.YELLOW, p * 3, 0f, Color.RED);
-        fillRectangle(g2, gp2);
+        ShapeTests.fillAndStrokeShape(g2, roundRect, gp2, null, null);
 
         moveTo(2, row, g2);
         GradientPaint gp3 = new GradientPaint(p, 0f, Color.YELLOW, p * 3, 0f, Color.RED, true);
-        fillRectangle(g2, gp3);
+        ShapeTests.fillAndStrokeShape(g2, roundRect, gp3, null, null);
 
         row++;  // ***** RADIAL GRADIENT PAINT
         moveTo(0, row, g2);
         Point2D center = new Point2D.Double(TILE_WIDTH / 2, TILE_HEIGHT / 2);
-        fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}));
+        RadialGradientPaint rgp = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY});
+        ShapeTests.fillAndStrokeShape(g2, roundRect, rgp, null, null);
 
         moveTo(1, row, g2);
-        fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REPEAT));
+        RadialGradientPaint rgp2 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REPEAT);
+        ShapeTests.fillAndStrokeShape(g2, roundRect, rgp2, null, null);
 
         moveTo(2, row, g2);
-        fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REFLECT));
+        RadialGradientPaint rgp3 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REFLECT);
+        ShapeTests.fillAndStrokeShape(g2, roundRect, rgp3, null, null);
 
         moveTo(3, row, g2);
         Point2D focus = new Point2D.Double(TILE_WIDTH / 3, TILE_HEIGHT / 3);
-        fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.NO_CYCLE));
+        RadialGradientPaint rgp4 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.NO_CYCLE);
+        ShapeTests.fillAndStrokeShape(g2, roundRect, rgp4, null, null);
 
         moveTo(4, row, g2);
-        fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REPEAT));
+        RadialGradientPaint rgp5 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REPEAT);
+        ShapeTests.fillAndStrokeShape(g2, roundRect, rgp5, null, null);
 
         moveTo(5, row, g2);
-        fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REFLECT));
+        RadialGradientPaint rgp6 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REFLECT);
+        ShapeTests.fillAndStrokeShape(g2, roundRect, rgp6, null, null);
 
         row++;  // ***** STRINGS & FONTS
         moveTo(0, row, g2);
@@ -436,7 +390,6 @@ public class Test {
     }
     private static Image BUG_IMAGE;
 
-
     /**
      * Draws a single tile - useful for testing just one feature.
      *
@@ -445,11 +398,10 @@ public class Test {
     private static void drawTestSingle(Graphics2D g2) {
         moveTo(0, 0, g2);
         Rectangle2D bounds = new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT);
-        //drawCubicCurve2D(g2, new BasicStroke(3.0f), Color.RED);
         Point2D center = new Point2D.Double(TILE_WIDTH / 2, TILE_HEIGHT / 2);
         //fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.GRAY}));
         //drawAxes(g2, center, 40.0, new BasicStroke(1f), Color.GRAY);
-        FontTests.drawStringBounds(g2, bounds);
+        ShapeTests.drawLines(g2, bounds, 5.0, new BasicStroke(1.0f));
     }
 
     /**
