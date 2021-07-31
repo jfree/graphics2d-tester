@@ -18,11 +18,11 @@ import java.io.IOException;
  * is that you can compare the output of a custom Graphics2D implementation against
  * the reference implementation (Java2D).
  */
-public class Test {
+public class Tester {
 
     private static int TILE_COUNT_H = 12;
 
-    private static int TILE_COUNT_V = 20;
+    private static int TILE_COUNT_V = 25;
 
     private static int TILE_WIDTH = 100;
 
@@ -51,10 +51,6 @@ public class Test {
     private static void moveTo(int tileX, int tileY, Graphics2D g2) {
         AffineTransform t = AffineTransform.getTranslateInstance(tileX * TILE_WIDTH, tileY * TILE_HEIGHT);
         g2.setTransform(t);
-    }
-
-    private static void drawTileImage(Graphics2D g2) {
-        g2.drawImage(BUG_IMAGE, 0, 0, null);
     }
 
     private static void drawTilePolygon(Graphics2D g2) {
@@ -118,13 +114,6 @@ public class Test {
         ShapeTests.fillAndStrokeShape(g2, rect, Color.LIGHT_GRAY, DASHED, Color.BLACK);
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, rect, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
-
-        AffineTransform savedTransform = g2.getTransform();
-        moveTo(5, row, g2);
-        g2.translate(bounds.getWidth() / 4.0, bounds.getHeight() / 4.0);
-        g2.scale(0.5, 0.5);
-        ShapeTests.fillAndStrokeShape(g2, rect, Color.LIGHT_GRAY, OUTLINE, Color.BLACK);
-        g2.setTransform(savedTransform);
 
         row++;  // ***** ROUNDRECTANGLE2D
         RoundRectangle2D roundRect = new RoundRectangle2D.Double(5, 5, TILE_WIDTH - 10, TILE_HEIGHT - 10, 8.0, 12.0);
@@ -383,10 +372,13 @@ public class Test {
         RadialGradientPaint rgp6 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REFLECT);
         ShapeTests.fillAndStrokeShape(g2, roundRect, rgp6, null, null);
 
+        row++;  // ***** IMAGE
+        moveTo(0, row, g2);
+        ImageTests.drawImage(g2, bounds, 5);
+
         row++;  // ***** STRINGS & FONTS
         moveTo(0, row, g2);
         FontTests.drawString(g2);
-
         moveTo(3, row, g2);
         FontTests.drawStringBounds(g2, bounds);
 
@@ -398,7 +390,6 @@ public class Test {
         ClippingTests.drawTileArc2DWithRectangularClip(g2, bounds, 5);
 
     }
-    private static Image BUG_IMAGE;
 
     /**
      * Draws a single tile - useful for testing just one feature.
@@ -491,7 +482,6 @@ public class Test {
      * @param args
      */
     public static void main(String[] args) throws IOException {
-        //BUG_IMAGE = ImageIO.read( ClassLoader.getSystemResource( "bug.png"));
         boolean single = false;
         testSkijaGraphics2D("skija", single);
         //testJFreeSVG("jfreesvg", single);

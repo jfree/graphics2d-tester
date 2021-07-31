@@ -113,6 +113,35 @@ public class ShapeTests {
         }
     }
 
+    static void transformShape(Graphics2D g2, Rectangle2D bounds, Shape shape, TransformType transformType, Paint paint, Stroke stroke, Paint outlinePaint) {
+        AffineTransform savedTransform = g2.getTransform();
+        g2.translate(bounds.getWidth() / 2.0, bounds.getHeight() / 2.0);
+        g2.scale(0.5, 0.5);
+        switch (transformType) {
+            case SCALE:
+                // we already scaled
+                break;
+            case ROTATE:
+                g2.rotate(Math.PI / 3.0, bounds.getCenterX(), bounds.getCenterY());
+                break;
+            case SHEAR:
+                g2.shear(2.0, 2.0);
+                break;
+            default:
+                break;
+        }
+        if (paint != null) {
+            g2.setPaint(paint);
+            g2.fill(shape);
+        }
+        if (stroke != null && outlinePaint != null) {
+            g2.setStroke(stroke);
+            g2.setPaint(outlinePaint);
+            g2.draw(shape);
+        }
+        g2.setTransform(savedTransform);
+    }
+
     /**
      * Draws three lines with different CAP settings (BUTT, ROUND and SQUARE).
      *
