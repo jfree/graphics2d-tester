@@ -118,10 +118,12 @@ public class ShapeTests {
      *
      * @param g2  the graphics target.
      * @param bounds  the bounds.
+     * @param strokeWidth  the stroke width.
      * @param margin  the margin.
+     * @param paint  the paint.
      */
-    public static void drawLineCaps(Graphics2D g2, Rectangle2D bounds, float strokeWidth, double margin) {
-        g2.setPaint(Color.BLACK);
+    public static void drawLineCaps(Graphics2D g2, Rectangle2D bounds, double margin, float strokeWidth, Paint paint) {
+        g2.setPaint(paint);
         double midY = bounds.getCenterY();
         double deltaY = bounds.getHeight() / 4.0;
         double left = bounds.getX() + 2 * margin;

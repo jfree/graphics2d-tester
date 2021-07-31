@@ -16,6 +16,7 @@ public class ClippingTests {
         int margin = 5;
         double w = bounds.getWidth();
         double h = bounds.getHeight();
+
         // set a region in the top left
         g2.clipRect(margin, margin, (int) (w / 2) - margin, (int) (h / 2) - margin);
         g2.setPaint(Color.BLUE);
@@ -32,7 +33,7 @@ public class ClippingTests {
         g2.fill(new Rectangle2D.Double(0.0, 0.0, w, h));
 
         // set a region in the bottom left
-        g2.setClip(margin, (int) (h / 2), (int) (w / 2) - margin, (int) (h / 2) - margin);
+        g2.setClip(new Rectangle2D.Double(margin, h / 2, w/ 2 - margin, h / 2 - margin));
         g2.setPaint(new GradientPaint((float) w, 0f, Color.YELLOW, (float) -w, (float) h, Color.GRAY));
         g2.fill(new Rectangle2D.Double(0.0, 0.0, w , h));
     }

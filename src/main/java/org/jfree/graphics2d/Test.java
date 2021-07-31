@@ -109,6 +109,13 @@ public class Test {
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, rect, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
 
+        AffineTransform savedTransform = g2.getTransform();
+        moveTo(5, row, g2);
+        g2.translate(bounds.getWidth() / 4.0, bounds.getHeight() / 4.0);
+        g2.scale(0.5, 0.5);
+        ShapeTests.fillAndStrokeShape(g2, rect, Color.LIGHT_GRAY, OUTLINE, Color.BLACK);
+        g2.setTransform(savedTransform);
+
         row++;  // ***** ROUNDRECTANGLE2D
         RoundRectangle2D roundRect = new RoundRectangle2D.Double(5, 5, TILE_WIDTH - 10, TILE_HEIGHT - 10, 8.0, 12.0);
         moveTo(0, row, g2);
@@ -244,11 +251,11 @@ public class Test {
 
         row++;  // ***** LINES SPECIAL
         moveTo(0, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0f,5.0);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, Color.BLACK);
         moveTo(1, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 1.0f,5.0);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0,1.0f, Color.BLACK);
         moveTo(2, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 0.0f,5.0);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0f,0.0f, Color.BLACK);
         moveTo(3, row, g2);
         ShapeTests.drawLineCapAndDash(g2, bounds, 5.0f, 5.0);
         moveTo(4, row, g2);
@@ -323,6 +330,14 @@ public class Test {
         moveTo(2, row, g2);
         GradientPaint gp3 = new GradientPaint(p, 0f, Color.YELLOW, p * 3, 0f, Color.RED, true);
         ShapeTests.fillAndStrokeShape(g2, roundRect, gp3, null, null);
+
+        row++;  // ***** LINES WITH GRADIENT PAINT
+        moveTo(0, row, g2);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, gp);
+        moveTo(1, row, g2);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, gp2);
+        moveTo(2, row, g2);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, gp3);
 
         row++;  // ***** RADIAL GRADIENT PAINT
         moveTo(0, row, g2);
@@ -462,7 +477,7 @@ public class Test {
         //BUG_IMAGE = ImageIO.read( ClassLoader.getSystemResource( "bug.png"));
         boolean single = false;
         testSkijaGraphics2D("skija", single);
-        testJFreeSVG("jfreesvg", single);
+        //testJFreeSVG("jfreesvg", single);
         testJava2D("java2D", single);
     }
 
