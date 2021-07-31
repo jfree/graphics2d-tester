@@ -1,6 +1,7 @@
 package org.jfree.graphics2d;
 
 import java.awt.*;
+import java.awt.geom.Arc2D;
 import java.awt.geom.Rectangle2D;
 
 public class ClippingTests {
@@ -34,5 +35,16 @@ public class ClippingTests {
         g2.setClip(margin, (int) (h / 2), (int) (w / 2) - margin, (int) (h / 2) - margin);
         g2.setPaint(new GradientPaint((float) w, 0f, Color.YELLOW, (float) -w, (float) h, Color.GRAY));
         g2.fill(new Rectangle2D.Double(0.0, 0.0, w , h));
+    }
+
+    static void drawTileArc2DWithRectangularClip(Graphics2D g2, Rectangle2D bounds, int margin) {
+        Shape savedClip = g2.getClip();
+        g2.clipRect(margin + 10, margin + 10, (int) bounds.getWidth() - 2 * (margin + 10), (int) bounds.getHeight() - 2 * (margin + 10));
+        Arc2D arc = ShapeTests.createArc2D(Arc2D.PIE, 45, 270, bounds, margin);
+        g2.setPaint(Color.DARK_GRAY);
+        g2.fill(arc);
+        g2.setPaint(Color.RED);
+        g2.draw(arc);
+        g2.setClip(savedClip);
     }
 }
