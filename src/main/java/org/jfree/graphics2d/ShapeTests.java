@@ -8,6 +8,28 @@ import java.awt.geom.*;
  */
 public class ShapeTests {
 
+    static QuadCurve2D createQuadCurve2D(Rectangle2D bounds, double margin) {
+        double w = bounds.getWidth();
+        double h = bounds.getHeight();
+        Point2D pt0 = new Point2D.Double(margin, h - margin);
+        Point2D pt1 = new Point2D.Double(w - margin, h - margin);
+        Point2D cp = new Point2D.Double(w / 2.0, margin);
+        return new QuadCurve2D.Double(pt0.getX(), pt0.getY(), cp.getX(), cp.getY(), pt1.getX(), pt1.getY());
+    }
+
+    static CubicCurve2D createCubicCurve2D(Rectangle2D bounds, double margin) {
+        double w = bounds.getWidth();
+        double h = bounds.getHeight();
+
+        Point2D pt0 = new Point2D.Double(margin, h - margin);
+        Point2D pt1 = new Point2D.Double(w - 4 * margin, margin);
+        Point2D cp1 = new Point2D.Double(2 * margin, margin);
+        Point2D cp2 = new Point2D.Double(w - margin, h - margin);
+        CubicCurve2D.Double curve = new CubicCurve2D.Double();
+        curve.setCurve(pt0, cp1, cp2, pt1);
+        return curve;
+    }
+
     /**
      * Fill and/or strokes a QuadCurve2D instance.
      *
