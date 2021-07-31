@@ -88,7 +88,7 @@ public class ShapeTests {
      * @return
      */
     static Arc2D createArc2D(int style, double start, double extent, Rectangle2D bounds, int margin) {
-        Arc2D arc = new Arc2D.Double(margin, margin, bounds.getWidth() - 2 * margin, bounds.getHeight() - 2 * margin, 45, 270, style);
+        Arc2D arc = new Arc2D.Double(margin, margin, bounds.getWidth() - 2 * margin, bounds.getHeight() - 2 * margin, start, extent, style);
         return arc;
     }
 

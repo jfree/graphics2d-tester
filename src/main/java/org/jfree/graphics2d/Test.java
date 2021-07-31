@@ -182,6 +182,19 @@ public class Test {
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, arc, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
 
+        row++;  // ***** ARC2D
+        Arc2D arc2 = ShapeTests.createArc2D(Arc2D.CHORD, 210, 300, bounds, 5);
+        moveTo(0, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, arc2, Color.BLUE, null, null);
+        moveTo(1, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, arc2, null, OUTLINE, Color.BLUE);
+        moveTo(2, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, arc2, Color.LIGHT_GRAY, OUTLINE, Color.BLACK);
+        moveTo(3, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, arc2, Color.LIGHT_GRAY, DASHED, Color.BLACK);
+        moveTo(4, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, arc2, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
+
         row++; // ***** GeneralPATH
         Path2D path = ShapeTests.createPath2D(bounds, MARGIN);
 
