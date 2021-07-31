@@ -38,6 +38,16 @@ public class Test {
     private static Stroke DASHED_3 = new BasicStroke(3.0f, BasicStroke.CAP_ROUND,
             BasicStroke.JOIN_ROUND, 4f, new float[] { 4f, 8f }, 0f);
 
+    private static Color[] RAINBOW_COLORS = new Color[] {
+            new Color(255, 0, 0), // RED
+            new Color(255, 165, 0), // ORANGE
+            new Color(255, 255, 0), // YELLOW
+            new Color(0, 128, 0), // GREEN
+            new Color(0, 0, 255), // BLUE
+            new Color(75, 0, 130), // INDIGO
+            new Color(238, 130, 238) // VIOLET
+    };
+
     private static void moveTo(int tileX, int tileY, Graphics2D g2) {
         AffineTransform t = AffineTransform.getTranslateInstance(tileX * TILE_WIDTH, tileY * TILE_HEIGHT);
         g2.setTransform(t);
@@ -331,6 +341,11 @@ public class Test {
         GradientPaint gp3 = new GradientPaint(p, 0f, Color.YELLOW, p * 3, 0f, Color.RED, true);
         ShapeTests.fillAndStrokeShape(g2, roundRect, gp3, null, null);
 
+        moveTo(3, row, g2);
+        float delta = (TILE_WIDTH - 10) / 6f;
+        LinearGradientPaint lgp1 = new LinearGradientPaint(10f, 0f, TILE_WIDTH - 10 , 0f, new float[] { 0f, 1/6f, 2/6f, 3/6f, 4/6f, 5/6f, 1f}, RAINBOW_COLORS);
+        ShapeTests.fillAndStrokeShape(g2, roundRect, lgp1, null, null);
+
         row++;  // ***** LINES WITH GRADIENT PAINT
         moveTo(0, row, g2);
         ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, gp);
@@ -338,6 +353,8 @@ public class Test {
         ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, gp2);
         moveTo(2, row, g2);
         ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, gp3);
+        moveTo(3, row, g2);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, lgp1);
 
         row++;  // ***** RADIAL GRADIENT PAINT
         moveTo(0, row, g2);
