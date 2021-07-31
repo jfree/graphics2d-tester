@@ -177,7 +177,7 @@ public class Tester {
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, ellipse, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
 
-        row++;  // ***** ARC2D
+        row++;  // ***** ARC2D PIE
         Arc2D arc = ShapeTests.createArc2D(Arc2D.PIE, 45, 270, bounds, 5);
         moveTo(0, row, g2);
         ShapeTests.fillAndStrokeShape(g2, arc, Color.BLUE, null, null);
@@ -190,7 +190,7 @@ public class Tester {
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, arc, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
 
-        row++;  // ***** ARC2D
+        row++;  // ***** ARC2D CHORD
         Arc2D arc2 = ShapeTests.createArc2D(Arc2D.CHORD, 210, 300, bounds, 5);
         moveTo(0, row, g2);
         ShapeTests.fillAndStrokeShape(g2, arc2, Color.BLUE, null, null);
@@ -203,9 +203,21 @@ public class Tester {
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, arc2, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
 
+        row++;  // ***** ARC2D OPEN
+        Arc2D arc3 = ShapeTests.createArc2D(Arc2D.OPEN, -45, 270, bounds, 5);
+        moveTo(0, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, arc3, Color.BLUE, null, null);
+        moveTo(1, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, arc3, null, OUTLINE, Color.BLUE);
+        moveTo(2, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, arc3, Color.LIGHT_GRAY, OUTLINE, Color.BLACK);
+        moveTo(3, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, arc3, Color.LIGHT_GRAY, DASHED, Color.BLACK);
+        moveTo(4, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, arc3, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
+
         row++; // ***** GeneralPATH
         Path2D path = ShapeTests.createPath2D(bounds, MARGIN);
-
         moveTo(0, row, g2);
         ShapeTests.fillAndStrokeShape(g2, path, Color.BLUE, null, null);
         moveTo(1, row, g2);
@@ -217,7 +229,7 @@ public class Tester {
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
 
-        row++;
+        row++; // ***** GeneralPATH WIND_NON_ZERO FILL
         path.setWindingRule(Path2D.WIND_NON_ZERO);
         moveTo(0, row, g2);
         ShapeTests.fillAndStrokeShape(g2, path, Color.BLUE, null, null);
@@ -229,14 +241,6 @@ public class Tester {
         ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, DASHED, Color.BLACK);
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
-
-        row++;  // ***** ARC2D - special
-        moveTo(0, row, g2);
-        ShapeTests.fillAndStrokeShape(g2, ShapeTests.createArc2D(Arc2D.PIE, 45, 270, bounds, 5), Color.LIGHT_GRAY, new BasicStroke(1.0f), Color.BLACK);
-        moveTo(1, row, g2);
-        ShapeTests.fillAndStrokeShape(g2, ShapeTests.createArc2D(Arc2D.OPEN, 45, 270, bounds, 5), Color.LIGHT_GRAY, new BasicStroke(1.0f), Color.BLACK);
-        moveTo(2, row, g2);
-        ShapeTests.fillAndStrokeShape(g2, ShapeTests.createArc2D(Arc2D.CHORD, 45, 270, bounds, 5), Color.LIGHT_GRAY, new BasicStroke(1.0f), Color.BLACK);
 
         row++;  // *****
         moveTo(0, row, g2);
@@ -335,6 +339,24 @@ public class Tester {
         LinearGradientPaint lgp1 = new LinearGradientPaint(10f, 0f, TILE_WIDTH - 10 , 0f, new float[] { 0f, 1/6f, 2/6f, 3/6f, 4/6f, 5/6f, 1f}, RAINBOW_COLORS);
         ShapeTests.fillAndStrokeShape(g2, roundRect, lgp1, null, null);
 
+        moveTo(4, row, g2);
+        GradientPaint gp4 = new GradientPaint(0f, 0f, Color.YELLOW, TILE_WIDTH, TILE_HEIGHT, Color.RED);
+        ShapeTests.fillAndStrokeShape(g2, roundRect, gp4, null, null);
+
+        // here we change the gradient to start one quarter of the way across the shape
+        // and finish at the three quarter mark - the default should be non-cyclic
+        moveTo(5, row, g2);
+        GradientPaint gp5 = new GradientPaint(p, 0f, Color.YELLOW, p * 3, TILE_HEIGHT, Color.RED);
+        ShapeTests.fillAndStrokeShape(g2, roundRect, gp5, null, null);
+
+        moveTo(6, row, g2);
+        GradientPaint gp6 = new GradientPaint(p, 0f, Color.YELLOW, p * 3, TILE_HEIGHT, Color.RED, true);
+        ShapeTests.fillAndStrokeShape(g2, roundRect, gp6, null, null);
+
+        moveTo(7, row, g2);
+        LinearGradientPaint lgp2 = new LinearGradientPaint(10f, 0f, TILE_WIDTH - 10 , TILE_HEIGHT, new float[] { 0f, 1/6f, 2/6f, 3/6f, 4/6f, 5/6f, 1f}, RAINBOW_COLORS);
+        ShapeTests.fillAndStrokeShape(g2, roundRect, lgp2, null, null);
+
         row++;  // ***** LINES WITH GRADIENT PAINT
         moveTo(0, row, g2);
         ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, gp);
@@ -344,6 +366,14 @@ public class Tester {
         ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, gp3);
         moveTo(3, row, g2);
         ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, lgp1);
+        moveTo(4, row, g2);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, gp4);
+        moveTo(5, row, g2);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, gp5);
+        moveTo(6, row, g2);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, gp6);
+        moveTo(7, row, g2);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, lgp2);
 
         row++;  // ***** RADIAL GRADIENT PAINT
         moveTo(0, row, g2);
@@ -387,7 +417,7 @@ public class Tester {
         ClippingTests.fillRectangularClippingRegions(g2, bounds);
 
         moveTo(1, row, g2);
-        ClippingTests.drawTileArc2DWithRectangularClip(g2, bounds, 5);
+        ClippingTests.drawArc2DWithRectangularClip(g2, bounds, 5);
 
     }
 
@@ -406,9 +436,11 @@ public class Tester {
     }
 
     /**
-     * Renders the test output.
+     * Renders the test output (checks whether generating the whole test
+     * sheet or just one single test).
      *
      * @param g2  the graphics target.
+     * @param single  set to true if just generating a single test
      */
     private static void drawTestOutput(Graphics2D g2, boolean single) {
         if (single) {

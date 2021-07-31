@@ -13,6 +13,7 @@ public class ClippingTests {
      * @param g2  the graphics target.
      */
     static void fillRectangularClippingRegions(Graphics2D g2, Rectangle2D bounds) {
+        Shape savedClip = g2.getClip();
         int margin = 5;
         double w = bounds.getWidth();
         double h = bounds.getHeight();
@@ -36,9 +37,11 @@ public class ClippingTests {
         g2.setClip(new Rectangle2D.Double(margin, h / 2, w/ 2 - margin, h / 2 - margin));
         g2.setPaint(new GradientPaint((float) w, 0f, Color.YELLOW, (float) -w, (float) h, Color.GRAY));
         g2.fill(new Rectangle2D.Double(0.0, 0.0, w , h));
+
+        g2.setClip(savedClip);
     }
 
-    static void drawTileArc2DWithRectangularClip(Graphics2D g2, Rectangle2D bounds, int margin) {
+    static void drawArc2DWithRectangularClip(Graphics2D g2, Rectangle2D bounds, int margin) {
         Shape savedClip = g2.getClip();
         g2.clipRect(margin + 10, margin + 10, (int) bounds.getWidth() - 2 * (margin + 10), (int) bounds.getHeight() - 2 * (margin + 10));
         Arc2D arc = ShapeTests.createArc2D(Arc2D.PIE, 45, 270, bounds, margin);
