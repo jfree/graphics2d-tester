@@ -2,6 +2,8 @@ package org.jfree.graphics2d;
 
 import org.jetbrains.skija.Data;
 import org.jetbrains.skija.EncodedImageFormat;
+import org.jfree.graphics2d.svg.SVGGraphics2D;
+import org.jfree.graphics2d.svg.SVGUtils;
 import org.jfree.skija.SkijaGraphics2D;
 
 import javax.imageio.ImageIO;
@@ -440,6 +442,17 @@ public class Test {
         ImageIO.write(image, "png", new File(fileName));
     }
 
+    public static void testJFreeSVG(String filename, boolean single) throws IOException {
+        SVGGraphics2D g2 = new SVGGraphics2D(TILE_WIDTH * TILE_COUNT_H, TILE_HEIGHT * TILE_COUNT_V);
+        drawTestOutput(g2, single);
+        if (single) {
+            filename += "-single.svg";
+        } else {
+            filename += ".svg";
+        }
+        SVGUtils.writeToSVG(new File(filename), g2.getSVGElement());
+    }
+
     /**
      * Creates Java2D output that exercises many features of the API.
      *
@@ -449,6 +462,7 @@ public class Test {
         //BUG_IMAGE = ImageIO.read( ClassLoader.getSystemResource( "bug.png"));
         boolean single = false;
         testSkijaGraphics2D("skija", single);
+        testJFreeSVG("jfreesvg", single);
         testJava2D("java2D", single);
     }
 
