@@ -100,9 +100,10 @@ public class Tester {
      * @param g2  the graphics target.
      */
     private static void drawTestSheet(Graphics2D g2) {
+        int row = -1;
         Rectangle2D bounds = new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT);
 
-        int row = 0; // ***** RECTANGLE2D
+        row++; // ***** RECTANGLE2D
         Rectangle2D rect = new Rectangle2D.Double(5, 5, TILE_WIDTH - 10, TILE_HEIGHT - 10);
         moveTo(0, row, g2);
         ShapeTests.fillAndStrokeShape(g2, rect, Color.BLUE, null, null);
@@ -401,6 +402,65 @@ public class Tester {
         moveTo(5, row, g2);
         RadialGradientPaint rgp6 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REFLECT);
         ShapeTests.fillAndStrokeShape(g2, roundRect, rgp6, null, null);
+
+        row++; // ***** TRANSLATION
+        moveTo(0, row, g2);
+        Rectangle2D rectToTranslate = new Rectangle2D.Double(5, 5, TILE_WIDTH / 2 - 10, TILE_HEIGHT / 2 - 10);
+        TransformTests.translateShape(g2, bounds, rectToTranslate, Color.YELLOW, new BasicStroke(1.0f), Color.BLACK);
+        moveTo(1, row, g2);
+        RoundRectangle2D roundRectToTranslate = new RoundRectangle2D.Double(5, 5, TILE_WIDTH / 2 - 10, TILE_HEIGHT / 2 - 10, 8, 8);
+        TransformTests.translateShape(g2, bounds, roundRectToTranslate, Color.ORANGE, new BasicStroke(1.0f), Color.BLACK);
+        moveTo(2, row, g2);
+        QuadCurve2D quadCurveToTranslate = ShapeTests.createQuadCurve2D(new Rectangle2D.Double(0, 0, TILE_WIDTH / 2, TILE_HEIGHT / 2), 3);
+        TransformTests.translateShape(g2, bounds, quadCurveToTranslate, Color.YELLOW, new BasicStroke(1.0f), Color.BLACK);
+        moveTo(3, row, g2);
+        CubicCurve2D cubicCurveToTranslate = ShapeTests.createCubicCurve2D(new Rectangle2D.Double(0, 0, TILE_WIDTH / 2, TILE_HEIGHT / 2), 3);
+        TransformTests.translateShape(g2, bounds, cubicCurveToTranslate, Color.ORANGE, new BasicStroke(1.0f), Color.BLACK);
+        moveTo(4, row, g2);
+        Ellipse2D ellipseToTranslate = new Ellipse2D.Double(5, 5, TILE_WIDTH / 2 - 10, TILE_HEIGHT / 2 - 10);
+        TransformTests.translateShape(g2, bounds, ellipseToTranslate, Color.YELLOW, new BasicStroke(1.0f), Color.BLACK);
+        moveTo(5, row, g2);
+        Arc2D arcToTranslate = new Arc2D.Double(new Rectangle2D.Double(5, 5, TILE_WIDTH / 2 - 10, TILE_HEIGHT / 2 - 10), 45, 290, Arc2D.PIE);
+        TransformTests.translateShape(g2, bounds, arcToTranslate, Color.ORANGE, new BasicStroke(1.0f), Color.BLACK);
+        moveTo(6, row, g2);
+        Area areaToTranslate = ShapeTests.createCombinedArea("exclusiveOr", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH / 2, TILE_HEIGHT / 2), 2.5);
+        TransformTests.translateShape(g2, bounds, areaToTranslate, Color.YELLOW, new BasicStroke(1.0f), Color.BLACK);
+        moveTo(7, row, g2);
+        Path2D pathToTranslate = ShapeTests.createPath2D(new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH / 2, TILE_HEIGHT / 2), 2.5);
+        TransformTests.translateShape(g2, bounds, pathToTranslate, Color.ORANGE, new BasicStroke(1.0f), Color.BLACK);
+
+        row++; // ***** ROTATION
+        moveTo(0, row, g2);
+        double m = 0.33 * TILE_HEIGHT;
+        Rectangle2D rectToRotate = new Rectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2);
+        TransformTests.rotateShape(g2, bounds, rectToRotate, Math.PI / 4, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
+        moveTo(1, row, g2);
+        RoundRectangle2D roundRectToRotate = new RoundRectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2, 8, 8);
+        TransformTests.rotateShape(g2, bounds, roundRectToRotate, Math.PI / 4, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
+        moveTo(2, row, g2);
+        QuadCurve2D quadCurveToRotate = ShapeTests.createQuadCurve2D(new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT),15);
+        TransformTests.rotateShape(g2, bounds, quadCurveToRotate, Math.PI / 4, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
+        moveTo(3, row, g2);
+        CubicCurve2D cubicCurveToRotate = ShapeTests.createCubicCurve2D(new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT), 15);
+        TransformTests.rotateShape(g2, bounds, cubicCurveToRotate, Math.PI / 4, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
+        moveTo(4, row, g2);
+        Ellipse2D ellipseToRotate = new Ellipse2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2);
+        TransformTests.rotateShape(g2, bounds, ellipseToRotate, Math.PI / 4, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
+        moveTo(5, row, g2);
+        Arc2D arcToRotate = new Arc2D.Double(new Rectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2), 45, 290, Arc2D.PIE);
+        TransformTests.rotateShape(g2, bounds, arcToRotate, Math.PI / 4, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
+
+//        row++; // ***** SHEAR
+//        moveTo(0, row, g2);
+//        double mm = 0.33 * TILE_HEIGHT;
+//        Rectangle2D rectToSkew = new Rectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2);
+//        TransformTests.shearShape(g2, bounds, rectToSkew, 0.5, -0.5, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
+//        moveTo(4, row, g2);
+//        Ellipse2D ellipseToSkew = new Ellipse2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2);
+//        TransformTests.shearShape(g2, bounds, ellipseToSkew, 0.5, -0.5, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
+//        moveTo(5, row, g2);
+//        Arc2D arcToSkew = new Arc2D.Double(new Rectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2), 45, 290, Arc2D.PIE);
+//        TransformTests.shearShape(g2, bounds, arcToSkew, 0.5, -0.5, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
 
         row++;  // ***** IMAGE
         moveTo(0, row, g2);
