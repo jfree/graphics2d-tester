@@ -27,7 +27,7 @@ public class Tester {
 
     private static int TILE_COUNT_H = 12;
 
-    private static int TILE_COUNT_V = 25;
+    private static int TILE_COUNT_V = 30;
 
     private static int TILE_WIDTH = 100;
 
@@ -247,11 +247,11 @@ public class Tester {
         row++; // ***** GeneralPATH
         Path2D path = ShapeTests.createPath2D(bounds, MARGIN);
         moveTo(0, row, g2);
-        ShapeTests.fillAndStrokeShape(g2, path, Color.BLUE, null, null);
+        ShapeTests.fillAndStrokeShape(g2, path, Color.RED, null, null);
         moveTo(1, row, g2);
-        ShapeTests.fillAndStrokeShape(g2, path, null, OUTLINE, Color.BLUE);
+        ShapeTests.fillAndStrokeShape(g2, path, null, OUTLINE, Color.RED);
         moveTo(2, row, g2);
-        ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, OUTLINE, Color.BLUE);
+        ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, OUTLINE, Color.RED);
         moveTo(3, row, g2);
         ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, DASHED, Color.BLACK);
         moveTo(4, row, g2);
@@ -262,11 +262,11 @@ public class Tester {
         row++; // ***** GeneralPATH WIND_NON_ZERO FILL
         path.setWindingRule(Path2D.WIND_NON_ZERO);
         moveTo(0, row, g2);
-        ShapeTests.fillAndStrokeShape(g2, path, Color.BLUE, null, null);
+        ShapeTests.fillAndStrokeShape(g2, path, Color.RED, null, null);
         moveTo(1, row, g2);
-        ShapeTests.fillAndStrokeShape(g2, path, null, OUTLINE, Color.BLUE);
+        ShapeTests.fillAndStrokeShape(g2, path, null, OUTLINE, Color.RED);
         moveTo(2, row, g2);
-        ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, OUTLINE, Color.BLUE);
+        ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, OUTLINE, Color.RED);
         moveTo(3, row, g2);
         ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, DASHED, Color.BLACK);
         moveTo(4, row, g2);
@@ -274,15 +274,65 @@ public class Tester {
         moveTo(5, row, g2);
         ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
 
-        row++;  // *****
+        row++; // ***** Area - add
+        Area areaAdd = ShapeTests.createCombinedArea("add", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
         moveTo(0, row, g2);
-        ShapeTests.drawAndFillArea(g2, ShapeTests.createCombinedArea("add", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
+        ShapeTests.fillAndStrokeShape(g2, areaAdd, Color.BLUE, null, null);
         moveTo(1, row, g2);
-        ShapeTests.drawAndFillArea(g2, ShapeTests.createCombinedArea("intersect", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
+        ShapeTests.fillAndStrokeShape(g2, areaAdd, null, OUTLINE, Color.BLUE);
         moveTo(2, row, g2);
-        ShapeTests.drawAndFillArea(g2, ShapeTests.createCombinedArea("subtract", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
+        ShapeTests.fillAndStrokeShape(g2, areaAdd, Color.LIGHT_GRAY, OUTLINE, Color.BLUE);
         moveTo(3, row, g2);
-        ShapeTests.drawAndFillArea(g2, ShapeTests.createCombinedArea("exclusiveOr", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0));
+        ShapeTests.fillAndStrokeShape(g2, areaAdd, Color.LIGHT_GRAY, DASHED, Color.BLACK);
+        moveTo(4, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaAdd, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
+        moveTo(5, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaAdd, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
+
+        row++; // ***** Area - intersect
+        Area areaIntersect = ShapeTests.createCombinedArea("intersect", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
+        moveTo(0, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaIntersect, Color.BLUE, null, null);
+        moveTo(1, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaIntersect, null, OUTLINE, Color.BLUE);
+        moveTo(2, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaIntersect, Color.LIGHT_GRAY, OUTLINE, Color.BLUE);
+        moveTo(3, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaIntersect, Color.LIGHT_GRAY, DASHED, Color.BLACK);
+        moveTo(4, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaIntersect, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
+        moveTo(5, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaIntersect, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
+
+        row++; // ***** Area - intersect
+        Area areaSubtract = ShapeTests.createCombinedArea("subtract", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
+        moveTo(0, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaSubtract, Color.BLUE, null, null);
+        moveTo(1, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaSubtract, null, OUTLINE, Color.BLUE);
+        moveTo(2, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaSubtract, Color.LIGHT_GRAY, OUTLINE, Color.BLUE);
+        moveTo(3, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaSubtract, Color.LIGHT_GRAY, DASHED, Color.BLACK);
+        moveTo(4, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaSubtract, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
+        moveTo(5, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaSubtract, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
+
+        row++; // ***** Area - intersect
+        Area areaXOR = ShapeTests.createCombinedArea("exclusiveOr", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
+        moveTo(0, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaXOR, Color.BLUE, null, null);
+        moveTo(1, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaXOR, null, OUTLINE, Color.BLUE);
+        moveTo(2, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaXOR, Color.LIGHT_GRAY, OUTLINE, Color.BLUE);
+        moveTo(3, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaXOR, Color.LIGHT_GRAY, DASHED, Color.BLACK);
+        moveTo(4, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaXOR, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
+        moveTo(5, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, areaXOR, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
 
         row++;  // ***** LINES SPECIAL
         moveTo(0, row, g2);
