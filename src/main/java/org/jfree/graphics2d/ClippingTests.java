@@ -1,3 +1,8 @@
+/**
+ * Graphics2D Tester
+ *
+ * (C)opyright 2021, David Gilbert.
+ */
 package org.jfree.graphics2d;
 
 import java.awt.*;

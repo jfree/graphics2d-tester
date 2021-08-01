@@ -220,13 +220,14 @@ public class ShapeTests {
      * @param bounds  the bounds.
      * @param margin  the margin.
      * @param stroke  the line stroke.
+     * @param paint  the line color.
      */
-    public static void drawLines(Graphics2D g2, Rectangle2D bounds, double margin, Stroke stroke) {
+    public static void drawLines(Graphics2D g2, Rectangle2D bounds, double margin, Stroke stroke, Paint paint) {
         double maxX = bounds.getWidth() - margin;
         double maxY = bounds.getHeight() - margin;
         double deltaX = (bounds.getWidth() - 2 * margin) / 3.0;
         double deltaY = (bounds.getHeight() - 2 * margin) / 3.0;
-        g2.setPaint(Color.BLUE);
+        g2.setPaint(paint);
         g2.setStroke(stroke);
         g2.draw(new Line2D.Double(margin, margin, maxX, margin));
         g2.draw(new Line2D.Double(margin, margin, maxX, margin + deltaY));

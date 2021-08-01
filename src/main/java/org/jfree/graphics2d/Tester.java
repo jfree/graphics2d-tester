@@ -1,3 +1,8 @@
+/**
+ * Graphics2D Tester
+ *
+ * (C)opyright 2021, David Gilbert.
+ */
 package org.jfree.graphics2d;
 
 import org.jetbrains.skija.Data;
@@ -31,13 +36,17 @@ public class Tester {
     private static int MARGIN = 5;
 
     private static Stroke OUTLINE = new BasicStroke(1.0f);
+    private static Stroke OUTLINE_3 = new BasicStroke(3.0f);
 
+    /** A dashed line stroke. */
     private static Stroke DASHED = new BasicStroke(1.0f, BasicStroke.CAP_BUTT,
             BasicStroke.JOIN_ROUND, 4f, new float[] { 2f, 2f }, 0f);
 
+    /** A dashed line stroke with width 3. */
     private static Stroke DASHED_3 = new BasicStroke(3.0f, BasicStroke.CAP_ROUND,
             BasicStroke.JOIN_ROUND, 4f, new float[] { 4f, 8f }, 0f);
 
+    /** An array containing rainbow colors, used in the gradient paint tests. */
     private static Color[] RAINBOW_COLORS = new Color[] {
             new Color(255, 0, 0), // RED
             new Color(255, 165, 0), // ORANGE
@@ -110,11 +119,13 @@ public class Tester {
         moveTo(1, row, g2);
         ShapeTests.fillAndStrokeShape(g2, rect, null, OUTLINE, Color.BLUE);
         moveTo(2, row, g2);
-        ShapeTests.fillAndStrokeShape(g2, rect, Color.LIGHT_GRAY, OUTLINE, Color.BLACK);
+        ShapeTests.fillAndStrokeShape(g2, rect, Color.LIGHT_GRAY, OUTLINE, Color.BLUE);
         moveTo(3, row, g2);
         ShapeTests.fillAndStrokeShape(g2, rect, Color.LIGHT_GRAY, DASHED, Color.BLACK);
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, rect, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
+        moveTo(5, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, rect, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
 
         row++;  // ***** ROUNDRECTANGLE2D
         RoundRectangle2D roundRect = new RoundRectangle2D.Double(5, 5, TILE_WIDTH - 10, TILE_HEIGHT - 10, 8.0, 12.0);
@@ -123,23 +134,27 @@ public class Tester {
         moveTo(1, row, g2);
         ShapeTests.fillAndStrokeShape(g2, roundRect, null, OUTLINE, Color.BLUE);
         moveTo(2, row, g2);
-        ShapeTests.fillAndStrokeShape(g2, roundRect, Color.LIGHT_GRAY, OUTLINE, Color.BLACK);
+        ShapeTests.fillAndStrokeShape(g2, roundRect, Color.LIGHT_GRAY, OUTLINE, Color.BLUE);
         moveTo(3, row, g2);
         ShapeTests.fillAndStrokeShape(g2, roundRect, Color.LIGHT_GRAY, DASHED, Color.BLACK);
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, roundRect, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
+        moveTo(5, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, roundRect, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
 
         row++; // ***** LINE2D
         moveTo(0, row, g2);
-        ShapeTests.drawLines(g2, bounds, 5.0, new BasicStroke(1.0f));
+        ShapeTests.drawLines(g2, bounds, 5.0, new BasicStroke(0.0f), Color.RED);
         moveTo(1, row, g2);
-        ShapeTests.drawLines(g2, bounds, 5.0, new BasicStroke(0.0f));
+        ShapeTests.drawLines(g2, bounds, 5.0, OUTLINE, Color.RED);
         moveTo(2, row, g2);
-        ShapeTests.drawLines(g2, bounds, 5.0, new BasicStroke(3.0f));
+        ShapeTests.drawLines(g2, bounds, 5.0, OUTLINE, Color.RED);
         moveTo(3, row, g2);
-        ShapeTests.drawLines(g2, bounds, 5.0, DASHED);
+        ShapeTests.drawLines(g2, bounds, 5.0, DASHED, Color.BLACK);
         moveTo(4, row, g2);
-        ShapeTests.drawLines(g2, bounds, 5.0, DASHED_3);
+        ShapeTests.drawLines(g2, bounds, 5.0, DASHED_3, Color.BLACK);
+        moveTo(5, row, g2);
+        ShapeTests.drawLines(g2, bounds, 5.0, OUTLINE_3, Color.BLACK);
 
         row++; // ***** QUADCURVE2D
         moveTo(0, row, g2);
@@ -152,6 +167,8 @@ public class Tester {
         ShapeTests.fillAndStrokeQuadCurve2D(g2, bounds, 5.0, Color.LIGHT_GRAY, DASHED, Color.BLACK);
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeQuadCurve2D(g2, bounds, 5.0, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
+        moveTo(5, row, g2);
+        ShapeTests.fillAndStrokeQuadCurve2D(g2, bounds, 5.0, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
 
         row++; // ***** CUBICCURVE2D
         moveTo(0, row, g2);
@@ -164,6 +181,8 @@ public class Tester {
         ShapeTests.fillAndStrokeCubicCurve2D(g2, bounds, 5.0, Color.LIGHT_GRAY, DASHED, Color.BLACK);
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeCubicCurve2D(g2, bounds, 5.0, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
+        moveTo(5, row, g2);
+        ShapeTests.fillAndStrokeCubicCurve2D(g2, bounds, 5.0, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
 
         row++;  // ***** ELLIPSE2D
         Ellipse2D ellipse = new Ellipse2D.Double(MARGIN, MARGIN, bounds.getWidth() - 2 * MARGIN, bounds.getHeight() - 2 * MARGIN);
@@ -172,11 +191,13 @@ public class Tester {
         moveTo(1, row, g2);
         ShapeTests.fillAndStrokeShape(g2, ellipse, null, OUTLINE, Color.BLUE);
         moveTo(2, row, g2);
-        ShapeTests.fillAndStrokeShape(g2, ellipse, Color.LIGHT_GRAY, OUTLINE, Color.BLACK);
+        ShapeTests.fillAndStrokeShape(g2, ellipse, Color.LIGHT_GRAY, OUTLINE, Color.BLUE);
         moveTo(3, row, g2);
         ShapeTests.fillAndStrokeShape(g2, ellipse, Color.LIGHT_GRAY, DASHED, Color.BLACK);
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, ellipse, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
+        moveTo(5, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, ellipse, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
 
         row++;  // ***** ARC2D PIE
         Arc2D arc = ShapeTests.createArc2D(Arc2D.PIE, 45, 270, bounds, 5);
@@ -185,11 +206,13 @@ public class Tester {
         moveTo(1, row, g2);
         ShapeTests.fillAndStrokeShape(g2, arc, null, OUTLINE, Color.BLUE);
         moveTo(2, row, g2);
-        ShapeTests.fillAndStrokeShape(g2, arc, Color.LIGHT_GRAY, OUTLINE, Color.BLACK);
+        ShapeTests.fillAndStrokeShape(g2, arc, Color.LIGHT_GRAY, OUTLINE, Color.BLUE);
         moveTo(3, row, g2);
         ShapeTests.fillAndStrokeShape(g2, arc, Color.LIGHT_GRAY, DASHED, Color.BLACK);
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, arc, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
+        moveTo(5, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, arc, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
 
         row++;  // ***** ARC2D CHORD
         Arc2D arc2 = ShapeTests.createArc2D(Arc2D.CHORD, 210, 300, bounds, 5);
@@ -198,11 +221,13 @@ public class Tester {
         moveTo(1, row, g2);
         ShapeTests.fillAndStrokeShape(g2, arc2, null, OUTLINE, Color.BLUE);
         moveTo(2, row, g2);
-        ShapeTests.fillAndStrokeShape(g2, arc2, Color.LIGHT_GRAY, OUTLINE, Color.BLACK);
+        ShapeTests.fillAndStrokeShape(g2, arc2, Color.LIGHT_GRAY, OUTLINE, Color.BLUE);
         moveTo(3, row, g2);
         ShapeTests.fillAndStrokeShape(g2, arc2, Color.LIGHT_GRAY, DASHED, Color.BLACK);
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, arc2, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
+        moveTo(5, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, arc2, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
 
         row++;  // ***** ARC2D OPEN
         Arc2D arc3 = ShapeTests.createArc2D(Arc2D.OPEN, -45, 270, bounds, 5);
@@ -211,11 +236,13 @@ public class Tester {
         moveTo(1, row, g2);
         ShapeTests.fillAndStrokeShape(g2, arc3, null, OUTLINE, Color.BLUE);
         moveTo(2, row, g2);
-        ShapeTests.fillAndStrokeShape(g2, arc3, Color.LIGHT_GRAY, OUTLINE, Color.BLACK);
+        ShapeTests.fillAndStrokeShape(g2, arc3, Color.LIGHT_GRAY, OUTLINE, Color.BLUE);
         moveTo(3, row, g2);
         ShapeTests.fillAndStrokeShape(g2, arc3, Color.LIGHT_GRAY, DASHED, Color.BLACK);
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, arc3, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
+        moveTo(5, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, arc3, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
 
         row++; // ***** GeneralPATH
         Path2D path = ShapeTests.createPath2D(bounds, MARGIN);
@@ -224,11 +251,13 @@ public class Tester {
         moveTo(1, row, g2);
         ShapeTests.fillAndStrokeShape(g2, path, null, OUTLINE, Color.BLUE);
         moveTo(2, row, g2);
-        ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, OUTLINE, Color.BLACK);
+        ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, OUTLINE, Color.BLUE);
         moveTo(3, row, g2);
         ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, DASHED, Color.BLACK);
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
+        moveTo(5, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
 
         row++; // ***** GeneralPATH WIND_NON_ZERO FILL
         path.setWindingRule(Path2D.WIND_NON_ZERO);
@@ -237,11 +266,13 @@ public class Tester {
         moveTo(1, row, g2);
         ShapeTests.fillAndStrokeShape(g2, path, null, OUTLINE, Color.BLUE);
         moveTo(2, row, g2);
-        ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, OUTLINE, Color.BLACK);
+        ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, OUTLINE, Color.BLUE);
         moveTo(3, row, g2);
         ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, DASHED, Color.BLACK);
         moveTo(4, row, g2);
         ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
+        moveTo(5, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, path, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
 
         row++;  // *****
         moveTo(0, row, g2);
@@ -578,6 +609,17 @@ public class Tester {
         testSkijaGraphics2D("skija", single);
         //testJFreeSVG("jfreesvg", single);
         testJava2D("java2D", single);
+        //System.getProperties().list(System.out);
+
+        // Graphics2D Tester
+        // Date and Time
+        // Graphics2D Implementation : SkijaGraphics2D 1.0.1 (-> Skija 0.92.18)
+        // os.name=Mac OS X
+        // os.version=10.16
+        // os.arch=x86_64
+        // java.runtime.version=15.0.1+8
+        // java.vm.name=OpenJDK 64-Bit Server VM
+        //java.vendor.version=Zulu15.28+13-CA
     }
 
 }
