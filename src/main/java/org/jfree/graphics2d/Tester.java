@@ -34,8 +34,10 @@ import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Runs a visual testing setup against various Graphics2D implementations.  The idea
@@ -44,7 +46,7 @@ import java.util.List;
  */
 public class Tester {
 
-    private static int TILE_COUNT_H = 12;
+    private static int TILE_COUNT_H = 11;
 
     private static int TILE_COUNT_V = 30;
 
@@ -240,7 +242,7 @@ public class Tester {
      * @param g2  the graphics target.
      * @param qrLink  the link text to put in the QR code
      */
-    private static void drawTestSheet(Graphics2D g2, String qrLink) {
+    private static void drawTestSheet(Graphics2D g2, String g2UnderTest, String qrLink) {
         int row = -1;
         Rectangle2D bounds = new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT);
 
@@ -253,29 +255,35 @@ public class Tester {
         g2.drawLine(0, 0, TILE_WIDTH * TILE_COUNT_H, 0);
         g2.drawLine(0, TILE_HEIGHT, TILE_WIDTH * TILE_COUNT_H, TILE_HEIGHT);
         g2.setFont(new Font(Font.SERIF, Font.BOLD, 32));
-        g2.drawString("Graphics2D Test Sheet", 0, TILE_HEIGHT - 10);
+        Rectangle2D strBounds = g2.getFontMetrics().getStringBounds("Graphics2D Test Sheet", g2);
+        g2.drawString("Graphics2D Test Sheet", 0, (int) strBounds.getHeight());
+
+        row ++;
+        moveTo(7, row, g2);
+        drawTestProperties(g2, g2UnderTest);
+        row--;
 
         // QR CODE AT RIGHT SIDE
-        row++;
+        row += 4;
         moveTo(TILE_COUNT_H - 2, row, g2);
         try {
             ImageTests.drawQRCodeImage(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2), 5, qrLink);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        row--;
-
-        // JFREECHART AT RIGHT SIDE
-        row += 4;
-        moveTo(TILE_COUNT_H - 4, row, g2);
-        drawJFreeChartSample(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
         row -= 4;
 
+        // JFREECHART AT RIGHT SIDE
+        row += 7;
+        moveTo(TILE_COUNT_H - 4, row, g2);
+        drawJFreeChartSample(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
+        row -= 7;
+
         // ORSON CHARTS AT RIGHT SIDE
-        row += 9;
+        row += 12;
         moveTo(TILE_COUNT_H - 4, row, g2);
         drawOrsonChartSample(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
-        row -= 9;
+        row -= 12;
 
         row++;  // ***** LINES SPECIAL
         moveTo(0, row, g2);
@@ -728,6 +736,28 @@ public class Tester {
         moveTo(1, row, g2);
         ClippingTests.drawArc2DWithRectangularClip(g2, bounds, 5);
 
+        moveTo(2, row, g2);
+        drawSwingUI(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
+
+    }
+
+    /**
+     * Draws strings in SERIF, SANS_SERIF and MONOSPACED fonts.
+     *
+     * @param g2  the graphics target.
+     */
+    public static void drawTestProperties(Graphics2D g2, String g2Implementation) {
+        g2.setPaint(Color.BLACK);
+        g2.setFont(new Font("Courier New", Font.PLAIN, 14));
+        int y = 20;
+        g2.drawString("target -> " + g2Implementation, 10, y += 16);
+        g2.drawString("timestamp -> " + LocalDateTime.now(), 10, y += 16);
+        g2.drawString("os.name -> " + System.getProperty("os.name"), 10, y += 16);
+        g2.drawString("os.version -> " + System.getProperty("os.version"), 10, y += 16);
+        g2.drawString("os.arch -> " + System.getProperty("os.arch"), 10, y += 16);
+        g2.drawString("java.runtime.version -> " + System.getProperty("java.runtime.version"), 10, y += 16);
+        g2.drawString("java.vm.name -> " + System.getProperty("java.vm.name"), 10, y += 16);
+        g2.drawString("java.vendor.version -> " + System.getProperty("java.vendor.version"), 10, y += 16);// Graphics2D Implementation : SkijaGraphics2D 1.0.1 (-> Skija 0.92.18)
     }
 
     /**
@@ -753,11 +783,11 @@ public class Tester {
      * @param g2  the graphics target.
      * @param single  set to true if just generating a single test
      */
-    private static void drawTestOutput(Graphics2D g2, String qrLink, boolean single) {
+    private static void drawTestOutput(Graphics2D g2, String g2UnderTest, String qrLink, boolean single) {
         if (single) {
             drawTestSingle(g2);
         } else {
-            drawTestSheet(g2, qrLink);
+            drawTestSheet(g2, g2UnderTest, qrLink);
         }
     }
 
@@ -769,7 +799,7 @@ public class Tester {
      */
     public static void testSkijaGraphics2D(String fileName, boolean single) {
         SkijaGraphics2D g2 = new SkijaGraphics2D(TILE_COUNT_H * TILE_WIDTH, TILE_COUNT_V * TILE_HEIGHT);
-        drawTestOutput(g2, "https://github.com/jfree/skijagraphics2d", single);
+        drawTestOutput(g2, "SkijaGraphics2d 1.0.2-SNAPSHOT", "https://github.com/jfree/skijagraphics2d", single);
         org.jetbrains.skija.Image image = g2.getSurface().makeImageSnapshot();
         Data pngData = image.encodeToData(EncodedImageFormat.PNG);
         byte [] pngBytes = pngData.getBytes();
@@ -799,7 +829,7 @@ public class Tester {
         BufferedImage image = new BufferedImage(TILE_WIDTH * TILE_COUNT_H, TILE_HEIGHT * TILE_COUNT_V, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        drawTestOutput(g2, "https://github.com/jfree", single);
+        drawTestOutput(g2, "Java2D/BufferedImage", "https://github.com/jfree", single);
         if (single) {
             fileName += "-single.png";
         } else {
@@ -810,7 +840,7 @@ public class Tester {
 
     public static void testJFreeSVG(String filename, boolean single) throws IOException {
         SVGGraphics2D g2 = new SVGGraphics2D(TILE_WIDTH * TILE_COUNT_H, TILE_HEIGHT * TILE_COUNT_V);
-        drawTestOutput(g2, "https://github.com/jfree/jfreesvg", single);
+        drawTestOutput(g2, "JFree/SVGGraphics2D", "https://github.com/jfree/jfreesvg", single);
         if (single) {
             filename += "-single.svg";
         } else {
