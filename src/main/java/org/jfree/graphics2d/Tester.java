@@ -5,18 +5,37 @@
  */
 package org.jfree.graphics2d;
 
+import eu.hansolo.steelseries.gauges.Radial;
 import org.jetbrains.skija.Data;
 import org.jetbrains.skija.EncodedImageFormat;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.flow.FlowPlot;
+import org.jfree.chart.title.TextTitle;
+import org.jfree.chart3d.Chart3D;
+import org.jfree.chart3d.Chart3DFactory;
+import org.jfree.chart3d.axis.ValueAxis3D;
+import org.jfree.chart3d.data.Range;
+import org.jfree.chart3d.data.function.Function3D;
+import org.jfree.chart3d.graphics3d.Dimension3D;
+import org.jfree.chart3d.graphics3d.ViewPoint3D;
+import org.jfree.chart3d.plot.XYZPlot;
+import org.jfree.chart3d.renderer.GradientColorScale;
+import org.jfree.chart3d.renderer.xyz.SurfaceRenderer;
+import org.jfree.data.flow.DefaultFlowDataset;
+import org.jfree.data.flow.FlowDataset;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.SVGUtils;
 import org.jfree.skija.SkijaGraphics2D;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Runs a visual testing setup against various Graphics2D implementations.  The idea
@@ -62,6 +81,118 @@ public class Tester {
         g2.setTransform(t);
     }
 
+    private static void drawSwingUI(Graphics2D g2, Rectangle2D bounds) {
+        JComponent content = createContent();
+        JFrame frame = new JFrame("Title");
+        frame.getContentPane().add(content);
+        frame.setBounds((int) bounds.getX(), (int) bounds.getY(), (int) bounds.getWidth(), (int) bounds.getHeight());
+        frame.pack();
+        content.paint(g2);
+    }
+
+    private static void drawOrsonChartSample(Graphics2D g2, Rectangle2D bounds) {
+        Function3D function = (double x, double z) -> Math.cos(x) * Math.sin(z);
+
+        Chart3D chart = Chart3DFactory.createSurfaceChart(
+                "SurfaceRendererDemo1",
+                "y = cos(x) * sin(z)",
+                function, "X", "Y", "Z");
+
+        XYZPlot plot = (XYZPlot) chart.getPlot();
+        plot.setDimensions(new Dimension3D(10, 5, 10));
+        ValueAxis3D xAxis = plot.getXAxis();
+        xAxis.setRange(-Math.PI, Math.PI);
+        ValueAxis3D zAxis = plot.getZAxis();
+        zAxis.setRange(-Math.PI, Math.PI);
+        SurfaceRenderer renderer = (SurfaceRenderer) plot.getRenderer();
+        renderer.setDrawFaceOutlines(false);
+        renderer.setColorScale(new GradientColorScale(new Range(-1.0, 1.0),
+                Color.RED, Color.YELLOW));
+        chart.setViewPoint(ViewPoint3D.createAboveLeftViewPoint(70.0));
+        chart.draw(g2, bounds);
+    }
+    /**
+     * Creates a dataset (source https://statisticsnz.shinyapps.io/trade_dashboard/).
+     *
+     * @return a dataset.
+     */
+    private static DefaultFlowDataset<String> createDataset() {
+        DefaultFlowDataset<String> dataset = new DefaultFlowDataset<>();
+        dataset.setFlow(0, "Goods", "Australia", 2101);
+        dataset.setFlow(0, "Services", "Australia", 714);
+        dataset.setFlow(0, "Goods", "China", 3397);
+        dataset.setFlow(0, "Services", "China", 391);
+        dataset.setFlow(0, "Goods", "USA", 1748);
+        dataset.setFlow(0, "Services", "USA", 583);
+        dataset.setFlow(0, "Goods", "United Kingdom", 363);
+        dataset.setFlow(0, "Services", "United Kingdom", 178);
+
+        // dairy, meat, travel, fruits & nuts, wood, beverages
+        dataset.setFlow(1, "Australia", "Dairy", 165);
+        dataset.setFlow(1, "Australia", "Travel", 198);
+        dataset.setFlow(1, "Australia", "Beverages", 170);
+        dataset.setFlow(1, "Australia", "Other Goods", 2815 - 165 - 198 - 170);
+
+        dataset.setFlow(1, "China", "Dairy", 848);
+        dataset.setFlow(1, "China", "Meat", 463);
+        dataset.setFlow(1, "China", "Travel", 343);
+        dataset.setFlow(1, "China", "Fruit & Nuts", 296);
+        dataset.setFlow(1, "China", "Wood", 706);
+        dataset.setFlow(1, "China", "Other Goods", 3788 - 848 - 463 - 343 - 296 - 706);
+
+        dataset.setFlow(1, "United Kingdom", "Dairy", 18);
+        dataset.setFlow(1, "United Kingdom", "Meat", 71);
+        dataset.setFlow(1, "United Kingdom", "Travel", 59);
+        dataset.setFlow(1, "United Kingdom", "Fruit & Nuts", 13);
+        dataset.setFlow(1, "United Kingdom", "Beverages", 154);
+        dataset.setFlow(1, "United Kingdom", "Other Goods", 541 - 18 - 71 - 59 - 13 - 154);
+
+        dataset.setFlow(1, "USA", "Dairy", 95);
+        dataset.setFlow(1, "USA", "Meat", 367);
+        dataset.setFlow(1, "USA", "Travel", 90);
+        dataset.setFlow(1, "USA", "Wood", 83);
+        dataset.setFlow(1, "USA", "Beverages", 157);
+        dataset.setFlow(1, "USA", "Other Goods", 2331 - 95 - 367 - 90 - 83 - 157);
+        return dataset;
+    }
+
+    /**
+     * Creates a sample chart.
+     *
+     * @param dataset  the dataset.
+     *
+     * @return A sample chart.
+     */
+    private static JFreeChart createChart(FlowDataset dataset) {
+        FlowPlot plot = new FlowPlot(dataset);
+        plot.setBackgroundPaint(Color.BLACK);
+        plot.setDefaultNodeLabelPaint(Color.WHITE);
+        plot.setNodeColorSwatch(createPastelColors());
+        JFreeChart chart = new JFreeChart("Selected NZ Exports Sept 2020", plot);
+        chart.addSubtitle(new TextTitle("Source: https://statisticsnz.shinyapps.io/trade_dashboard/"));
+        chart.setBackgroundPaint(Color.WHITE);
+        return chart;
+    }
+    private static java.util.List<Color> createPastelColors() {
+        List<Color> result = new ArrayList<>();
+        result.add(new Color(232, 177, 165));
+        result.add(new Color(207, 235, 142));
+        result.add(new Color(142, 220, 220));
+        result.add(new Color(228, 186, 115));
+        result.add(new Color(187, 200, 230));
+        result.add(new Color(157, 222, 177));
+        result.add(new Color(234, 183, 210));
+        result.add(new Color(213, 206, 169));
+        result.add(new Color(202, 214, 205));
+        result.add(new Color(195, 204, 133));
+        return result;
+    }
+
+    private static void drawJFreeChartSample(Graphics2D g2, Rectangle2D bounds) {
+        JFreeChart chart = createChart(createDataset());
+        chart.draw(g2, bounds);
+    }
+
     private static void drawTilePolygon(Graphics2D g2) {
         g2.setPaint(Color.BLUE);
         g2.setStroke(new BasicStroke(1.0f));
@@ -104,13 +235,75 @@ public class Tester {
 
     /**
      * Draws a test sheet consisting of a number of tiles, each one testing one or
-     * more features of Java2D.
+     * more features of Java2D and Graphics2D.
      *
      * @param g2  the graphics target.
+     * @param qrLink  the link text to put in the QR code
      */
-    private static void drawTestSheet(Graphics2D g2) {
+    private static void drawTestSheet(Graphics2D g2, String qrLink) {
         int row = -1;
         Rectangle2D bounds = new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT);
+
+        row++; // ***** HEADER
+        moveTo(0, row, g2);
+        g2.setPaint(Color.WHITE);
+        g2.fill(new Rectangle2D.Double(2, 2, TILE_WIDTH * TILE_COUNT_H, TILE_HEIGHT - 2));
+        g2.setPaint(Color.BLACK);
+        g2.setStroke(new BasicStroke(2.0f));
+        g2.drawLine(0, 0, TILE_WIDTH * TILE_COUNT_H, 0);
+        g2.drawLine(0, TILE_HEIGHT, TILE_WIDTH * TILE_COUNT_H, TILE_HEIGHT);
+        g2.setFont(new Font(Font.SERIF, Font.BOLD, 32));
+        g2.drawString("Graphics2D Test Sheet", 0, TILE_HEIGHT - 10);
+
+        // QR CODE AT RIGHT SIDE
+        row++;
+        moveTo(TILE_COUNT_H - 2, row, g2);
+        try {
+            ImageTests.drawQRCodeImage(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2), 5, qrLink);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        row--;
+
+        // JFREECHART AT RIGHT SIDE
+        row += 4;
+        moveTo(TILE_COUNT_H - 4, row, g2);
+        drawJFreeChartSample(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
+        row -= 4;
+
+        // ORSON CHARTS AT RIGHT SIDE
+        row += 9;
+        moveTo(TILE_COUNT_H - 4, row, g2);
+        drawOrsonChartSample(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
+        row -= 9;
+
+        row++;  // ***** LINES SPECIAL
+        moveTo(0, row, g2);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0,0.0f, Color.BLACK);
+        moveTo(1, row, g2);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0,1.0f, Color.BLACK);
+        moveTo(2, row, g2);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0f,5.0f, Color.BLACK);
+        moveTo(3, row, g2);
+        ShapeTests.drawLineCapAndDash(g2, bounds, 0.0f, 5.0);
+        moveTo(4, row, g2);
+        ShapeTests.drawLineCapAndDash(g2, bounds, 1.0f, 5.0);
+        moveTo(5, row, g2);
+        ShapeTests.drawLineCapAndDash(g2, bounds, 5.0f, 5.0);
+
+        row++; // ***** LINE2D
+        moveTo(0, row, g2);
+        ShapeTests.drawLines(g2, bounds, 5.0, new BasicStroke(0.0f), Color.RED);
+        moveTo(1, row, g2);
+        ShapeTests.drawLines(g2, bounds, 5.0, OUTLINE, Color.RED);
+        moveTo(2, row, g2);
+        ShapeTests.drawLines(g2, bounds, 5.0, OUTLINE, Color.RED);
+        moveTo(3, row, g2);
+        ShapeTests.drawLines(g2, bounds, 5.0, DASHED, Color.BLACK);
+        moveTo(4, row, g2);
+        ShapeTests.drawLines(g2, bounds, 5.0, DASHED_3, Color.BLACK);
+        moveTo(5, row, g2);
+        ShapeTests.drawLines(g2, bounds, 5.0, OUTLINE_3, Color.BLACK);
 
         row++; // ***** RECTANGLE2D
         Rectangle2D rect = new Rectangle2D.Double(5, 5, TILE_WIDTH - 10, TILE_HEIGHT - 10);
@@ -141,20 +334,6 @@ public class Tester {
         ShapeTests.fillAndStrokeShape(g2, roundRect, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
         moveTo(5, row, g2);
         ShapeTests.fillAndStrokeShape(g2, roundRect, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
-
-        row++; // ***** LINE2D
-        moveTo(0, row, g2);
-        ShapeTests.drawLines(g2, bounds, 5.0, new BasicStroke(0.0f), Color.RED);
-        moveTo(1, row, g2);
-        ShapeTests.drawLines(g2, bounds, 5.0, OUTLINE, Color.RED);
-        moveTo(2, row, g2);
-        ShapeTests.drawLines(g2, bounds, 5.0, OUTLINE, Color.RED);
-        moveTo(3, row, g2);
-        ShapeTests.drawLines(g2, bounds, 5.0, DASHED, Color.BLACK);
-        moveTo(4, row, g2);
-        ShapeTests.drawLines(g2, bounds, 5.0, DASHED_3, Color.BLACK);
-        moveTo(5, row, g2);
-        ShapeTests.drawLines(g2, bounds, 5.0, OUTLINE_3, Color.BLACK);
 
         row++; // ***** QUADCURVE2D
         moveTo(0, row, g2);
@@ -333,20 +512,6 @@ public class Tester {
         ShapeTests.fillAndStrokeShape(g2, areaXOR, Color.LIGHT_GRAY, DASHED_3, Color.BLACK);
         moveTo(5, row, g2);
         ShapeTests.fillAndStrokeShape(g2, areaXOR, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
-
-        row++;  // ***** LINES SPECIAL
-        moveTo(0, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, Color.BLACK);
-        moveTo(1, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0,1.0f, Color.BLACK);
-        moveTo(2, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0f,0.0f, Color.BLACK);
-        moveTo(3, row, g2);
-        ShapeTests.drawLineCapAndDash(g2, bounds, 5.0f, 5.0);
-        moveTo(4, row, g2);
-        ShapeTests.drawLineCapAndDash(g2, bounds, 1.0f, 5.0);
-        moveTo(5, row, g2);
-        ShapeTests.drawLineCapAndDash(g2, bounds, 0.0f, 5.0);
 
         row++;  // ***** ALPHACOMPOSITE
         // show a set of tiles with standard AlphaComposite settings
@@ -545,7 +710,10 @@ public class Tester {
 
         row++;  // ***** IMAGE
         moveTo(0, row, g2);
-        ImageTests.drawImage(g2, bounds, 5);
+        Rectangle2D imageBounds = new Rectangle2D.Double(0, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2);
+        ImageTests.drawImage(g2, imageBounds, 5);
+
+        row ++;  // skip a row because the images are covering two rows
 
         row++;  // ***** STRINGS & FONTS
         moveTo(0, row, g2);
@@ -570,10 +738,12 @@ public class Tester {
     private static void drawTestSingle(Graphics2D g2) {
         moveTo(0, 0, g2);
         Rectangle2D bounds = new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT);
-        Point2D center = new Point2D.Double(TILE_WIDTH / 2, TILE_HEIGHT / 2);
+        //Point2D center = new Point2D.Double(TILE_WIDTH / 2, TILE_HEIGHT / 2);
         //fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.GRAY}));
         //drawAxes(g2, center, 40.0, new BasicStroke(1f), Color.GRAY);
-        drawTilePolygon(g2);
+        //drawTilePolygon(g2);
+        Rectangle2D rect = new Rectangle2D.Double(0, 0, -40, 50);
+        ShapeTests.fillAndStrokeShape(g2, rect, Color.LIGHT_GRAY, OUTLINE, Color.RED);
     }
 
     /**
@@ -583,11 +753,11 @@ public class Tester {
      * @param g2  the graphics target.
      * @param single  set to true if just generating a single test
      */
-    private static void drawTestOutput(Graphics2D g2, boolean single) {
+    private static void drawTestOutput(Graphics2D g2, String qrLink, boolean single) {
         if (single) {
             drawTestSingle(g2);
         } else {
-            drawTestSheet(g2);
+            drawTestSheet(g2, qrLink);
         }
     }
 
@@ -599,7 +769,7 @@ public class Tester {
      */
     public static void testSkijaGraphics2D(String fileName, boolean single) {
         SkijaGraphics2D g2 = new SkijaGraphics2D(TILE_COUNT_H * TILE_WIDTH, TILE_COUNT_V * TILE_HEIGHT);
-        drawTestOutput(g2, single);
+        drawTestOutput(g2, "https://github.com/jfree/skijagraphics2d", single);
         org.jetbrains.skija.Image image = g2.getSurface().makeImageSnapshot();
         Data pngData = image.encodeToData(EncodedImageFormat.PNG);
         byte [] pngBytes = pngData.getBytes();
@@ -629,7 +799,7 @@ public class Tester {
         BufferedImage image = new BufferedImage(TILE_WIDTH * TILE_COUNT_H, TILE_HEIGHT * TILE_COUNT_V, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        drawTestOutput(g2, single);
+        drawTestOutput(g2, "https://github.com/jfree", single);
         if (single) {
             fileName += "-single.png";
         } else {
@@ -640,7 +810,7 @@ public class Tester {
 
     public static void testJFreeSVG(String filename, boolean single) throws IOException {
         SVGGraphics2D g2 = new SVGGraphics2D(TILE_WIDTH * TILE_COUNT_H, TILE_HEIGHT * TILE_COUNT_V);
-        drawTestOutput(g2, single);
+        drawTestOutput(g2, "https://github.com/jfree/jfreesvg", single);
         if (single) {
             filename += "-single.svg";
         } else {
@@ -656,9 +826,9 @@ public class Tester {
      */
     public static void main(String[] args) throws IOException {
         boolean single = false;
-        testSkijaGraphics2D("skija", single);
         //testJFreeSVG("jfreesvg", single);
         testJava2D("java2D", single);
+        testSkijaGraphics2D("skija", single);
         //System.getProperties().list(System.out);
 
         // Graphics2D Tester
@@ -670,6 +840,37 @@ public class Tester {
         // java.runtime.version=15.0.1+8
         // java.vm.name=OpenJDK 64-Bit Server VM
         //java.vendor.version=Zulu15.28+13-CA
+        System.exit(0);
+    }
+
+    private static JComponent createContent() {
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            // just take the default look and feel
+        }
+
+        JPanel content = new JPanel(new BorderLayout());
+        JTabbedPane tabs = new JTabbedPane();
+        final Radial gauge = new Radial();
+        gauge.setTitle("SteelSeries");
+        gauge.setUnitString("Units");
+        gauge.setDigitalFont(true);
+        gauge.setValue(45.0);
+        gauge.setPreferredSize(new Dimension(300, 200));
+        JPanel panel1 = new JPanel(new BorderLayout());
+        panel1.add(gauge, BorderLayout.CENTER);
+        tabs.add("Tab 1", panel1);
+        tabs.add("Tab 2", new JButton("Second Tab"));
+        JButton button = new JButton("OK");
+        content.add(tabs);
+        content.add(button, BorderLayout.SOUTH);
+        return content;
     }
 
 }
