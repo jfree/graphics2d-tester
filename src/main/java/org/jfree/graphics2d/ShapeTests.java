@@ -8,6 +8,14 @@ import java.awt.geom.*;
  */
 public class ShapeTests {
 
+    /** A dashed line stroke. */
+    private static Stroke DASHED = new BasicStroke(1.0f, BasicStroke.CAP_BUTT,
+            BasicStroke.JOIN_ROUND, 4f, new float[] { 2f, 2f }, 0f);
+
+    /** A dashed line stroke with width 3. */
+    private static Stroke DASHED_3 = new BasicStroke(3.0f, BasicStroke.CAP_ROUND,
+            BasicStroke.JOIN_ROUND, 4f, new float[] { 4f, 8f }, 0f);
+
     static QuadCurve2D createQuadCurve2D(Rectangle2D bounds, double margin) {
         double w = bounds.getWidth();
         double h = bounds.getHeight();
@@ -195,20 +203,23 @@ public class ShapeTests {
      * @param g2  the graphics target.
      * @param bounds  the bounds.
      * @param margin  the margin.
+     * @param strokeWidth  the stroke width.
+     * @param dashPhase  the dash phase for the stroke.
+     * @param paint  the color for the line.
      */
-    public static void drawLineCapAndDash(Graphics2D g2, Rectangle2D bounds, float strokeWidth, double margin) {
-        g2.setPaint(Color.RED);
+    public static void drawLineCapAndDash(Graphics2D g2, Rectangle2D bounds, double margin, float strokeWidth, float[] dashPhase, Paint paint) {
+        g2.setPaint(paint);
         double midY = bounds.getCenterY();
         double deltaY = bounds.getHeight() / 4.0;
         double left = bounds.getX() + 2 * margin;
         double right = bounds.getWidth() - 2 * margin;
         Line2D line = new Line2D.Double(left, midY - deltaY, right, midY - deltaY);
-        g2.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 10f, new float[] { 4.0f, 8.0f, 10.0f, 8.0f }, 0f));
+        g2.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 10f, dashPhase, 0f));
         g2.draw(line);
         line = new Line2D.Double(left, midY, right, midY);
-        g2.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10f, new float[] { 4.0f, 8.0f, 10.0f, 8.0f }, 0f));
+        g2.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10f, dashPhase, 0f));
         g2.draw(line);
-        g2.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND, 10f, new float[] { 4.0f, 8.0f, 10.0f, 8.0f }, 0f));
+        g2.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND, 10f, dashPhase, 0f));
         line = new Line2D.Double(left, midY + deltaY, right, midY + deltaY);
         g2.draw(line);
     }

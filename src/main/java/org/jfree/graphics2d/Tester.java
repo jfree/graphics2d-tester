@@ -252,11 +252,11 @@ public class Tester {
         g2.fill(new Rectangle2D.Double(2, 2, TILE_WIDTH * TILE_COUNT_H, TILE_HEIGHT - 2));
         g2.setPaint(Color.BLACK);
         g2.setStroke(new BasicStroke(2.0f));
-        g2.drawLine(0, 0, TILE_WIDTH * TILE_COUNT_H, 0);
+        g2.drawLine(0, 1, TILE_WIDTH * TILE_COUNT_H, 1);
         g2.drawLine(0, TILE_HEIGHT, TILE_WIDTH * TILE_COUNT_H, TILE_HEIGHT);
         g2.setFont(new Font(Font.SERIF, Font.BOLD, 32));
         Rectangle2D strBounds = g2.getFontMetrics().getStringBounds("Graphics2D Test Sheet", g2);
-        g2.drawString("Graphics2D Test Sheet", 0, (int) strBounds.getHeight());
+        g2.drawString("Java2D / Graphics2D Test Image", 5, (int) (bounds.getCenterY() + strBounds.getHeight() / 2));
 
         row ++;
         moveTo(7, row, g2);
@@ -265,7 +265,7 @@ public class Tester {
 
         // QR CODE AT RIGHT SIDE
         row += 4;
-        moveTo(TILE_COUNT_H - 2, row, g2);
+        moveTo(TILE_COUNT_H - 4, row, g2);
         try {
             ImageTests.drawQRCodeImage(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2), 5, qrLink);
         } catch (Exception e) {
@@ -287,17 +287,17 @@ public class Tester {
 
         row++;  // ***** LINES SPECIAL
         moveTo(0, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0,0.0f, Color.BLACK);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0,0.0f, Color.RED);
         moveTo(1, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0,1.0f, Color.BLACK);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0,1.0f, Color.RED);
         moveTo(2, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0f,5.0f, Color.BLACK);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0f,1.0f, Color.RED);
         moveTo(3, row, g2);
-        ShapeTests.drawLineCapAndDash(g2, bounds, 0.0f, 5.0);
+        ShapeTests.drawLineCapAndDash(g2, bounds, 5.0,1.0f, new float[] {2f, 2f}, Color.BLACK);
         moveTo(4, row, g2);
-        ShapeTests.drawLineCapAndDash(g2, bounds, 1.0f, 5.0);
+        ShapeTests.drawLineCapAndDash(g2, bounds, 5.0, 3.0f, new float[] {4f, 8f}, Color.BLACK);
         moveTo(5, row, g2);
-        ShapeTests.drawLineCapAndDash(g2, bounds, 5.0f, 5.0);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0f,5.0f, Color.BLACK);
 
         row++; // ***** LINE2D
         moveTo(0, row, g2);
@@ -876,7 +876,7 @@ public class Tester {
     private static JComponent createContent() {
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Metal".equals(info.getName())) {
                     UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
