@@ -1,3 +1,8 @@
+/**
+ * Graphics2D Tester
+ *
+ * (C)opyright 2021, by David Gilbert.
+ */
 package org.jfree.graphics2d;
 
 import java.awt.*;
@@ -16,7 +21,15 @@ public class ShapeTests {
     private static Stroke DASHED_3 = new BasicStroke(3.0f, BasicStroke.CAP_ROUND,
             BasicStroke.JOIN_ROUND, 4f, new float[] { 4f, 8f }, 0f);
 
-    static QuadCurve2D createQuadCurve2D(Rectangle2D bounds, double margin) {
+    /**
+     * Creates a sample {@code QuadCurve2D} instance fitting within the specified bounds.
+     *
+     * @param bounds  the bounds.
+     * @param margin  the margin.
+     *
+     * @return A sample {@code QuadCurve2D}.
+     */
+    static QuadCurve2D createQuadCurve2D1(Rectangle2D bounds, double margin) {
         double w = bounds.getWidth();
         double h = bounds.getHeight();
         Point2D pt0 = new Point2D.Double(margin, h - margin);
@@ -25,6 +38,23 @@ public class ShapeTests {
         return new QuadCurve2D.Double(pt0.getX(), pt0.getY(), cp.getX(), cp.getY(), pt1.getX(), pt1.getY());
     }
 
+    static QuadCurve2D createQuadCurve2D2(Rectangle2D bounds, double margin) {
+        double w = bounds.getWidth();
+        double h = bounds.getHeight();
+        Point2D pt0 = new Point2D.Double(margin, h / 2.0);
+        Point2D pt1 = new Point2D.Double(w - margin, h / 2.0);
+        Point2D cp = new Point2D.Double(w / 2.0, margin);
+        return new QuadCurve2D.Double(pt0.getX(), pt0.getY(), cp.getX(), cp.getY(), pt1.getX(), pt1.getY());
+    }
+
+    /**
+     * Creates a sample {@code CubicCurve2D} instance fitting within the specified bounds.
+     *
+     * @param bounds  the bounds.
+     * @param margin  the margin.
+     *
+     * @return A sample {@code CubicCurve2D}.
+     */
     static CubicCurve2D createCubicCurve2D(Rectangle2D bounds, double margin) {
         double w = bounds.getWidth();
         double h = bounds.getHeight();
@@ -141,35 +171,6 @@ public class ShapeTests {
             g2.setPaint(outlinePaint);
             g2.draw(shape);
         }
-    }
-
-    static void transformShape(Graphics2D g2, Rectangle2D bounds, Shape shape, TransformType transformType, Paint paint, Stroke stroke, Paint outlinePaint) {
-        AffineTransform savedTransform = g2.getTransform();
-        g2.translate(bounds.getWidth() / 2.0, bounds.getHeight() / 2.0);
-        g2.scale(0.5, 0.5);
-        switch (transformType) {
-            case SCALE:
-                // we already scaled
-                break;
-            case ROTATE:
-                g2.rotate(Math.PI / 3.0, bounds.getCenterX(), bounds.getCenterY());
-                break;
-            case SHEAR:
-                g2.shear(2.0, 2.0);
-                break;
-            default:
-                break;
-        }
-        if (paint != null) {
-            g2.setPaint(paint);
-            g2.fill(shape);
-        }
-        if (stroke != null && outlinePaint != null) {
-            g2.setStroke(stroke);
-            g2.setPaint(outlinePaint);
-            g2.draw(shape);
-        }
-        g2.setTransform(savedTransform);
     }
 
     /**

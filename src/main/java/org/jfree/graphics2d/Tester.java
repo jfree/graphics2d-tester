@@ -30,6 +30,7 @@ import org.jfree.skija.SkijaGraphics2D;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.font.LineMetrics;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -215,9 +216,15 @@ public class Tester {
         g2.setStroke(new BasicStroke(2.0f));
         g2.drawLine(0, 1, TILE_WIDTH * TILE_COUNT_H, 1);
         g2.drawLine(0, TILE_HEIGHT, TILE_WIDTH * TILE_COUNT_H, TILE_HEIGHT);
+
+        String str = "Graphics2D Tester";
         g2.setFont(new Font(Font.SERIF, Font.BOLD, 32));
-        Rectangle2D strBounds = g2.getFontMetrics().getStringBounds("Graphics2D Tester", g2);
-        g2.drawString("Graphics2D Tester", 5, (int) (bounds.getCenterY() + strBounds.getHeight() / 2));
+        FontMetrics fm = g2.getFontMetrics();
+        Rectangle2D strBounds = fm.getStringBounds(str, g2);
+        LineMetrics lm = fm.getLineMetrics(str, g2);
+        float x = 5f;
+        float y = (float) (bounds.getCenterY() + (lm.getAscent() / 2));
+        g2.drawString(str, x, y);
 
         row ++;
         moveTo(7, row, g2);
@@ -626,7 +633,7 @@ public class Tester {
         RoundRectangle2D roundRectToTranslate = new RoundRectangle2D.Double(5, 5, TILE_WIDTH / 2 - 10, TILE_HEIGHT / 2 - 10, 8, 8);
         TransformTests.translateShape(g2, bounds, roundRectToTranslate, Color.ORANGE, new BasicStroke(1.0f), Color.BLACK);
         moveTo(2, row, g2);
-        QuadCurve2D quadCurveToTranslate = ShapeTests.createQuadCurve2D(new Rectangle2D.Double(0, 0, TILE_WIDTH / 2, TILE_HEIGHT / 2), 3);
+        QuadCurve2D quadCurveToTranslate = ShapeTests.createQuadCurve2D1(new Rectangle2D.Double(0, 0, TILE_WIDTH / 2, TILE_HEIGHT / 2), 3);
         TransformTests.translateShape(g2, bounds, quadCurveToTranslate, Color.YELLOW, new BasicStroke(1.0f), Color.BLACK);
         moveTo(3, row, g2);
         CubicCurve2D cubicCurveToTranslate = ShapeTests.createCubicCurve2D(new Rectangle2D.Double(0, 0, TILE_WIDTH / 2, TILE_HEIGHT / 2), 3);
@@ -653,7 +660,7 @@ public class Tester {
         RoundRectangle2D roundRectToRotate = new RoundRectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2, 8, 8);
         TransformTests.rotateShape(g2, bounds, roundRectToRotate, Math.PI / 4, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
         moveTo(2, row, g2);
-        QuadCurve2D quadCurveToRotate = ShapeTests.createQuadCurve2D(new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT),15);
+        QuadCurve2D quadCurveToRotate = ShapeTests.createQuadCurve2D2(new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT),15);
         TransformTests.rotateShape(g2, bounds, quadCurveToRotate, Math.PI / 4, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
         moveTo(3, row, g2);
         CubicCurve2D cubicCurveToRotate = ShapeTests.createCubicCurve2D(new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT), 15);
@@ -679,9 +686,11 @@ public class Tester {
 
         row++;  // ***** STRINGS & FONTS
         moveTo(0, row, g2);
-        FontTests.drawString(g2);
-        moveTo(3, row, g2);
+        FontTests.drawString(g2, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH * 2, TILE_HEIGHT));
+        moveTo(2, row, g2);
         FontTests.drawStringBounds(g2, bounds);
+        moveTo(4, row, g2);
+        FontTests.drawTextMetrics(g2, bounds);
 
         row++;  // ***** CLIPPING
         moveTo(0, row, g2);
@@ -692,7 +701,7 @@ public class Tester {
 
         row++;  // ***** IMAGE
         moveTo(0, row, g2);
-        Rectangle2D imageBounds = new Rectangle2D.Double(0, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2);
+        Rectangle2D imageBounds = new Rectangle2D.Double(0, 0, TILE_WIDTH * TILE_COUNT_H, 256);
         ImageTests.drawImage(g2, imageBounds, 5);
 
         row ++;  // skip a row because the images are covering two rows
