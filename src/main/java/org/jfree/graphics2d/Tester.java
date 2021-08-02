@@ -159,7 +159,7 @@ public class Tester {
     }
 
     /**
-     * Creates a sample chart.
+     * Creates a JFreeChart sample chart.
      *
      * @param dataset  the dataset.
      *
@@ -175,6 +175,7 @@ public class Tester {
         chart.setBackgroundPaint(Color.WHITE);
         return chart;
     }
+
     private static java.util.List<Color> createPastelColors() {
         List<Color> result = new ArrayList<>();
         result.add(new Color(232, 177, 165));
@@ -193,46 +194,6 @@ public class Tester {
     private static void drawJFreeChartSample(Graphics2D g2, Rectangle2D bounds) {
         JFreeChart chart = createChart(createDataset());
         chart.draw(g2, bounds);
-    }
-
-    private static void drawTilePolygon(Graphics2D g2) {
-        g2.setPaint(Color.BLUE);
-        g2.setStroke(new BasicStroke(1.0f));
-        g2.drawPolygon(xCoordsForCross(TILE_WIDTH / 2, 36, 18), yCoordsForCross(TILE_HEIGHT / 2, 36, 18), 12);
-    }
-
-    private static int[] xCoordsForCross(int centerX, int radius, int thickness) {
-        int[] xcoords = new int[12];
-        xcoords[0] = centerX + thickness / 2;
-        xcoords[1] = xcoords[0];
-        xcoords[2] = centerX + radius;
-        xcoords[3] = xcoords[2];
-        xcoords[4] = xcoords[0];
-        xcoords[5] = xcoords[0];
-        xcoords[6] = centerX - thickness / 2;
-        xcoords[7] = xcoords[6];
-        xcoords[8] = centerX - radius;
-        xcoords[9] = xcoords[8];
-        xcoords[10] = xcoords[6];
-        xcoords[11] = xcoords[6];
-        return xcoords;
-    }
-
-    private static int[] yCoordsForCross(int centerY, int radius, int thickness) {
-        int[] ycoords = new int[12];
-        ycoords[0] = centerY + radius;
-        ycoords[1] = centerY + thickness / 2;
-        ycoords[2] = ycoords[1];
-        ycoords[3] = centerY - thickness / 2;
-        ycoords[4] = ycoords[3];
-        ycoords[5] = centerY - radius;
-        ycoords[6] = ycoords[5];
-        ycoords[7] = ycoords[3];
-        ycoords[8] = ycoords[3];
-        ycoords[9] = ycoords[1];
-        ycoords[10] = ycoords[1];
-        ycoords[11] = ycoords[0];
-        return ycoords;
     }
 
     /**
@@ -255,8 +216,8 @@ public class Tester {
         g2.drawLine(0, 1, TILE_WIDTH * TILE_COUNT_H, 1);
         g2.drawLine(0, TILE_HEIGHT, TILE_WIDTH * TILE_COUNT_H, TILE_HEIGHT);
         g2.setFont(new Font(Font.SERIF, Font.BOLD, 32));
-        Rectangle2D strBounds = g2.getFontMetrics().getStringBounds("Graphics2D Test Sheet", g2);
-        g2.drawString("Java2D / Graphics2D Test Image", 5, (int) (bounds.getCenterY() + strBounds.getHeight() / 2));
+        Rectangle2D strBounds = g2.getFontMetrics().getStringBounds("Graphics2D Tester", g2);
+        g2.drawString("Graphics2D Tester", 5, (int) (bounds.getCenterY() + strBounds.getHeight() / 2));
 
         row ++;
         moveTo(7, row, g2);
@@ -716,13 +677,6 @@ public class Tester {
 //        Arc2D arcToSkew = new Arc2D.Double(new Rectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2), 45, 290, Arc2D.PIE);
 //        TransformTests.shearShape(g2, bounds, arcToSkew, 0.5, -0.5, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
 
-        row++;  // ***** IMAGE
-        moveTo(0, row, g2);
-        Rectangle2D imageBounds = new Rectangle2D.Double(0, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2);
-        ImageTests.drawImage(g2, imageBounds, 5);
-
-        row ++;  // skip a row because the images are covering two rows
-
         row++;  // ***** STRINGS & FONTS
         moveTo(0, row, g2);
         FontTests.drawString(g2);
@@ -736,15 +690,24 @@ public class Tester {
         moveTo(1, row, g2);
         ClippingTests.drawArc2DWithRectangularClip(g2, bounds, 5);
 
-        moveTo(2, row, g2);
+        row++;  // ***** IMAGE
+        moveTo(0, row, g2);
+        Rectangle2D imageBounds = new Rectangle2D.Double(0, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2);
+        ImageTests.drawImage(g2, imageBounds, 5);
+
+        row ++;  // skip a row because the images are covering two rows
+
+
+        moveTo(TILE_COUNT_H - 2, 20, g2);
         drawSwingUI(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
 
     }
 
     /**
-     * Draws strings in SERIF, SANS_SERIF and MONOSPACED fonts.
+     * Writes out the relevant properties for the test.
      *
      * @param g2  the graphics target.
+     * @param g2Implementation  a description of the Graphics2D implementation under test.
      */
     public static void drawTestProperties(Graphics2D g2, String g2Implementation) {
         g2.setPaint(Color.BLACK);
@@ -768,12 +731,7 @@ public class Tester {
     private static void drawTestSingle(Graphics2D g2) {
         moveTo(0, 0, g2);
         Rectangle2D bounds = new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT);
-        //Point2D center = new Point2D.Double(TILE_WIDTH / 2, TILE_HEIGHT / 2);
-        //fillRectangle(g2, new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.GRAY}));
-        //drawAxes(g2, center, 40.0, new BasicStroke(1f), Color.GRAY);
-        //drawTilePolygon(g2);
-        Rectangle2D rect = new Rectangle2D.Double(0, 0, -40, 50);
-        ShapeTests.fillAndStrokeShape(g2, rect, Color.LIGHT_GRAY, OUTLINE, Color.RED);
+        drawSwingUI(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
     }
 
     /**
@@ -856,27 +814,16 @@ public class Tester {
      */
     public static void main(String[] args) throws IOException {
         boolean single = false;
-        //testJFreeSVG("jfreesvg", single);
         testJava2D("java2D", single);
+        //testJFreeSVG("jfreesvg", single);
         testSkijaGraphics2D("skija", single);
-        //System.getProperties().list(System.out);
-
-        // Graphics2D Tester
-        // Date and Time
-        // Graphics2D Implementation : SkijaGraphics2D 1.0.1 (-> Skija 0.92.18)
-        // os.name=Mac OS X
-        // os.version=10.16
-        // os.arch=x86_64
-        // java.runtime.version=15.0.1+8
-        // java.vm.name=OpenJDK 64-Bit Server VM
-        //java.vendor.version=Zulu15.28+13-CA
         System.exit(0);
     }
 
     private static JComponent createContent() {
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Metal".equals(info.getName())) {
+                if ("Nimbus".equals(info.getName())) {
                     UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -895,6 +842,7 @@ public class Tester {
         gauge.setPreferredSize(new Dimension(300, 200));
         JPanel panel1 = new JPanel(new BorderLayout());
         panel1.add(gauge, BorderLayout.CENTER);
+        //panel1.add(new JButton("Click ME!"), BorderLayout.CENTER);
         tabs.add("Tab 1", panel1);
         tabs.add("Tab 2", new JButton("Second Tab"));
         JButton button = new JButton("OK");
