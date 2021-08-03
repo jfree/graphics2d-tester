@@ -13,14 +13,6 @@ import java.awt.geom.*;
  */
 public class ShapeTests {
 
-    /** A dashed line stroke. */
-    private static Stroke DASHED = new BasicStroke(1.0f, BasicStroke.CAP_BUTT,
-            BasicStroke.JOIN_ROUND, 4f, new float[] { 2f, 2f }, 0f);
-
-    /** A dashed line stroke with width 3. */
-    private static Stroke DASHED_3 = new BasicStroke(3.0f, BasicStroke.CAP_ROUND,
-            BasicStroke.JOIN_ROUND, 4f, new float[] { 4f, 8f }, 0f);
-
     /**
      * Creates a sample {@code QuadCurve2D} instance fitting within the specified bounds.
      *
@@ -38,6 +30,14 @@ public class ShapeTests {
         return new QuadCurve2D.Double(pt0.getX(), pt0.getY(), cp.getX(), cp.getY(), pt1.getX(), pt1.getY());
     }
 
+    /**
+     * Creates a quad curve instance (in this case, occupying only the top half of the bounds).
+     *
+     * @param bounds  the bounds.
+     * @param margin  the margin.
+     *
+     * @return A quad curve.
+     */
     static QuadCurve2D createQuadCurve2D2(Rectangle2D bounds, double margin) {
         double w = bounds.getWidth();
         double h = bounds.getHeight();
@@ -143,13 +143,16 @@ public class ShapeTests {
     /**
      * Creates an Arc2D instance with the specified style.
      *
-     * @param style
+     * @param style  the arc style.
+     * @param start  the start angle.
+     * @param extent  the arc extent.
+     * @param bounds  the bounds.
+     * @param margin  the margin.
      *
-     * @return
+     * @return An Arc2D instance.
      */
     static Arc2D createArc2D(int style, double start, double extent, Rectangle2D bounds, int margin) {
-        Arc2D arc = new Arc2D.Double(margin, margin, bounds.getWidth() - 2 * margin, bounds.getHeight() - 2 * margin, start, extent, style);
-        return arc;
+        return new Arc2D.Double(margin, margin, bounds.getWidth() - 2 * margin, bounds.getHeight() - 2 * margin, start, extent, style);
     }
 
     /**
@@ -248,22 +251,6 @@ public class ShapeTests {
         g2.draw(new Line2D.Double(margin, margin, maxX - deltaX, maxY));
         g2.draw(new Line2D.Double(margin, margin, maxX - deltaX * 2, maxY));
         g2.draw(new Line2D.Double(margin, margin, margin, maxY));
-    }
-
-    /**
-     * Fills the specified area and then draws its outline.  This tile is used to
-     * show various combinations of Constructive Area Geometry (CAG) operations.
-     *
-     * @param g2  the graphics target.
-     * @param area  the shape.
-     */
-    static void drawAndFillArea(Graphics2D g2, Area area) {
-        g2.setPaint(Color.LIGHT_GRAY);
-        g2.fill(area);
-
-        g2.setPaint(Color.BLACK);
-        g2.setStroke(new BasicStroke(1.0f));
-        g2.draw(area);
     }
 
     /**

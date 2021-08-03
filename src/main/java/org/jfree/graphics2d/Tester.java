@@ -38,7 +38,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * Runs a visual testing setup against various Graphics2D implementations.  The idea
@@ -47,29 +46,29 @@ import java.util.Properties;
  */
 public class Tester {
 
-    private static int TILE_COUNT_H = 11;
+    private static final int TILE_COUNT_H = 11;
 
-    private static int TILE_COUNT_V = 32;
+    private static final int TILE_COUNT_V = 32;
 
-    private static int TILE_WIDTH = 100;
+    private static final int TILE_WIDTH = 100;
 
-    private static int TILE_HEIGHT = 65;
+    private static final int TILE_HEIGHT = 65;
 
-    private static int MARGIN = 5;
+    private static final int MARGIN = 5;
 
-    private static Stroke OUTLINE = new BasicStroke(1.0f);
-    private static Stroke OUTLINE_3 = new BasicStroke(3.0f);
+    private static final Stroke OUTLINE = new BasicStroke(1.0f);
+    private static final Stroke OUTLINE_3 = new BasicStroke(3.0f);
 
     /** A dashed line stroke. */
-    private static Stroke DASHED = new BasicStroke(1.0f, BasicStroke.CAP_BUTT,
+    private static final Stroke DASHED = new BasicStroke(1.0f, BasicStroke.CAP_BUTT,
             BasicStroke.JOIN_ROUND, 4f, new float[] { 2f, 2f }, 0f);
 
     /** A dashed line stroke with width 3. */
-    private static Stroke DASHED_3 = new BasicStroke(3.0f, BasicStroke.CAP_ROUND,
+    private static final Stroke DASHED_3 = new BasicStroke(3.0f, BasicStroke.CAP_ROUND,
             BasicStroke.JOIN_ROUND, 4f, new float[] { 4f, 8f }, 0f);
 
     /** An array containing rainbow colors, used in the gradient paint tests. */
-    private static Color[] RAINBOW_COLORS = new Color[] {
+    private static final Color[] RAINBOW_COLORS = new Color[] {
             new Color(255, 0, 0), // RED
             new Color(255, 165, 0), // ORANGE
             new Color(255, 255, 0), // YELLOW
@@ -220,7 +219,6 @@ public class Tester {
         String str = "Graphics2D Tester";
         g2.setFont(new Font(Font.SERIF, Font.BOLD, 32));
         FontMetrics fm = g2.getFontMetrics();
-        Rectangle2D strBounds = fm.getStringBounds(str, g2);
         LineMetrics lm = fm.getLineMetrics(str, g2);
         float x = 5f;
         float y = (float) (bounds.getCenterY() + (lm.getAscent() / 2));
@@ -600,7 +598,7 @@ public class Tester {
 
         row++;  // ***** RADIAL GRADIENT PAINT
         moveTo(0, row, g2);
-        Point2D center = new Point2D.Double(TILE_WIDTH / 2, TILE_HEIGHT / 2);
+        Point2D center = new Point2D.Double(TILE_WIDTH / 2.0, TILE_HEIGHT / 2.0);
         RadialGradientPaint rgp = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY});
         ShapeTests.fillAndStrokeShape(g2, roundRect, rgp, null, null);
 
@@ -613,7 +611,7 @@ public class Tester {
         ShapeTests.fillAndStrokeShape(g2, roundRect, rgp3, null, null);
 
         moveTo(3, row, g2);
-        Point2D focus = new Point2D.Double(TILE_WIDTH / 3, TILE_HEIGHT / 3);
+        Point2D focus = new Point2D.Double(TILE_WIDTH / 3.0, TILE_HEIGHT / 3.0);
         RadialGradientPaint rgp4 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.NO_CYCLE);
         ShapeTests.fillAndStrokeShape(g2, roundRect, rgp4, null, null);
 
@@ -627,28 +625,28 @@ public class Tester {
 
         row++; // ***** TRANSLATION
         moveTo(0, row, g2);
-        Rectangle2D rectToTranslate = new Rectangle2D.Double(5, 5, TILE_WIDTH / 2 - 10, TILE_HEIGHT / 2 - 10);
+        Rectangle2D rectToTranslate = new Rectangle2D.Double(5, 5, TILE_WIDTH / 2.0 - 10, TILE_HEIGHT / 2.0 - 10);
         TransformTests.translateShape(g2, bounds, rectToTranslate, Color.YELLOW, new BasicStroke(1.0f), Color.BLACK);
         moveTo(1, row, g2);
-        RoundRectangle2D roundRectToTranslate = new RoundRectangle2D.Double(5, 5, TILE_WIDTH / 2 - 10, TILE_HEIGHT / 2 - 10, 8, 8);
+        RoundRectangle2D roundRectToTranslate = new RoundRectangle2D.Double(5, 5, TILE_WIDTH / 2.0 - 10, TILE_HEIGHT / 2.0 - 10, 8, 8);
         TransformTests.translateShape(g2, bounds, roundRectToTranslate, Color.ORANGE, new BasicStroke(1.0f), Color.BLACK);
         moveTo(2, row, g2);
-        QuadCurve2D quadCurveToTranslate = ShapeTests.createQuadCurve2D1(new Rectangle2D.Double(0, 0, TILE_WIDTH / 2, TILE_HEIGHT / 2), 3);
+        QuadCurve2D quadCurveToTranslate = ShapeTests.createQuadCurve2D1(new Rectangle2D.Double(0, 0, TILE_WIDTH / 2.0, TILE_HEIGHT / 2.0), 3);
         TransformTests.translateShape(g2, bounds, quadCurveToTranslate, Color.YELLOW, new BasicStroke(1.0f), Color.BLACK);
         moveTo(3, row, g2);
-        CubicCurve2D cubicCurveToTranslate = ShapeTests.createCubicCurve2D(new Rectangle2D.Double(0, 0, TILE_WIDTH / 2, TILE_HEIGHT / 2), 3);
+        CubicCurve2D cubicCurveToTranslate = ShapeTests.createCubicCurve2D(new Rectangle2D.Double(0, 0, TILE_WIDTH / 2.0, TILE_HEIGHT / 2.0), 3);
         TransformTests.translateShape(g2, bounds, cubicCurveToTranslate, Color.ORANGE, new BasicStroke(1.0f), Color.BLACK);
         moveTo(4, row, g2);
-        Ellipse2D ellipseToTranslate = new Ellipse2D.Double(5, 5, TILE_WIDTH / 2 - 10, TILE_HEIGHT / 2 - 10);
+        Ellipse2D ellipseToTranslate = new Ellipse2D.Double(5, 5, TILE_WIDTH / 2.0 - 10, TILE_HEIGHT / 2.0 - 10);
         TransformTests.translateShape(g2, bounds, ellipseToTranslate, Color.YELLOW, new BasicStroke(1.0f), Color.BLACK);
         moveTo(5, row, g2);
-        Arc2D arcToTranslate = new Arc2D.Double(new Rectangle2D.Double(5, 5, TILE_WIDTH / 2 - 10, TILE_HEIGHT / 2 - 10), 45, 290, Arc2D.PIE);
+        Arc2D arcToTranslate = new Arc2D.Double(new Rectangle2D.Double(5, 5, TILE_WIDTH / 2.0 - 10, TILE_HEIGHT / 2.0 - 10), 45, 290, Arc2D.PIE);
         TransformTests.translateShape(g2, bounds, arcToTranslate, Color.ORANGE, new BasicStroke(1.0f), Color.BLACK);
         moveTo(6, row, g2);
-        Area areaToTranslate = ShapeTests.createCombinedArea("exclusiveOr", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH / 2, TILE_HEIGHT / 2), 2.5);
+        Area areaToTranslate = ShapeTests.createCombinedArea("exclusiveOr", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH / 2.0, TILE_HEIGHT / 2.0), 2.5);
         TransformTests.translateShape(g2, bounds, areaToTranslate, Color.YELLOW, new BasicStroke(1.0f), Color.BLACK);
         moveTo(7, row, g2);
-        Path2D pathToTranslate = ShapeTests.createPath2D(new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH / 2, TILE_HEIGHT / 2), 2.5);
+        Path2D pathToTranslate = ShapeTests.createPath2D(new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH / 2.0, TILE_HEIGHT / 2.0), 2.5);
         TransformTests.translateShape(g2, bounds, pathToTranslate, Color.ORANGE, new BasicStroke(1.0f), Color.BLACK);
 
         row++; // ***** ROTATION
@@ -805,7 +803,6 @@ public class Tester {
      */
     private static void drawTestSingle(Graphics2D g2) {
         moveTo(0, 0, g2);
-        Rectangle2D bounds = new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT);
         drawSwingUI(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
     }
 
@@ -856,7 +853,7 @@ public class Tester {
      *
      * @param fileName  the PNG file name.
      *
-     * @throws IOException
+     * @throws IOException if there is an I/O problem.
      */
     public static void testJava2D(String fileName, boolean single) throws IOException {
         BufferedImage image = new BufferedImage(TILE_WIDTH * TILE_COUNT_H, TILE_HEIGHT * TILE_COUNT_V, BufferedImage.TYPE_INT_ARGB);

@@ -58,8 +58,8 @@ public class FontTests {
     /**
      * Draws some text and the typical text metrics.
      *
-     * @param g2
-     * @param bounds
+     * @param g2  the graphics target.
+     * @param bounds  the cell bounds.
      */
     public static void drawTextMetrics(Graphics2D g2, Rectangle2D bounds) {
         double x = 5.0;

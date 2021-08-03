@@ -21,19 +21,37 @@ import java.io.IOException;
  */
 public class ImageTests {
 
-    private static Image BUG_IMAGE;
+    private static Image TRIUMPH_IMAGE;
 
+    /**
+     * Draws an image of a motorcycle within the specified bounds.
+     *
+     * @param g2  the graphics target.
+     * @param bounds  the cell bounds.
+     * @param margin  the margin.
+     */
     static void drawImage(Graphics2D g2, Rectangle2D bounds, int margin) {
-        if (BUG_IMAGE == null) {
+        if (TRIUMPH_IMAGE == null) {
             try {
-                BUG_IMAGE = ImageIO.read(ClassLoader.getSystemResource("triumph.png"));
+                TRIUMPH_IMAGE = ImageIO.read(ClassLoader.getSystemResource("triumph.png"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        g2.drawImage(BUG_IMAGE, (int) bounds.getX() + margin, (int) bounds.getY() + margin, (int) bounds.getWidth(), (int) bounds.getHeight(), null);
+        g2.drawImage(TRIUMPH_IMAGE, (int) bounds.getX() + margin, (int) bounds.getY() + margin, (int) bounds.getWidth(), (int) bounds.getHeight(), null);
     }
 
+    /**
+     * Draws a QR code representing the specified text (usually a URL pointing to the project page for the
+     * Graphics2D instance being tested.
+     *
+     * @param g2  the graphics target.
+     * @param bounds  the cell bounds.
+     * @param margin  the margin.
+     * @param text  the text to be encoded in the QR code.
+     *
+     * @throws Exception if there is a problem.
+     */
     static void drawQRCodeImage(Graphics2D g2, Rectangle2D bounds, int margin, String text) throws Exception {
         QRCodeWriter writer = new QRCodeWriter();
         BitMatrix matrix = writer.encode(text, BarcodeFormat.QR_CODE, 250, 250);
