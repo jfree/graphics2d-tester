@@ -67,8 +67,8 @@ public class FontTests {
         String str = "Murphy \u00C9";
         FontMetrics fm = g2.getFontMetrics();
         Rectangle2D strBounds = fm.getStringBounds(str, g2);
-        g2.setPaint(Color.ORANGE);
-        g2.setStroke(new BasicStroke(0.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 4f, new float[] {2f, 2f}, 0f));
+        g2.setPaint(Color.RED);
+        g2.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 4f, new float[] {2f, 2f}, 0f));
         g2.draw(new Line2D.Double(x, y, x + strBounds.getWidth(), y));
         g2.setPaint(Color.BLACK);
         g2.setFont(new Font(Font.SERIF, Font.PLAIN, 36));
@@ -78,13 +78,13 @@ public class FontTests {
 
         LineMetrics lm = fm.getLineMetrics(str, g2);
         g2.setStroke(new BasicStroke(0.5f));
-        g2.setPaint(Color.RED);
+        g2.setPaint(Color.DARK_GRAY);
         float ascent = lm.getAscent();
-        g2.draw(new Line2D.Double(x, y - ascent, strBounds.getWidth(), y - ascent));
+        g2.draw(new Line2D.Double(x, y - ascent, x + strBounds.getWidth(), y - ascent));
         float descent = lm.getDescent();
-        g2.draw(new Line2D.Double(x, y + descent, strBounds.getWidth(), y + descent));
+        g2.draw(new Line2D.Double(x, y + descent, x + strBounds.getWidth(), y + descent));
         float leading = lm.getLeading();
-        g2.draw(new Line2D.Double(x, y + descent + leading, strBounds.getWidth(), y + descent + leading));
+        g2.draw(new Line2D.Double(x, y + descent + leading, x + strBounds.getWidth(), y + descent + leading));
     }
 
 }

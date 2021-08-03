@@ -26,7 +26,7 @@ public class ImageTests {
     static void drawImage(Graphics2D g2, Rectangle2D bounds, int margin) {
         if (BUG_IMAGE == null) {
             try {
-                BUG_IMAGE = ImageIO.read(ClassLoader.getSystemResource("IMG_1194.png"));
+                BUG_IMAGE = ImageIO.read(ClassLoader.getSystemResource("triumph.png"));
             } catch (IOException e) {
                 e.printStackTrace();
             }

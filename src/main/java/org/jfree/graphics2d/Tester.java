@@ -49,7 +49,7 @@ public class Tester {
 
     private static int TILE_COUNT_H = 11;
 
-    private static int TILE_COUNT_V = 31;
+    private static int TILE_COUNT_V = 34;
 
     private static int TILE_WIDTH = 100;
 
@@ -749,11 +749,29 @@ public class Tester {
 
         row++;  // ***** IMAGE
         moveTo(0, row, g2);
-        Rectangle2D imageBounds = new Rectangle2D.Double(0, 0, TILE_WIDTH * TILE_COUNT_H, 256);
+        Rectangle2D imageBounds = new Rectangle2D.Double(0, 0, TILE_WIDTH * 3, TILE_WIDTH * 2);
         ImageTests.drawImage(g2, imageBounds, 5);
 
-        row ++;  // skip a row because the images are covering two rows
+        moveTo(4, row, g2);
+        imageBounds = new Rectangle2D.Double(0, 0, TILE_WIDTH * 3, TILE_WIDTH * 2);
+        Shape saved = g2.getClip();
+        g2.clip(new Ellipse2D.Double(15, 15, TILE_WIDTH * 3 - 30, TILE_WIDTH * 2  - 30));
+        ImageTests.drawImage(g2, imageBounds, 5);
+        g2.setClip(saved);
 
+        moveTo(8, row, g2);
+        imageBounds = new Rectangle2D.Double(0, 0, TILE_WIDTH * 3, TILE_WIDTH * 2);
+        AffineTransform savedTransform = g2.getTransform();
+        Shape savedClip = g2.getClip();
+        g2.clip(imageBounds);
+        g2.translate(TILE_WIDTH * 1.5, TILE_WIDTH);
+        g2.rotate(Math.PI / 4);
+        g2.translate(-TILE_WIDTH * 1.5, -TILE_WIDTH);
+        ImageTests.drawImage(g2, imageBounds, 5);
+        g2.setClip(savedClip);
+        g2.setTransform(savedTransform);
+
+        row ++;  // skip a row because the images are covering two rows
 
         moveTo(TILE_COUNT_H - 2, 20, g2);
         drawSwingUI(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
