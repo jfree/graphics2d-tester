@@ -9,13 +9,18 @@ import java.awt.*;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Rectangle2D;
 
+/**
+ * Checks for clipping operations.
+ */
 public class ClippingTests {
+
     /**
      * This test sets rectangular clipping regions and then fills the complete
      * tile with a color.  This tests clipping and the ability to reset a
      * user clip completely.
      *
      * @param g2  the graphics target.
+     * @param bounds  the cell bounds.
      */
     static void fillRectangularClippingRegions(Graphics2D g2, Rectangle2D bounds) {
         Shape savedClip = g2.getClip();
@@ -46,6 +51,13 @@ public class ClippingTests {
         g2.setClip(savedClip);
     }
 
+    /**
+     * In this test an Arc2D is drawn after applying a rectangular clip.
+     *
+     * @param g2  the graphics target.
+     * @param bounds  the cell bounds.
+     * @param margin  the margin.
+     */
     static void drawArc2DWithRectangularClip(Graphics2D g2, Rectangle2D bounds, int margin) {
         Shape savedClip = g2.getClip();
         g2.clipRect(margin + 10, margin + 10, (int) bounds.getWidth() - 2 * (margin + 10), (int) bounds.getHeight() - 2 * (margin + 10));
@@ -56,4 +68,5 @@ public class ClippingTests {
         g2.draw(arc);
         g2.setClip(savedClip);
     }
+
 }

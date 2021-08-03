@@ -49,7 +49,7 @@ public class Tester {
 
     private static int TILE_COUNT_H = 11;
 
-    private static int TILE_COUNT_V = 34;
+    private static int TILE_COUNT_V = 32;
 
     private static int TILE_WIDTH = 100;
 
