@@ -276,14 +276,16 @@ public class ShapeTests {
      * @return An area.
      */
     static Area createCombinedArea(String operation, Rectangle2D bounds, double margin) {
-        double w = bounds.getWidth() / 1.5;
-        double h = bounds.getHeight() / 1.5;
+
+        Rectangle2D areaBounds = new Rectangle2D.Double(margin, margin, bounds.getWidth() - 2 * margin, bounds.getHeight() - 2 * margin);
+        double w = areaBounds.getWidth() / 1.5;
+        double h = areaBounds.getHeight() / 1.5;
 
         // create an ellipse in the top left
-        Ellipse2D ellipse = new Ellipse2D.Double(margin, margin, bounds.getWidth() / 1.5, bounds.getHeight() / 1.5);
+        Ellipse2D ellipse = new Ellipse2D.Double(areaBounds.getX(), areaBounds.getY(), w, h);
 
         // create a rectangle in the bottom right
-        Rectangle2D rectangle = new Rectangle2D.Double(bounds.getWidth() - margin - w, bounds.getHeight() - margin - h, w, h);
+        Rectangle2D rectangle = new Rectangle2D.Double(areaBounds.getMaxX() - w, areaBounds.getMaxY() - h, w, h);
 
         Area a1 = new Area(ellipse);
         Area a2 = new Area(rectangle);
@@ -320,9 +322,9 @@ public class ShapeTests {
         double deltaY = (bounds.getHeight() - 2 * margin) / 5.0;
         GeneralPath path = new GeneralPath();
         path.setWindingRule(GeneralPath.WIND_EVEN_ODD);
-        double x0 = margin;
-        double x1 = bounds.getWidth() - margin;
-        double y0 = margin;
+        double x0 = bounds.getX() + margin;
+        double x1 = bounds.getMaxX() - margin;
+        double y0 = bounds.getY() + margin;
         double y1 = y0 + deltaY;
         double y2 = y0 + deltaY * 2;
         double y3 = y0 + deltaY * 3;

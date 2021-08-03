@@ -49,7 +49,7 @@ public class Tester {
 
     private static int TILE_COUNT_H = 11;
 
-    private static int TILE_COUNT_V = 30;
+    private static int TILE_COUNT_V = 31;
 
     private static int TILE_WIDTH = 100;
 
@@ -652,37 +652,85 @@ public class Tester {
         TransformTests.translateShape(g2, bounds, pathToTranslate, Color.ORANGE, new BasicStroke(1.0f), Color.BLACK);
 
         row++; // ***** ROTATION
-        moveTo(0, row, g2);
         double m = 0.33 * TILE_HEIGHT;
+        moveTo(0, row, g2);
         Rectangle2D rectToRotate = new Rectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2);
-        TransformTests.rotateShape(g2, bounds, rectToRotate, Math.PI / 4, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
+        TransformTests.rotateShape(g2, bounds, rectToRotate, Math.PI / 4, Color.BLUE, OUTLINE, Color.BLACK);
         moveTo(1, row, g2);
         RoundRectangle2D roundRectToRotate = new RoundRectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2, 8, 8);
-        TransformTests.rotateShape(g2, bounds, roundRectToRotate, Math.PI / 4, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
+        TransformTests.rotateShape(g2, bounds, roundRectToRotate, Math.PI / 4, Color.BLUE, OUTLINE, Color.BLACK);
         moveTo(2, row, g2);
         QuadCurve2D quadCurveToRotate = ShapeTests.createQuadCurve2D2(new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT),15);
-        TransformTests.rotateShape(g2, bounds, quadCurveToRotate, Math.PI / 4, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
+        TransformTests.rotateShape(g2, bounds, quadCurveToRotate, Math.PI / 4, Color.BLUE, OUTLINE, Color.BLACK);
         moveTo(3, row, g2);
         CubicCurve2D cubicCurveToRotate = ShapeTests.createCubicCurve2D(new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT), 15);
-        TransformTests.rotateShape(g2, bounds, cubicCurveToRotate, Math.PI / 4, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
+        TransformTests.rotateShape(g2, bounds, cubicCurveToRotate, Math.PI / 4, Color.BLUE, OUTLINE, Color.BLACK);
         moveTo(4, row, g2);
         Ellipse2D ellipseToRotate = new Ellipse2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2);
-        TransformTests.rotateShape(g2, bounds, ellipseToRotate, Math.PI / 4, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
+        TransformTests.rotateShape(g2, bounds, ellipseToRotate, Math.PI / 4, Color.BLUE, OUTLINE, Color.BLACK);
         moveTo(5, row, g2);
         Arc2D arcToRotate = new Arc2D.Double(new Rectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2), 45, 290, Arc2D.PIE);
-        TransformTests.rotateShape(g2, bounds, arcToRotate, Math.PI / 4, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
+        TransformTests.rotateShape(g2, bounds, arcToRotate, Math.PI / 4, Color.BLUE, OUTLINE, Color.BLACK);
+        moveTo(6, row, g2);
+        Area areaToRotate = ShapeTests.createCombinedArea("add", new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT), m);
+        TransformTests.rotateShape(g2, bounds, areaToRotate, Math.PI / 4, Color.BLUE, OUTLINE, Color.BLACK);
+        moveTo(7, row, g2);
+        double mmm = 0.50;
+        Path2D pathToRotate = ShapeTests.createPath2D(new Rectangle2D.Double(TILE_WIDTH * (mmm / 2.0), TILE_HEIGHT * (mmm / 2.0), TILE_WIDTH * (1 - mmm), TILE_HEIGHT * (1 - mmm)), 0.0);
+        TransformTests.rotateShape(g2, bounds, pathToRotate, Math.PI / 4, Color.BLUE, OUTLINE, Color.BLACK);
 
-//        row++; // ***** SHEAR
-//        moveTo(0, row, g2);
-//        double mm = 0.33 * TILE_HEIGHT;
-//        Rectangle2D rectToSkew = new Rectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2);
-//        TransformTests.shearShape(g2, bounds, rectToSkew, 0.5, -0.5, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
-//        moveTo(4, row, g2);
-//        Ellipse2D ellipseToSkew = new Ellipse2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2);
-//        TransformTests.shearShape(g2, bounds, ellipseToSkew, 0.5, -0.5, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
-//        moveTo(5, row, g2);
-//        Arc2D arcToSkew = new Arc2D.Double(new Rectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2), 45, 290, Arc2D.PIE);
-//        TransformTests.shearShape(g2, bounds, arcToSkew, 0.5, -0.5, Color.BLUE, new BasicStroke(1.0f), Color.BLACK);
+        row++; // ***** SHEAR X & Y
+        moveTo(0, row, g2);
+        double shx = -2.0;
+        double shy = -0.5;
+        double mm = 0.33 * TILE_HEIGHT;
+        Rectangle2D rectToSkew = new Rectangle2D.Double(m, m, TILE_WIDTH - mm*2, TILE_HEIGHT - mm*2);
+        TransformTests.shearShape(g2, bounds, rectToSkew, 0.0, shy, Color.BLUE, OUTLINE, Color.BLACK);
+        moveTo(0, row + 1, g2);
+        TransformTests.shearShape(g2, bounds, rectToSkew, shx, 0.0, Color.BLUE, OUTLINE, Color.BLACK);
+        moveTo(1, row, g2);
+        RoundRectangle2D roundRectToShear = new RoundRectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2, 8, 8);
+        TransformTests.shearShape(g2, bounds, roundRectToShear, 0.0, shy, Color.BLUE, OUTLINE, Color.BLACK);
+        moveTo(1, row + 1, g2);
+        TransformTests.shearShape(g2, bounds, roundRectToShear, shx, 0.0, Color.BLUE, OUTLINE, Color.BLACK);
+
+        moveTo(2, row, g2);
+        QuadCurve2D quadCurveToShear = ShapeTests.createQuadCurve2D2(new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT),15);
+        TransformTests.shearShape(g2, bounds, quadCurveToShear, 0.0, shy, Color.BLUE, OUTLINE, Color.BLACK);
+        moveTo(2, row + 1, g2);
+        TransformTests.shearShape(g2, bounds, quadCurveToShear, shx, 0.0, Color.BLUE, OUTLINE, Color.BLACK);
+
+        moveTo(3, row, g2);
+        CubicCurve2D cubicCurveToShear = ShapeTests.createCubicCurve2D(new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT), 15);
+        TransformTests.shearShape(g2, bounds, cubicCurveToShear, 0.0, shy, Color.BLUE, OUTLINE, Color.BLACK);
+        moveTo(3, row + 1, g2);
+        TransformTests.shearShape(g2, bounds, cubicCurveToShear, shx, 0.0, Color.BLUE, OUTLINE, Color.BLACK);
+
+        moveTo(4, row, g2);
+        Ellipse2D ellipseToSkew = new Ellipse2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2);
+        TransformTests.shearShape(g2, bounds, ellipseToSkew, 0.0, shy, Color.BLUE, OUTLINE, Color.BLACK);
+        moveTo(4, row + 1, g2);
+        TransformTests.shearShape(g2, bounds, ellipseToSkew, shx, 0.0, Color.BLUE, OUTLINE, Color.BLACK);
+
+        moveTo(5, row, g2);
+        Arc2D arcToShear = new Arc2D.Double(new Rectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2), 45, 290, Arc2D.PIE);
+        TransformTests.shearShape(g2, bounds, arcToShear, 0.0, shy, Color.BLUE, OUTLINE, Color.BLACK);
+        moveTo(5, row + 1, g2);
+        TransformTests.shearShape(g2, bounds, arcToShear, shx, 0.0, Color.BLUE, OUTLINE, Color.BLACK);
+
+        moveTo(6, row, g2);
+        Area areaToShear = ShapeTests.createCombinedArea("add", new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT), m);
+        TransformTests.shearShape(g2, bounds, areaToShear, 0.0, shy, Color.BLUE, OUTLINE, Color.BLACK);
+        moveTo(6, row + 1, g2);
+        TransformTests.shearShape(g2, bounds, areaToShear, shx, 0.0, Color.BLUE, OUTLINE, Color.BLACK);
+
+        moveTo(7, row, g2);
+        Path2D pathToShear = ShapeTests.createPath2D(new Rectangle2D.Double(TILE_WIDTH * (mmm / 2.0), TILE_HEIGHT * (mmm / 2.0), TILE_WIDTH * (1 - mmm), TILE_HEIGHT * (1 - mmm)), 0.0);
+        TransformTests.shearShape(g2, bounds, pathToShear, 0.0, shy, Color.BLUE, OUTLINE, Color.BLACK);
+        moveTo(7, row + 1, g2);
+        TransformTests.shearShape(g2, bounds, pathToShear, shx, 0.0, Color.BLUE, OUTLINE, Color.BLACK);
+
+        row++; // to cover the shearing above taking up two rows
 
         row++;  // ***** STRINGS & FONTS
         moveTo(0, row, g2);
