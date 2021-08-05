@@ -4,7 +4,16 @@
     <groupId>org.jfree</groupId>
     <artifactId>graphics2d-tester</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>g2d-core</module>
+        <module>g2d-jfreesvg</module>
+        <module>g2d-jfreepdf</module>
+        <module>g2d-fxgraphics2d</module>
+	<module>g2d-skijagraphics2d</module>
+    </modules>
+	
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>15</maven.compiler.source>
@@ -29,28 +38,11 @@
         </developer>
     </developers>
 
-    <repositories>
-        <repository>
-            <id>space-maven</id>
-            <url>https://packages.jetbrains.team/maven/p/skija/maven</url>
-        </repository>
-    </repositories>
-
     <dependencies>
-        <dependency>
-            <groupId>org.jfree</groupId>
-            <artifactId>org.jfree.skijagraphics2d</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
-        </dependency>
         <dependency>
             <groupId>org.jfree</groupId>
             <artifactId>jfreechart</artifactId>
             <version>1.5.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jfree</groupId>
-            <artifactId>jfreesvg</artifactId>
-            <version>3.4.1</version>
         </dependency>
         <dependency>
             <groupId>org.jfree</groupId>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.jfree</groupId>
+    <artifactId>g2d-skijagraphics2d</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>org.jfree</groupId>
+        <artifactId>graphics2d-tester</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <name>Graphics2D Tester - SkijaGraphics2D</name>
+    <url>http://github.com/jfree/graphics2d-tester</url>
+    <description>A test program for Graphics2D implementations.</description>
+
+    <scm>
+        <url>https://github.com/jfree/graphics2d-tester</url>
+        <connection>scm:git:git://github.com/jfree/graphics2d-tester.git</connection>
+        <developerConnection>scm:git:git@github.com:jfree/graphics2d-tester.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <email>dave@jfree.org</email>
+            <name>David Gilbert</name>
+            <url>https://github.com/jfree</url>
+        </developer>
+    </developers>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>g2d-core</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>org.jfree.skijagraphics2d</artifactId>
+            <version>1.0.2-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+</project>

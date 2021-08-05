@@ -6,8 +6,6 @@
 package org.jfree.graphics2d;
 
 import eu.hansolo.steelseries.gauges.Radial;
-import org.jetbrains.skija.Data;
-import org.jetbrains.skija.EncodedImageFormat;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.flow.FlowPlot;
 import org.jfree.chart.title.TextTitle;
@@ -23,9 +21,6 @@ import org.jfree.chart3d.renderer.GradientColorScale;
 import org.jfree.chart3d.renderer.xyz.SurfaceRenderer;
 import org.jfree.data.flow.DefaultFlowDataset;
 import org.jfree.data.flow.FlowDataset;
-import org.jfree.graphics2d.svg.SVGGraphics2D;
-import org.jfree.graphics2d.svg.SVGUtils;
-import org.jfree.skija.SkijaGraphics2D;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -203,7 +198,7 @@ public class Tester {
      * @param g2  the graphics target.
      * @param qrLink  the link text to put in the QR code
      */
-    private static void drawTestSheet(Graphics2D g2, String g2UnderTest, String qrLink) {
+    public static void drawTestSheet(Graphics2D g2, String g2UnderTest, String qrLink) {
         int row = -1;
         Rectangle2D bounds = new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT);
 
@@ -813,37 +808,11 @@ public class Tester {
      * @param g2  the graphics target.
      * @param single  set to true if just generating a single test
      */
-    private static void drawTestOutput(Graphics2D g2, String g2UnderTest, String qrLink, boolean single) {
+    public static void drawTestOutput(Graphics2D g2, String g2UnderTest, String qrLink, boolean single) {
         if (single) {
             drawTestSingle(g2);
         } else {
             drawTestSheet(g2, g2UnderTest, qrLink);
-        }
-    }
-
-    /**
-     * Run the tests with SkijaGraphics2D.
-     *
-     * @param fileName  the base filename.
-     * @param single  run the current single test?
-     */
-    public static void testSkijaGraphics2D(String fileName, boolean single) {
-        SkijaGraphics2D g2 = new SkijaGraphics2D(TILE_COUNT_H * TILE_WIDTH, TILE_COUNT_V * TILE_HEIGHT);
-        drawTestOutput(g2, "SkijaGraphics2d 1.0.2-SNAPSHOT", "https://github.com/jfree/skijagraphics2d", single);
-        org.jetbrains.skija.Image image = g2.getSurface().makeImageSnapshot();
-        Data pngData = image.encodeToData(EncodedImageFormat.PNG);
-        byte [] pngBytes = pngData.getBytes();
-        try {
-            if (single) {
-                fileName += "-single.png";
-            } else {
-                fileName += ".png";
-            }
-            java.nio.file.Path path = java.nio.file.Path.of(fileName);
-            java.nio.file.Files.write(path, pngBytes);
-        }
-        catch (IOException e) {
-            System.out.println(e);
         }
     }
 
@@ -868,16 +837,6 @@ public class Tester {
         ImageIO.write(image, "png", new File(fileName));
     }
 
-    public static void testJFreeSVG(String filename, boolean single) throws IOException {
-        SVGGraphics2D g2 = new SVGGraphics2D(TILE_WIDTH * TILE_COUNT_H, TILE_HEIGHT * TILE_COUNT_V);
-        drawTestOutput(g2, "JFree/SVGGraphics2D", "https://github.com/jfree/jfreesvg", single);
-        if (single) {
-            filename += "-single.svg";
-        } else {
-            filename += ".svg";
-        }
-        SVGUtils.writeToSVG(new File(filename), g2.getSVGElement());
-    }
 
     /**
      * Creates Java2D output that exercises many features of the API.
@@ -887,8 +846,6 @@ public class Tester {
     public static void main(String[] args) throws IOException {
         boolean single = false;
         testJava2D("java2D", single);
-        //testJFreeSVG("jfreesvg", single);
-        testSkijaGraphics2D("skija", single);
         System.exit(0);
     }
 
@@ -921,6 +878,24 @@ public class Tester {
         content.add(tabs);
         content.add(button, BorderLayout.SOUTH);
         return content;
+    }
+
+    /**
+     * Returns the width of the test sheet in Java2D units.
+     *
+     * @return The width of the test sheet in Java2D units.
+     */
+    public static double getTestSheetWidth() {
+        return TILE_WIDTH * TILE_COUNT_H;
+    }
+
+    /**
+     * Returns the height of the test sheet in Java2D units.
+     *
+     * @return The height of the test sheet in Java2D units.
+     */
+    public static double getTestSheetHeight() {
+        return TILE_HEIGHT * TILE_COUNT_V;
     }
 
 }
