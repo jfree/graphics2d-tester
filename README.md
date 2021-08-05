@@ -2,9 +2,7 @@
 
 Overview
 --------
-A visual tester for implementations of Java2D's `Graphics2D` class.  The program generates a pre-defined set of outputs 
-for any provided subclass of `Graphics2D` that can be compared against a known good result.  The following 
-libraries (as well as others) can be tested this way:
+**Graphics2D Tester** is a visual tester for implementations of Java2D's `Graphics2D` class.  The program generates a pre-defined set of outputs for any provided subclass of `Graphics2D` that can be compared against a known good result.  The following libraries (as well as others) can be tested this way:
 
 - [JFreeSVG](https://github.com/jfree/jfreesvg)
 - [JFreePDF](https://github.com/jfree/jfreepdf)
@@ -32,4 +30,12 @@ The test kit uses several third party libraries:
 
 - [Orson Charts](https://github.com/jfree/orson-charts) - used to create a sample 3D chart;
 
-- [SteelSeries-Swing](https://github.com/HanSolo/SteelSeries-Swing) - used within the Java Swing UI demo to draw a dial
+- [SteelSeries-Swing](https://github.com/HanSolo/SteelSeries-Swing) - used within the Java Swing UI demo to draw a dial.
+
+License
+-------
+**Graphics2D Tester** is free software under the terms of the GNU General Public License version 3 (GPLv3) or later.  The license file (LICENSE) is included in this distribution.
+
+    Please note that Graphics2D Tester is distributed WITHOUT ANY WARRANTY; without even 
+    the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+    Please refer to the license for details.
