@@ -1,8 +1,8 @@
-# Graphics 2D Tester
+# JFree Graphics2D Tester
 
 Overview
 --------
-**Graphics2D Tester** is a visual tester for implementations of Java2D's `Graphics2D` class.  The program generates a pre-defined set of outputs for any provided subclass of `Graphics2D` that can be compared against a known good result.  The following libraries (as well as others) can be tested this way:
+**JFree Graphics2D Tester** is a visual tester for implementations of Java2D's `Graphics2D` class.  The program generates a pre-defined set of outputs for any provided subclass of `Graphics2D` that can be compared against a known good result.  The following libraries (as well as others) can be tested this way:
 
 - [JFreeSVG](https://github.com/jfree/jfreesvg)
 - [JFreePDF](https://github.com/jfree/jfreepdf)
