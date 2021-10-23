@@ -17,7 +17,7 @@ public class SkijaGraphics2DTestRunner {
      */
     public static void testSkijaGraphics2D(String fileName, boolean single) {
         SkijaGraphics2D g2 = new SkijaGraphics2D((int) Tester.getTestSheetWidth(), (int) Tester.getTestSheetHeight());
-        Tester.drawTestOutput(g2, "SkijaGraphics2d 1.0.2-SNAPSHOT", "https://github.com/jfree/skijagraphics2d", single);
+        Tester.drawTestOutput(g2, "SkijaGraphics2d 1.0.4", "https://github.com/jfree/skijagraphics2d", single);
         org.jetbrains.skija.Image image = g2.getSurface().makeImageSnapshot();
         Data pngData = image.encodeToData(EncodedImageFormat.PNG);
         byte [] pngBytes = pngData.getBytes();
