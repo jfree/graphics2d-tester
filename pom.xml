@@ -78,13 +78,13 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.7.0</version>
+            <version>5.8.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.7.0</version>
+            <version>5.8.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -123,7 +123,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.3.1</version>
                 <configuration>
                     <docfilessubdirs>true</docfilessubdirs>
                     <linksource>true</linksource>
@@ -158,6 +158,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>
