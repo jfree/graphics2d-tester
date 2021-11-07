@@ -1,4 +1,4 @@
-/**
+/*
  * Graphics2D Tester
  *
  * (C)opyright 2021, by David Gilbert.
@@ -7,8 +7,11 @@ package org.jfree.graphics2d;
 
 import java.awt.*;
 import java.awt.font.LineMetrics;
+import java.awt.font.TextAttribute;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A collection of tests related to fonts.
@@ -85,6 +88,27 @@ public class FontTests {
         g2.draw(new Line2D.Double(x, y + descent, x + strBounds.getWidth(), y + descent));
         float leading = lm.getLeading();
         g2.draw(new Line2D.Double(x, y + descent + leading, x + strBounds.getWidth(), y + descent + leading));
+    }
+
+    /**
+     * Draws some text with different tracking attributes.
+     *
+     * @param g2  the graphics target.
+     * @param bounds  the cell bounds.
+     */
+    public static void drawTextWithTracking(Graphics2D g2, Rectangle2D bounds) {
+        g2.setPaint(Color.BLACK);
+        Map<TextAttribute, Object> attributes = new HashMap<>();
+        attributes.put(TextAttribute.TRACKING, TextAttribute.TRACKING_LOOSE);
+        g2.setFont(new Font(Font.SERIF, Font.PLAIN, 14).deriveFont(attributes));
+        g2.drawString("Tracking: TRACKING_LOOSE", (float) bounds.getX() + 5f, (float) bounds.getY() + 20);
+        attributes.put(TextAttribute.TRACKING, 0.0);
+        g2.setFont(new Font(Font.SERIF, Font.PLAIN, 14).deriveFont(attributes));
+        g2.drawString("Tracking: None", (float) bounds.getX() + 5f, (float) bounds.getY() + 40);
+        attributes.put(TextAttribute.TRACKING, TextAttribute.TRACKING_TIGHT);
+        g2.setFont(new Font(Font.SERIF, Font.PLAIN, 14).deriveFont(attributes));
+        g2.drawString("Tracking: TRACKING_TIGHT", (float) bounds.getX() + 5f, (float) bounds.getY() + 60);
+
     }
 
 }

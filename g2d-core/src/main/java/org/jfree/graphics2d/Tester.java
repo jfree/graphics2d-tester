@@ -732,6 +732,8 @@ public class Tester {
         FontTests.drawStringBounds(g2, bounds);
         moveTo(4, row, g2);
         FontTests.drawTextMetrics(g2, bounds);
+        moveTo(6, row, g2);
+        FontTests.drawTextWithTracking(g2, bounds);
 
         row++;  // ***** CLIPPING
         moveTo(0, row, g2);
