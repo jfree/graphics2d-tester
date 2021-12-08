@@ -10,6 +10,7 @@ import java.awt.font.LineMetrics;
 import java.awt.font.TextAttribute;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
+import java.text.AttributedString;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -108,7 +109,36 @@ public class FontTests {
         attributes.put(TextAttribute.TRACKING, TextAttribute.TRACKING_TIGHT);
         g2.setFont(new Font(Font.SERIF, Font.PLAIN, 14).deriveFont(attributes));
         g2.drawString("Tracking: TRACKING_TIGHT", (float) bounds.getX() + 5f, (float) bounds.getY() + 60);
+    }
 
+    /**
+     * Draws a couple of attributed strings with superscript and bold.
+     *
+     * @param g2  the graphics target.
+     * @param bounds  the cell bounds.
+     */
+    public static void drawAttributedString(Graphics2D g2, Rectangle2D bounds) {
+
+        AttributedString test1 = new AttributedString("test superscript and bold");
+        test1.addAttribute(TextAttribute.SIZE, 14, 0, 25);
+        test1.addAttribute(TextAttribute.SUPERSCRIPT, TextAttribute.SUPERSCRIPT_SUPER, 5, 16);
+        test1.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD, 21, 25);
+        test1.addAttribute(TextAttribute.SUPERSCRIPT, TextAttribute.SUPERSCRIPT_SUPER, 21, 25);
+
+        AttributedString test2 = new AttributedString("underline and strikethrough");
+        test2.addAttribute(TextAttribute.SIZE, 14, 0, 20);
+        test2.addAttribute(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON, 0, 9);
+        test2.addAttribute(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON, 14, 27);
+
+        AttributedString test3 = new AttributedString("test subscript and oblique");
+        test3.addAttribute(TextAttribute.SIZE, 14, 0, 25);
+        test3.addAttribute(TextAttribute.SUPERSCRIPT, TextAttribute.SUPERSCRIPT_SUB, 5, 14);
+        test3.addAttribute(TextAttribute.POSTURE, TextAttribute.POSTURE_OBLIQUE, 19, 26);
+        test3.addAttribute(TextAttribute.SUPERSCRIPT, TextAttribute.SUPERSCRIPT_SUB, 19, 26);
+
+        g2.drawString(test1.getIterator(), (float) bounds.getX() + 5f, (float) bounds.getY() + 20f);
+        g2.drawString(test2.getIterator(), (float) bounds.getX() + 5f, (float) bounds.getY() + 40f);
+        g2.drawString(test3.getIterator(), (float) bounds.getX() + 5f, (float) bounds.getY() + 60f);
     }
 
 }
