@@ -8,6 +8,7 @@
 
     <modules>
         <module>g2d-core</module>
+        <module>g2d-batik</module>
         <module>g2d-jfreesvg</module>
         <module>g2d-jfreepdf</module>
         <module>g2d-fxgraphics2d</module>
