@@ -1,7 +1,7 @@
 package org.jfree.graphics2d.tester.skija;
 
-import org.jetbrains.skija.Data;
-import org.jetbrains.skija.EncodedImageFormat;
+import io.github.humbleui.skija.Data;
+import io.github.humbleui.skija.EncodedImageFormat;
 import org.jfree.graphics2d.Tester;
 import org.jfree.skija.SkijaGraphics2D;
 
@@ -17,8 +17,8 @@ public class SkijaGraphics2DTestRunner {
      */
     public static void testSkijaGraphics2D(String fileName, boolean single) {
         SkijaGraphics2D g2 = new SkijaGraphics2D((int) Tester.getTestSheetWidth(), (int) Tester.getTestSheetHeight());
-        Tester.drawTestOutput(g2, "SkijaGraphics2d 1.0.2-SNAPSHOT", "https://github.com/jfree/skijagraphics2d", single);
-        org.jetbrains.skija.Image image = g2.getSurface().makeImageSnapshot();
+        Tester.drawTestOutput(g2, "SkijaGraphics2D 1.0.4", "https://github.com/jfree/skijagraphics2d", single);
+        io.github.humbleui.skija.Image image = g2.getSurface().makeImageSnapshot();
         Data pngData = image.encodeToData(EncodedImageFormat.PNG);
         byte [] pngBytes = pngData.getBytes();
         try {
