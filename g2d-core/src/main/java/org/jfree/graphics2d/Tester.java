@@ -1,4 +1,4 @@
-/**
+/*
  * Graphics2D Tester
  *
  * (C)opyright 2021, David Gilbert.
@@ -729,8 +729,12 @@ public class Tester {
         moveTo(0, row, g2);
         FontTests.drawString(g2, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH * 2, TILE_HEIGHT));
         moveTo(2, row, g2);
-        FontTests.drawStringBounds(g2, bounds);
+        FontTests.drawAttributedString(g2, bounds);
         moveTo(4, row, g2);
+        FontTests.drawTextWithTracking(g2, bounds);
+        moveTo(6, row, g2);
+        FontTests.drawStringBounds(g2, bounds);
+        moveTo(8, row, g2);
         FontTests.drawTextMetrics(g2, bounds);
 
         row++;  // ***** CLIPPING
@@ -763,8 +767,6 @@ public class Tester {
         ImageTests.drawImage(g2, imageBounds, 5);
         g2.setClip(savedClip);
         g2.setTransform(savedTransform);
-
-        row ++;  // skip a row because the images are covering two rows
 
         moveTo(TILE_COUNT_H - 2, 20, g2);
         drawSwingUI(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
@@ -837,11 +839,10 @@ public class Tester {
         ImageIO.write(image, "png", new File(fileName));
     }
 
-
     /**
      * Creates Java2D output that exercises many features of the API.
      *
-     * @param args
+     * @param args  ignored
      */
     public static void main(String[] args) throws IOException {
         boolean single = false;
