@@ -40,7 +40,7 @@ public class FontTests {
 
     /**
      * Draws a string then fetches and highlights the string bounds.  This tests
-     * whether or not the graphics target is supporting font metrics correctly.
+     * whether the graphics target is supporting font metrics correctly.
      *
      * @param g2  the graphics target.
      * @param bounds  the cell bounds.

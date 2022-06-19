@@ -732,16 +732,16 @@ public class Tester {
         FontTests.drawAttributedString(g2, bounds);
         moveTo(4, row, g2);
         FontTests.drawTextWithTracking(g2, bounds);
-        moveTo(6, row, g2);
-        FontTests.drawStringBounds(g2, bounds);
-        moveTo(8, row, g2);
-        FontTests.drawTextMetrics(g2, bounds);
 
         row++;  // ***** UNICODE
         moveTo(0, row, g2);
         FontTests.drawUnicodeCharacters1(g2, bounds);
         moveTo(2, row, g2);
         FontTests.drawUnicodeCharacters2(g2, bounds);
+        moveTo(4, row, g2);
+        FontTests.drawStringBounds(g2, bounds);
+        moveTo(6, row, g2);
+        FontTests.drawTextMetrics(g2, bounds);
 
         row++;  // ***** CLIPPING
         moveTo(0, row, g2);
