@@ -92,31 +92,17 @@ public class FontTests {
     }
 
     /**
-     * Draws some unicode characters.
+     * Draws a selection of unicode characters.
      *
      * @param g2  the graphics target.
      * @param bounds  the cell bounds.
      */
-    public static void drawUnicodeCharacters1(Graphics2D g2, Rectangle2D bounds) {
+    public static void drawUnicodeCharacters(Graphics2D g2, Rectangle2D bounds) {
         g2.setPaint(Color.BLACK);
         g2.setFont(new Font(Font.SERIF, Font.PLAIN, 14));
-        g2.drawString("copyright = \u00A9", (float) bounds.getX() + 5f, (float) bounds.getY() + 20);
-        g2.drawString("trademark = \u2122", (float) bounds.getX() + 5f, (float) bounds.getY() + 40);
-        g2.drawString("euro = \u20AC", (float) bounds.getX() + 5f, (float) bounds.getY() + 60);
-    }
-
-    /**
-     * Draws some unicode characters.
-     *
-     * @param g2  the graphics target.
-     * @param bounds  the cell bounds.
-     */
-    public static void drawUnicodeCharacters2(Graphics2D g2, Rectangle2D bounds) {
-        g2.setPaint(Color.BLACK);
-        g2.setFont(new Font(Font.SERIF, Font.PLAIN, 14));
-        g2.drawString("infinity = \u221E", (float) bounds.getX() + 5f, (float) bounds.getY() + 20);
-        g2.drawString("club = \u2663", (float) bounds.getX() + 5f, (float) bounds.getY() + 40);
-        g2.drawString("circle = \u25CF", (float) bounds.getX() + 5f, (float) bounds.getY() + 60);
+        g2.drawString("Symbols: \u25CF, \u221E, \u2663", (float) bounds.getX() + 5f, (float) bounds.getY() + 20);
+        g2.drawString("Marks: \u00A9, \u2122, \u00AE", (float) bounds.getX() + 5f, (float) bounds.getY() + 40);
+        g2.drawString("Currencies: \u0024, \u20AC, \u00A3", (float) bounds.getX() + 5f, (float) bounds.getY() + 60);
     }
 
     /**
@@ -128,19 +114,19 @@ public class FontTests {
     public static void drawTextWithTracking(Graphics2D g2, Rectangle2D bounds) {
         g2.setPaint(Color.BLACK);
         Map<TextAttribute, Object> attributes = new HashMap<>();
-        attributes.put(TextAttribute.TRACKING, TextAttribute.TRACKING_LOOSE);
-        g2.setFont(new Font(Font.SERIF, Font.PLAIN, 14).deriveFont(attributes));
-        g2.drawString("Tracking: TRACKING_LOOSE", (float) bounds.getX() + 5f, (float) bounds.getY() + 20);
         attributes.put(TextAttribute.TRACKING, 0.0);
         g2.setFont(new Font(Font.SERIF, Font.PLAIN, 14).deriveFont(attributes));
-        g2.drawString("Tracking: None", (float) bounds.getX() + 5f, (float) bounds.getY() + 40);
+        g2.drawString("Tracking:", (float) bounds.getX() + 5f, (float) bounds.getY() + 20);
+        attributes.put(TextAttribute.TRACKING, TextAttribute.TRACKING_LOOSE);
+        g2.setFont(new Font(Font.SERIF, Font.PLAIN, 14).deriveFont(attributes));
+        g2.drawString("Tracking: TRACKING_LOOSE", (float) bounds.getX() + 5f, (float) bounds.getY() + 40);
         attributes.put(TextAttribute.TRACKING, TextAttribute.TRACKING_TIGHT);
         g2.setFont(new Font(Font.SERIF, Font.PLAIN, 14).deriveFont(attributes));
         g2.drawString("Tracking: TRACKING_TIGHT", (float) bounds.getX() + 5f, (float) bounds.getY() + 60);
     }
 
     /**
-     * Draws a couple of attributed strings with superscript and bold.
+     * Draws attributed strings with superscript, subscript, bold, italic, underline and strikethrough.
      *
      * @param g2  the graphics target.
      * @param bounds  the cell bounds.
@@ -169,4 +155,83 @@ public class FontTests {
         g2.drawString(test3.getIterator(), (float) bounds.getX() + 5f, (float) bounds.getY() + 60f);
     }
 
+    /**
+     * Draws attributed strings with superscript, subscript, bold, italic, underline and strikethrough.
+     *
+     * @param g2  the graphics target.
+     * @param bounds  the cell bounds.
+     */
+    public static void drawAttributedString2(Graphics2D g2, Rectangle2D bounds) {
+
+        AttributedString test1 = new AttributedString("Foreground & background");
+        test1.addAttribute(TextAttribute.FAMILY, Font.SERIF);
+        test1.addAttribute(TextAttribute.SIZE, 14, 0, 23);
+        test1.addAttribute(TextAttribute.FOREGROUND, Color.RED, 0, 10);
+        test1.addAttribute(TextAttribute.BACKGROUND, Color.LIGHT_GRAY, 13, 23);
+
+        AttributedString test2 = new AttributedString("Swap colors one two three");
+        test2.addAttribute(TextAttribute.FAMILY, Font.SERIF);
+        test2.addAttribute(TextAttribute.SIZE, 14, 0, 25);
+        test2.addAttribute(TextAttribute.SWAP_COLORS, TextAttribute.SWAP_COLORS_ON, 12, 15);
+        test2.addAttribute(TextAttribute.FOREGROUND, Color.BLUE, 16, 19);
+        test2.addAttribute(TextAttribute.SWAP_COLORS, TextAttribute.SWAP_COLORS_ON, 16, 19);
+        test2.addAttribute(TextAttribute.FOREGROUND, Color.YELLOW, 20, 25);
+        test2.addAttribute(TextAttribute.BACKGROUND, Color.BLUE, 20, 25);
+        test2.addAttribute(TextAttribute.SWAP_COLORS, TextAttribute.SWAP_COLORS_ON, 20, 25);
+
+        g2.drawString(test1.getIterator(), (float) bounds.getX() + 5f, (float) bounds.getY() + 20f);
+        g2.drawString(test2.getIterator(), (float) bounds.getX() + 5f, (float) bounds.getY() + 40f);
+    }
+
+    /**
+     * Draws attributed strings with and without kerning.
+     *
+     * @param g2  the graphics target.
+     * @param bounds  the cell bounds.
+     */
+    public static void drawAttributedStringWithKerning(Graphics2D g2, Rectangle2D bounds) {
+
+        AttributedString test1 = new AttributedString("Kerning:");
+        test1.addAttribute(TextAttribute.FAMILY, Font.SERIF);
+        test1.addAttribute(TextAttribute.SIZE, 14, 0, 8);
+
+        AttributedString test2 = new AttributedString("To & AWAY (no kerning)");
+        test2.addAttribute(TextAttribute.FAMILY, Font.SERIF);
+        test2.addAttribute(TextAttribute.SIZE, 14, 0, 22);
+
+        AttributedString test3 = new AttributedString("To & AWAY (with kerning)");
+        test3.addAttribute(TextAttribute.FAMILY, Font.SERIF);
+        test3.addAttribute(TextAttribute.SIZE, 14, 0, 24);
+        test3.addAttribute(TextAttribute.KERNING, TextAttribute.KERNING_ON, 0, 24);
+
+        g2.drawString(test1.getIterator(), (float) bounds.getX() + 5f, (float) bounds.getY() + 20f);
+        g2.drawString(test2.getIterator(), (float) bounds.getX() + 5f, (float) bounds.getY() + 40f);
+        g2.drawString(test3.getIterator(), (float) bounds.getX() + 5f, (float) bounds.getY() + 60f);
+    }
+
+    /**
+     * Draws attributed strings with and without kerning.
+     *
+     * @param g2  the graphics target.
+     * @param bounds  the cell bounds.
+     */
+    public static void drawAttributedStringWithLigatures(Graphics2D g2, Rectangle2D bounds) {
+
+        AttributedString test1 = new AttributedString("Ligatures:");
+        test1.addAttribute(TextAttribute.FAMILY, Font.SERIF);
+        test1.addAttribute(TextAttribute.SIZE, 14, 0, 10);
+
+        AttributedString test2 = new AttributedString("Affluent fish (on)");
+        test2.addAttribute(TextAttribute.FAMILY, Font.SERIF);
+        test2.addAttribute(TextAttribute.SIZE, 14, 0, 18);
+        test2.addAttribute(TextAttribute.LIGATURES, TextAttribute.LIGATURES_ON, 0, 18);
+
+        AttributedString test3 = new AttributedString("Affluent fish (off)");
+        test3.addAttribute(TextAttribute.FAMILY, Font.SERIF);
+        test3.addAttribute(TextAttribute.SIZE, 14, 0, 18);
+
+        g2.drawString(test1.getIterator(), (float) bounds.getX() + 5f, (float) bounds.getY() + 20f);
+        g2.drawString(test2.getIterator(), (float) bounds.getX() + 5f, (float) bounds.getY() + 40f);
+        g2.drawString(test3.getIterator(), (float) bounds.getX() + 5f, (float) bounds.getY() + 60f);
+    }
 }
