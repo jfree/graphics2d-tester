@@ -1,7 +1,7 @@
 /*
  * Graphics2D Tester
  *
- * (C)opyright 2021, David Gilbert.
+ * (C)opyright 2021, 2022, by David Gilbert.
  */
 package org.jfree.graphics2d;
 
@@ -736,6 +736,12 @@ public class Tester {
         FontTests.drawStringBounds(g2, bounds);
         moveTo(8, row, g2);
         FontTests.drawTextMetrics(g2, bounds);
+
+        row++;  // ***** UNICODE
+        moveTo(0, row, g2);
+        FontTests.drawUnicodeCharacters1(g2, bounds);
+        moveTo(2, row, g2);
+        FontTests.drawUnicodeCharacters2(g2, bounds);
 
         row++;  // ***** CLIPPING
         moveTo(0, row, g2);

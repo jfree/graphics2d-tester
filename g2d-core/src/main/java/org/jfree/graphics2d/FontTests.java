@@ -1,7 +1,7 @@
 /*
  * Graphics2D Tester
  *
- * (C)opyright 2021, by David Gilbert.
+ * (C)opyright 2021, 2022, by David Gilbert.
  */
 package org.jfree.graphics2d;
 
@@ -89,6 +89,34 @@ public class FontTests {
         g2.draw(new Line2D.Double(x, y + descent, x + strBounds.getWidth(), y + descent));
         float leading = lm.getLeading();
         g2.draw(new Line2D.Double(x, y + descent + leading, x + strBounds.getWidth(), y + descent + leading));
+    }
+
+    /**
+     * Draws some unicode characters.
+     *
+     * @param g2  the graphics target.
+     * @param bounds  the cell bounds.
+     */
+    public static void drawUnicodeCharacters1(Graphics2D g2, Rectangle2D bounds) {
+        g2.setPaint(Color.BLACK);
+        g2.setFont(new Font(Font.SERIF, Font.PLAIN, 14));
+        g2.drawString("copyright = \u00A9", (float) bounds.getX() + 5f, (float) bounds.getY() + 20);
+        g2.drawString("trademark = \u2122", (float) bounds.getX() + 5f, (float) bounds.getY() + 40);
+        g2.drawString("euro = \u20AC", (float) bounds.getX() + 5f, (float) bounds.getY() + 60);
+    }
+
+    /**
+     * Draws some unicode characters.
+     *
+     * @param g2  the graphics target.
+     * @param bounds  the cell bounds.
+     */
+    public static void drawUnicodeCharacters2(Graphics2D g2, Rectangle2D bounds) {
+        g2.setPaint(Color.BLACK);
+        g2.setFont(new Font(Font.SERIF, Font.PLAIN, 14));
+        g2.drawString("infinity = \u221E", (float) bounds.getX() + 5f, (float) bounds.getY() + 20);
+        g2.drawString("club = \u2663", (float) bounds.getX() + 5f, (float) bounds.getY() + 40);
+        g2.drawString("circle = \u25CF", (float) bounds.getX() + 5f, (float) bounds.getY() + 60);
     }
 
     /**
