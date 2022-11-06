@@ -26,7 +26,7 @@ public class JFreePDFTestRunner {
         PDFDocument pdfDoc = new PDFDocument();
         Page page = pdfDoc.createPage(new Rectangle((int) Tester.getTestSheetWidth(), (int) Tester.getTestSheetHeight()));
         PDFGraphics2D g2 = page.getGraphics2D();
-        Tester.drawTestOutput(g2, "JFree/PDFGraphics2D (v2.0)", "https://github.com/jfree/jfreepdf", single);
+        Tester.drawTestOutput(g2, "JFree/PDFGraphics2D (v2.0.1)", "https://github.com/jfree/jfreepdf", single);
         pdfDoc.writeToFile(new File(filename));
     }
 
