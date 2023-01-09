@@ -16,11 +16,11 @@ public class SkijaGraphics2DTestRunner {
      * @param single  run the current single test?
      */
     public static void testSkijaGraphics2D(String fileName, boolean single) {
-        SkijaGraphics2D g2 = new SkijaGraphics2D((int) Tester.getTestSheetWidth(), (int) Tester.getTestSheetHeight());
+        SkijaGraphics2D g2 = new SkijaGraphics2D(Tester.getTestSheetWidth(), Tester.getTestSheetHeight());
         Tester.drawTestOutput(g2, "SkijaGraphics2D 1.0.4", "https://github.com/jfree/skijagraphics2d", single);
         io.github.humbleui.skija.Image image = g2.getSurface().makeImageSnapshot();
         Data pngData = image.encodeToData(EncodedImageFormat.PNG);
-        byte [] pngBytes = pngData.getBytes();
+        byte[] pngBytes = pngData.getBytes();
         try {
             if (single) {
                 fileName += "-single.png";
@@ -29,8 +29,7 @@ public class SkijaGraphics2DTestRunner {
             }
             java.nio.file.Path path = java.nio.file.Path.of(fileName);
             java.nio.file.Files.write(path, pngBytes);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.println(e);
         }
     }

@@ -1,0 +1,12 @@
+Built-By: org.jfree
+Built-Date: ${timestamp}
+Implementation-Title: ${project.artifactId}
+Implementation-Version: ${project.version}
+Implementation-Vendor: org.jfree
+Implementation-URL: http://github.com/jfree/graphics2d-tester
+Application-Name: GraphicsTester's FXGraphics2D implementation
+Permissions: all-permissions
+Codebase: *
+Application-Library-Allowable-Codebase: *
+Main-Class: org.jfree.graphics2d.tester.fxgraphics2d.TestApplication
+Multi-Release: true

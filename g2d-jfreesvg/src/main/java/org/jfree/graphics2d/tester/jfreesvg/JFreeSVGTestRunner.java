@@ -3,7 +3,6 @@
  *
  * (C)opyright 2021, 2022, by David Gilbert.
  */
-
 package org.jfree.graphics2d.tester.jfreesvg;
 
 import org.jfree.svg.SVGGraphics2D;

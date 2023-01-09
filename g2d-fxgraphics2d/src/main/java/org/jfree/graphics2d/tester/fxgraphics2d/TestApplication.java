@@ -1,5 +1,6 @@
 package org.jfree.graphics2d.tester.fxgraphics2d;
 
+import java.awt.RenderingHints;
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Scene;
@@ -8,38 +9,41 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.xy.XYDataset;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.graphics2d.Tester;
 
 import javax.imageio.ImageIO;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.transform.Transform;
 
 public class TestApplication extends Application {
 
-    static class MyCanvas extends Canvas {
+    static final class MyCanvas extends Canvas {
 
         private final FXGraphics2D g2;
 
-        public MyCanvas() {
+        MyCanvas() {
             super(Tester.getTestSheetWidth(), Tester.getTestSheetHeight());
             this.g2 = new FXGraphics2D(getGraphicsContext2D());
+            this.g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
             // Redraw canvas when size changes.
             draw();
         }
 
         private void draw() {
-            double width = getWidth();
-            double height = getHeight();
+            final int width = (int) Math.ceil(getWidth());
+            final int height = (int) Math.ceil(getHeight());
             getGraphicsContext2D().clearRect(0, 0, width, height);
+
             Tester.drawTestSheet(this.g2, "FXGraphics2D", "https://github.com/jfree/fxgraphics2d");
-            WritableImage writableImage = new WritableImage((int) getWidth(), (int) getHeight());
-            snapshot(null, writableImage);
-            RenderedImage renderedImage = SwingFXUtils.fromFXImage(writableImage, null);
+
+            final WritableImage writableImage = pixelScaleAwareCanvasSnapshot(this, 1.0);
+
+            final RenderedImage renderedImage = SwingFXUtils.fromFXImage(writableImage, null);
             try {
                 ImageIO.write(renderedImage, "png", new File("fxgraphics2d.png"));
             } catch (IOException e) {
@@ -47,16 +51,29 @@ public class TestApplication extends Application {
             }
         }
 
-        @Override
-        public boolean isResizable() {
-            return true;
+        public static WritableImage pixelScaleAwareCanvasSnapshot(Canvas canvas, double pixelScale) {
+            WritableImage writableImage = new WritableImage(
+                    (int) Math.rint(pixelScale * canvas.getWidth()),
+                    (int) Math.rint(pixelScale * canvas.getHeight()));
+            final SnapshotParameters spa = new SnapshotParameters();
+            spa.setTransform(Transform.scale(pixelScale, pixelScale));
+            return canvas.snapshot(spa, writableImage);
         }
 
         @Override
-        public double prefWidth(double height) { return getWidth(); }
+        public boolean isResizable() {
+            return false;
+        }
 
         @Override
-        public double prefHeight(double width) { return getHeight(); }
+        public double prefWidth(double height) {
+            return getWidth();
+        }
+
+        @Override
+        public double prefHeight(double width) {
+            return getHeight();
+        }
     }
 
     @Override
@@ -71,8 +88,8 @@ public class TestApplication extends Application {
         //scrollPane.heightProperty().bind( stackPane.heightProperty());
         stage.setScene(new Scene(stackPane));
         stage.setTitle("TestApplication.java");
-        stage.setWidth(700);
-        stage.setHeight(390);
+        stage.setWidth(Tester.getTestSheetWidth());
+        stage.setHeight(Tester.getTestSheetHeight());
         stage.show();
     }
 
@@ -80,6 +97,11 @@ public class TestApplication extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        // ensure no hi-dpi to ensure scale = 1.0:
+        System.out.println("Use 'java -Dprism.verbose=true -Dprism.allowhidpi=false -Dprism.order=sw -Dglass.gtk.uiScale=1.0 -Dsun.java2d.uiScale=1.0 ...' ");
+        // -Dprism.order=es2
+        // -Dprism.marlin.log=true
+
         launch(args);
     }
 }

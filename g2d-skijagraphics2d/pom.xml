@@ -11,6 +11,10 @@
         <version>1.0.0</version>
     </parent>
 
+    <properties>
+        <assembly.skipAssembly>false</assembly.skipAssembly>
+    </properties>
+
     <name>Graphics2D Tester - SkijaGraphics2D</name>
     <url>http://github.com/jfree/graphics2d-tester</url>
     <description>A test program for Graphics2D implementations.</description>
@@ -28,7 +32,6 @@
             <url>https://github.com/jfree</url>
         </developer>
     </developers>
-
 
     <dependencies>
         <dependency>
