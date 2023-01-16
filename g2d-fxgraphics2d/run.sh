@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ~/test-zulu17.sh
+source ../test-zulu17.sh
 
 #BACKEND=sw
 BACKEND=es2

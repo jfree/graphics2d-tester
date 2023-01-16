@@ -21,6 +21,7 @@ import java.awt.RadialGradientPaint;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Stroke;
+import java.awt.Toolkit;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.flow.FlowPlot;
 import org.jfree.chart.title.TextTitle;
@@ -68,6 +69,8 @@ import javax.swing.UIManager;
  * the reference implementation (Java2D).
  */
 public class Tester {
+
+    private final static int REPEATS = 100;
 
     private static final int TILE_COUNT_H = 11;
 
@@ -865,15 +868,37 @@ public class Tester {
      * @throws IOException if there is an I/O problem.
      */
     public static void testJava2D(String fileName, boolean single) throws IOException {
-        BufferedImage image = new BufferedImage(getTestSheetWidth(), getTestSheetHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = image.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        drawTestOutput(g2, "Java2D/BufferedImage", "https://github.com/jfree", single);
-        if (single) {
-            fileName += "-single";
+        for (int i = 0; i < REPEATS; i++) {
+            final long startTime = System.nanoTime();
+
+            final BufferedImage image = new BufferedImage(getTestSheetWidth(), getTestSheetHeight(), BufferedImage.TYPE_INT_ARGB);
+            final Graphics2D g2 = image.createGraphics();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            try {
+                drawTestOutput(g2, "Java2D/BufferedImage", "https://github.com/jfree", single);
+
+                // Sync CPU / GPU:
+                Toolkit.getDefaultToolkit().sync();
+                // image is ready
+
+                final double elapsedTime = 1e-6d * (System.nanoTime() - startTime);
+                System.out.println("drawTestOutput(Java2D) duration = " + elapsedTime + " ms.");
+
+                if (i == 0) {
+                    try {
+                        if (single) {
+                            fileName += "-single";
+                        }
+                        fileName += ".png";
+                        ImageIO.write(image, "png", new File(fileName));
+                    } catch (IOException e) {
+                        System.err.println(e);
+                    }
+                }
+            } finally {
+                g2.dispose();
+            }
         }
-        fileName += ".png";
-        ImageIO.write(image, "png", new File(fileName));
     }
 
     private static JComponent createContent() {

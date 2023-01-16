@@ -33,6 +33,20 @@
         </developer>
     </developers>
 
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>org.jfree</groupId>
@@ -42,8 +56,15 @@
         <dependency>
             <groupId>org.jfree</groupId>
             <artifactId>org.jfree.skijagraphics2d</artifactId>
-            <version>1.0.4</version>
+            <version>1.0.5-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.github.humbleui</groupId>
+            <artifactId>jwm</artifactId>
+            <version>0.4.13</version>
+        </dependency>
+
     </dependencies>
 
 </project>
