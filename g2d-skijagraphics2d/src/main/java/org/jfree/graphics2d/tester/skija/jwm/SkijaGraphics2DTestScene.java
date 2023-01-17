@@ -36,7 +36,7 @@ public class SkijaGraphics2DTestScene extends Scene {
             // Sync CPU / GPU:
             final Surface surface = canvas.getSurface();
             if (surface != null) {
-                surface.flushAndSubmit(false); // full SYNC (GPU)
+                surface.flushAndSubmit(true); // full SYNC (GPU)
             }
             // image is ready
 
