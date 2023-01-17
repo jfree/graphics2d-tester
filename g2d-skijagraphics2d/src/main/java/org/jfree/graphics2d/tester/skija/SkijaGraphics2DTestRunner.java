@@ -7,6 +7,7 @@ import org.jfree.graphics2d.Tester;
 import org.jfree.skija.SkijaGraphics2D;
 
 import java.io.IOException;
+import static org.jfree.graphics2d.Tester.prepareTestOutput;
 
 public class SkijaGraphics2DTestRunner {
 
@@ -19,6 +20,14 @@ public class SkijaGraphics2DTestRunner {
      * @param single  run the current single test?
      */
     public static void testSkijaGraphics2D(String fileName, boolean single) {
+        if (single) {
+            fileName += "-single.png";
+        } else {
+            fileName += ".png";
+        }
+        // Prepare context:
+        final Tester.TesterContext tc = prepareTestOutput("JFree/SkijaGraphics2D (1.0.5)", single);
+
         final int width = Tester.getTestSheetWidth();
         final int height = Tester.getTestSheetHeight();
 
@@ -27,7 +36,7 @@ public class SkijaGraphics2DTestRunner {
             for (int i = 0; i < REPEATS; i++) {
                 final long startTime = System.nanoTime();
 
-                Tester.drawTestOutput(g2, "SkijaGraphics2D 1.0.4", "https://github.com/jfree/skijagraphics2d", single);
+                Tester.drawTestOutput(tc, g2, "https://github.com/jfree/skijagraphics2d", single);
 
                 // Sync CPU / GPU:
                 final Surface surface = g2.getSurface();
@@ -44,11 +53,6 @@ public class SkijaGraphics2DTestRunner {
                     final Data pngData = image.encodeToData(EncodedImageFormat.PNG);
                     final byte[] pngBytes = pngData.getBytes();
                     try {
-                        if (single) {
-                            fileName += "-single.png";
-                        } else {
-                            fileName += ".png";
-                        }
                         java.nio.file.Path path = java.nio.file.Path.of(fileName);
                         java.nio.file.Files.write(path, pngBytes);
                     } catch (IOException e) {
