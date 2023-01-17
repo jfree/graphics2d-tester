@@ -6,6 +6,22 @@
 package org.jfree.graphics2d;
 
 import eu.hansolo.steelseries.gauges.Radial;
+import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.GradientPaint;
+import java.awt.Graphics2D;
+import java.awt.LinearGradientPaint;
+import java.awt.MultipleGradientPaint;
+import java.awt.RadialGradientPaint;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.Stroke;
+import java.awt.Toolkit;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.flow.FlowPlot;
 import org.jfree.chart.title.TextTitle;
@@ -23,16 +39,29 @@ import org.jfree.data.flow.DefaultFlowDataset;
 import org.jfree.data.flow.FlowDataset;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
 import java.awt.font.LineMetrics;
-import java.awt.geom.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Arc2D;
+import java.awt.geom.Area;
+import java.awt.geom.CubicCurve2D;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.QuadCurve2D;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
 
 /**
  * Runs a visual testing setup against various Graphics2D implementations.  The idea
@@ -40,6 +69,8 @@ import java.util.List;
  * the reference implementation (Java2D).
  */
 public class Tester {
+
+    private final static int REPEATS = 100;
 
     private static final int TILE_COUNT_H = 11;
 
@@ -56,21 +87,21 @@ public class Tester {
 
     /** A dashed line stroke. */
     private static final Stroke DASHED = new BasicStroke(1.0f, BasicStroke.CAP_BUTT,
-            BasicStroke.JOIN_ROUND, 4f, new float[] { 2f, 2f }, 0f);
+            BasicStroke.JOIN_ROUND, 4f, new float[]{2f, 2f}, 0f);
 
     /** A dashed line stroke with width 3. */
     private static final Stroke DASHED_3 = new BasicStroke(3.0f, BasicStroke.CAP_ROUND,
-            BasicStroke.JOIN_ROUND, 4f, new float[] { 4f, 8f }, 0f);
+            BasicStroke.JOIN_ROUND, 4f, new float[]{4f, 8f}, 0f);
 
     /** An array containing rainbow colors, used in the gradient paint tests. */
-    private static final Color[] RAINBOW_COLORS = new Color[] {
-            new Color(255, 0, 0), // RED
-            new Color(255, 165, 0), // ORANGE
-            new Color(255, 255, 0), // YELLOW
-            new Color(0, 128, 0), // GREEN
-            new Color(0, 0, 255), // BLUE
-            new Color(75, 0, 130), // INDIGO
-            new Color(238, 130, 238) // VIOLET
+    private static final Color[] RAINBOW_COLORS = new Color[]{
+        new Color(255, 0, 0), // RED
+        new Color(255, 165, 0), // ORANGE
+        new Color(255, 255, 0), // YELLOW
+        new Color(0, 128, 0), // GREEN
+        new Color(0, 0, 255), // BLUE
+        new Color(75, 0, 130), // INDIGO
+        new Color(238, 130, 238) // VIOLET
     };
 
     private static void moveTo(int tileX, int tileY, Graphics2D g2) {
@@ -108,6 +139,7 @@ public class Tester {
         chart.setViewPoint(ViewPoint3D.createAboveLeftViewPoint(70.0));
         chart.draw(g2, bounds);
     }
+
     /**
      * Creates a dataset (source https://statisticsnz.shinyapps.io/trade_dashboard/).
      *
@@ -219,7 +251,7 @@ public class Tester {
         float y = (float) (bounds.getCenterY() + (lm.getAscent() / 2));
         g2.drawString(str, x, y);
 
-        row ++;
+        row++;
         moveTo(7, row, g2);
         drawTestProperties(g2, g2UnderTest);
         row--;
@@ -248,17 +280,17 @@ public class Tester {
 
         row++;  // ***** LINES SPECIAL
         moveTo(0, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0,0.0f, Color.RED);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0, 0.0f, Color.RED);
         moveTo(1, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0,1.0f, Color.RED);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0, 1.0f, Color.RED);
         moveTo(2, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0f,1.0f, Color.RED);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0f, 1.0f, Color.RED);
         moveTo(3, row, g2);
-        ShapeTests.drawLineCapAndDash(g2, bounds, 5.0,1.0f, new float[] {2f, 2f}, Color.BLACK);
+        ShapeTests.drawLineCapAndDash(g2, bounds, 5.0, 1.0f, new float[]{2f, 2f}, Color.BLACK);
         moveTo(4, row, g2);
-        ShapeTests.drawLineCapAndDash(g2, bounds, 5.0, 3.0f, new float[] {4f, 8f}, Color.BLACK);
+        ShapeTests.drawLineCapAndDash(g2, bounds, 5.0, 3.0f, new float[]{4f, 8f}, Color.BLACK);
         moveTo(5, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0f,5.0f, Color.BLACK);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0f, 5.0f, Color.BLACK);
 
         row++; // ***** LINE2D
         moveTo(0, row, g2);
@@ -551,8 +583,7 @@ public class Tester {
         ShapeTests.fillAndStrokeShape(g2, roundRect, gp3, null, null);
 
         moveTo(3, row, g2);
-        float delta = (TILE_WIDTH - 10) / 6f;
-        LinearGradientPaint lgp1 = new LinearGradientPaint(10f, 0f, TILE_WIDTH - 10 , 0f, new float[] { 0f, 1/6f, 2/6f, 3/6f, 4/6f, 5/6f, 1f}, RAINBOW_COLORS);
+        LinearGradientPaint lgp1 = new LinearGradientPaint(10f, 0f, TILE_WIDTH - 10, 0f, new float[]{0f, 1 / 6f, 2 / 6f, 3 / 6f, 4 / 6f, 5 / 6f, 1f}, RAINBOW_COLORS);
         ShapeTests.fillAndStrokeShape(g2, roundRect, lgp1, null, null);
 
         moveTo(4, row, g2);
@@ -570,52 +601,52 @@ public class Tester {
         ShapeTests.fillAndStrokeShape(g2, roundRect, gp6, null, null);
 
         moveTo(7, row, g2);
-        LinearGradientPaint lgp2 = new LinearGradientPaint(10f, 0f, TILE_WIDTH - 10 , TILE_HEIGHT, new float[] { 0f, 1/6f, 2/6f, 3/6f, 4/6f, 5/6f, 1f}, RAINBOW_COLORS);
+        LinearGradientPaint lgp2 = new LinearGradientPaint(10f, 0f, TILE_WIDTH - 10, TILE_HEIGHT, new float[]{0f, 1 / 6f, 2 / 6f, 3 / 6f, 4 / 6f, 5 / 6f, 1f}, RAINBOW_COLORS);
         ShapeTests.fillAndStrokeShape(g2, roundRect, lgp2, null, null);
 
         row++;  // ***** LINES WITH GRADIENT PAINT
         moveTo(0, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, gp);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0, 5.0f, gp);
         moveTo(1, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, gp2);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0, 5.0f, gp2);
         moveTo(2, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, gp3);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0, 5.0f, gp3);
         moveTo(3, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, lgp1);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0, 5.0f, lgp1);
         moveTo(4, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, gp4);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0, 5.0f, gp4);
         moveTo(5, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, gp5);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0, 5.0f, gp5);
         moveTo(6, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, gp6);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0, 5.0f, gp6);
         moveTo(7, row, g2);
-        ShapeTests.drawLineCaps(g2, bounds, 5.0,5.0f, lgp2);
+        ShapeTests.drawLineCaps(g2, bounds, 5.0, 5.0f, lgp2);
 
         row++;  // ***** RADIAL GRADIENT PAINT
         moveTo(0, row, g2);
         Point2D center = new Point2D.Double(TILE_WIDTH / 2.0, TILE_HEIGHT / 2.0);
-        RadialGradientPaint rgp = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY});
+        RadialGradientPaint rgp = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[]{0.0f, 0.75f, 1.0f}, new Color[]{Color.YELLOW, Color.RED, Color.LIGHT_GRAY});
         ShapeTests.fillAndStrokeShape(g2, roundRect, rgp, null, null);
 
         moveTo(1, row, g2);
-        RadialGradientPaint rgp2 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REPEAT);
+        RadialGradientPaint rgp2 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[]{0.0f, 0.75f, 1.0f}, new Color[]{Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REPEAT);
         ShapeTests.fillAndStrokeShape(g2, roundRect, rgp2, null, null);
 
         moveTo(2, row, g2);
-        RadialGradientPaint rgp3 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REFLECT);
+        RadialGradientPaint rgp3 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), new float[]{0.0f, 0.75f, 1.0f}, new Color[]{Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REFLECT);
         ShapeTests.fillAndStrokeShape(g2, roundRect, rgp3, null, null);
 
         moveTo(3, row, g2);
         Point2D focus = new Point2D.Double(TILE_WIDTH / 3.0, TILE_HEIGHT / 3.0);
-        RadialGradientPaint rgp4 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.NO_CYCLE);
+        RadialGradientPaint rgp4 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[]{0.0f, 0.75f, 1.0f}, new Color[]{Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.NO_CYCLE);
         ShapeTests.fillAndStrokeShape(g2, roundRect, rgp4, null, null);
 
         moveTo(4, row, g2);
-        RadialGradientPaint rgp5 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REPEAT);
+        RadialGradientPaint rgp5 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[]{0.0f, 0.75f, 1.0f}, new Color[]{Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REPEAT);
         ShapeTests.fillAndStrokeShape(g2, roundRect, rgp5, null, null);
 
         moveTo(5, row, g2);
-        RadialGradientPaint rgp6 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[] {0.0f, 0.75f, 1.0f}, new Color[] {Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REFLECT);
+        RadialGradientPaint rgp6 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[]{0.0f, 0.75f, 1.0f}, new Color[]{Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REFLECT);
         ShapeTests.fillAndStrokeShape(g2, roundRect, rgp6, null, null);
 
         row++; // ***** TRANSLATION
@@ -647,22 +678,22 @@ public class Tester {
         row++; // ***** ROTATION
         double m = 0.33 * TILE_HEIGHT;
         moveTo(0, row, g2);
-        Rectangle2D rectToRotate = new Rectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2);
+        Rectangle2D rectToRotate = new Rectangle2D.Double(m, m, TILE_WIDTH - m * 2, TILE_HEIGHT - m * 2);
         TransformTests.rotateShape(g2, bounds, rectToRotate, Math.PI / 4, Color.BLUE, OUTLINE, Color.BLACK);
         moveTo(1, row, g2);
-        RoundRectangle2D roundRectToRotate = new RoundRectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2, 8, 8);
+        RoundRectangle2D roundRectToRotate = new RoundRectangle2D.Double(m, m, TILE_WIDTH - m * 2, TILE_HEIGHT - m * 2, 8, 8);
         TransformTests.rotateShape(g2, bounds, roundRectToRotate, Math.PI / 4, Color.BLUE, OUTLINE, Color.BLACK);
         moveTo(2, row, g2);
-        QuadCurve2D quadCurveToRotate = ShapeTests.createQuadCurve2D2(new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT),15);
+        QuadCurve2D quadCurveToRotate = ShapeTests.createQuadCurve2D2(new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT), 15);
         TransformTests.rotateShape(g2, bounds, quadCurveToRotate, Math.PI / 4, Color.BLUE, OUTLINE, Color.BLACK);
         moveTo(3, row, g2);
         CubicCurve2D cubicCurveToRotate = ShapeTests.createCubicCurve2D(new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT), 15);
         TransformTests.rotateShape(g2, bounds, cubicCurveToRotate, Math.PI / 4, Color.BLUE, OUTLINE, Color.BLACK);
         moveTo(4, row, g2);
-        Ellipse2D ellipseToRotate = new Ellipse2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2);
+        Ellipse2D ellipseToRotate = new Ellipse2D.Double(m, m, TILE_WIDTH - m * 2, TILE_HEIGHT - m * 2);
         TransformTests.rotateShape(g2, bounds, ellipseToRotate, Math.PI / 4, Color.BLUE, OUTLINE, Color.BLACK);
         moveTo(5, row, g2);
-        Arc2D arcToRotate = new Arc2D.Double(new Rectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2), 45, 290, Arc2D.PIE);
+        Arc2D arcToRotate = new Arc2D.Double(new Rectangle2D.Double(m, m, TILE_WIDTH - m * 2, TILE_HEIGHT - m * 2), 45, 290, Arc2D.PIE);
         TransformTests.rotateShape(g2, bounds, arcToRotate, Math.PI / 4, Color.BLUE, OUTLINE, Color.BLACK);
         moveTo(6, row, g2);
         Area areaToRotate = ShapeTests.createCombinedArea("add", new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT), m);
@@ -677,18 +708,18 @@ public class Tester {
         double shx = -2.0;
         double shy = -0.5;
         double mm = 0.33 * TILE_HEIGHT;
-        Rectangle2D rectToSkew = new Rectangle2D.Double(m, m, TILE_WIDTH - mm*2, TILE_HEIGHT - mm*2);
+        Rectangle2D rectToSkew = new Rectangle2D.Double(m, m, TILE_WIDTH - mm * 2, TILE_HEIGHT - mm * 2);
         TransformTests.shearShape(g2, bounds, rectToSkew, 0.0, shy, Color.BLUE, OUTLINE, Color.BLACK);
         moveTo(0, row + 1, g2);
         TransformTests.shearShape(g2, bounds, rectToSkew, shx, 0.0, Color.BLUE, OUTLINE, Color.BLACK);
         moveTo(1, row, g2);
-        RoundRectangle2D roundRectToShear = new RoundRectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2, 8, 8);
+        RoundRectangle2D roundRectToShear = new RoundRectangle2D.Double(m, m, TILE_WIDTH - m * 2, TILE_HEIGHT - m * 2, 8, 8);
         TransformTests.shearShape(g2, bounds, roundRectToShear, 0.0, shy, Color.BLUE, OUTLINE, Color.BLACK);
         moveTo(1, row + 1, g2);
         TransformTests.shearShape(g2, bounds, roundRectToShear, shx, 0.0, Color.BLUE, OUTLINE, Color.BLACK);
 
         moveTo(2, row, g2);
-        QuadCurve2D quadCurveToShear = ShapeTests.createQuadCurve2D2(new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT),15);
+        QuadCurve2D quadCurveToShear = ShapeTests.createQuadCurve2D2(new Rectangle2D.Double(0, 0, TILE_WIDTH, TILE_HEIGHT), 15);
         TransformTests.shearShape(g2, bounds, quadCurveToShear, 0.0, shy, Color.BLUE, OUTLINE, Color.BLACK);
         moveTo(2, row + 1, g2);
         TransformTests.shearShape(g2, bounds, quadCurveToShear, shx, 0.0, Color.BLUE, OUTLINE, Color.BLACK);
@@ -700,13 +731,13 @@ public class Tester {
         TransformTests.shearShape(g2, bounds, cubicCurveToShear, shx, 0.0, Color.BLUE, OUTLINE, Color.BLACK);
 
         moveTo(4, row, g2);
-        Ellipse2D ellipseToSkew = new Ellipse2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2);
+        Ellipse2D ellipseToSkew = new Ellipse2D.Double(m, m, TILE_WIDTH - m * 2, TILE_HEIGHT - m * 2);
         TransformTests.shearShape(g2, bounds, ellipseToSkew, 0.0, shy, Color.BLUE, OUTLINE, Color.BLACK);
         moveTo(4, row + 1, g2);
         TransformTests.shearShape(g2, bounds, ellipseToSkew, shx, 0.0, Color.BLUE, OUTLINE, Color.BLACK);
 
         moveTo(5, row, g2);
-        Arc2D arcToShear = new Arc2D.Double(new Rectangle2D.Double(m, m, TILE_WIDTH - m*2, TILE_HEIGHT - m*2), 45, 290, Arc2D.PIE);
+        Arc2D arcToShear = new Arc2D.Double(new Rectangle2D.Double(m, m, TILE_WIDTH - m * 2, TILE_HEIGHT - m * 2), 45, 290, Arc2D.PIE);
         TransformTests.shearShape(g2, bounds, arcToShear, 0.0, shy, Color.BLUE, OUTLINE, Color.BLACK);
         moveTo(5, row + 1, g2);
         TransformTests.shearShape(g2, bounds, arcToShear, shx, 0.0, Color.BLUE, OUTLINE, Color.BLACK);
@@ -763,7 +794,7 @@ public class Tester {
         moveTo(4, row, g2);
         imageBounds = new Rectangle2D.Double(0, 0, TILE_WIDTH * 3, TILE_WIDTH * 2);
         Shape saved = g2.getClip();
-        g2.clip(new Ellipse2D.Double(15, 15, TILE_WIDTH * 3 - 30, TILE_WIDTH * 2  - 30));
+        g2.clip(new Ellipse2D.Double(15, 15, TILE_WIDTH * 3 - 30, TILE_WIDTH * 2 - 30));
         ImageTests.drawImage(g2, imageBounds, 5);
         g2.setClip(saved);
 
@@ -781,7 +812,6 @@ public class Tester {
 
         moveTo(TILE_COUNT_H - 2, 20, g2);
         drawSwingUI(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
-
     }
 
     /**
@@ -838,27 +868,37 @@ public class Tester {
      * @throws IOException if there is an I/O problem.
      */
     public static void testJava2D(String fileName, boolean single) throws IOException {
-        BufferedImage image = new BufferedImage(TILE_WIDTH * TILE_COUNT_H, TILE_HEIGHT * TILE_COUNT_V, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = image.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        drawTestOutput(g2, "Java2D/BufferedImage", "https://github.com/jfree", single);
-        if (single) {
-            fileName += "-single.png";
-        } else {
-            fileName += ".png";
-        }
-        ImageIO.write(image, "png", new File(fileName));
-    }
+        for (int i = 0; i < REPEATS; i++) {
+            final long startTime = System.nanoTime();
 
-    /**
-     * Creates Java2D output that exercises many features of the API.
-     *
-     * @param args  ignored
-     */
-    public static void main(String[] args) throws IOException {
-        boolean single = false;
-        testJava2D("java2D", single);
-        System.exit(0);
+            final BufferedImage image = new BufferedImage(getTestSheetWidth(), getTestSheetHeight(), BufferedImage.TYPE_INT_ARGB);
+            final Graphics2D g2 = image.createGraphics();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            try {
+                drawTestOutput(g2, "Java2D/BufferedImage", "https://github.com/jfree", single);
+
+                // Sync CPU / GPU:
+                Toolkit.getDefaultToolkit().sync();
+                // image is ready
+
+                final double elapsedTime = 1e-6d * (System.nanoTime() - startTime);
+                System.out.println("drawTestOutput(Java2D) duration = " + elapsedTime + " ms.");
+
+                if (i == 0) {
+                    try {
+                        if (single) {
+                            fileName += "-single";
+                        }
+                        fileName += ".png";
+                        ImageIO.write(image, "png", new File(fileName));
+                    } catch (IOException e) {
+                        System.err.println(e);
+                    }
+                }
+            } finally {
+                g2.dispose();
+            }
+        }
     }
 
     private static JComponent createContent() {
@@ -897,7 +937,7 @@ public class Tester {
      *
      * @return The width of the test sheet in Java2D units.
      */
-    public static double getTestSheetWidth() {
+    public static int getTestSheetWidth() {
         return TILE_WIDTH * TILE_COUNT_H;
     }
 
@@ -906,8 +946,21 @@ public class Tester {
      *
      * @return The height of the test sheet in Java2D units.
      */
-    public static double getTestSheetHeight() {
+    public static int getTestSheetHeight() {
         return TILE_HEIGHT * TILE_COUNT_V;
     }
 
+    /**
+     * Creates Java2D output that exercises many features of the API.
+     *
+     * @param args  ignored
+     */
+    public static void main(String[] args) throws IOException {
+        // ensure no hi-dpi to ensure scale = 1.0:
+        System.out.println("Use 'java -Dsun.java2d.uiScale=1.0 ...' ");
+
+        boolean single = false;
+        testJava2D("java2D", single);
+        System.exit(0);
+    }
 }

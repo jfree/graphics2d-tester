@@ -21,3 +21,14 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+nbactions.xml
+nb-configuration.xml
+
+/g2d-core/target/
+/g2d-fxgraphics2d/target/
+/g2d-jfreepdf/target/
+/g2d-skijagraphics2d/target/
+/g2d-jfreesvg/target/
+/target/
+
