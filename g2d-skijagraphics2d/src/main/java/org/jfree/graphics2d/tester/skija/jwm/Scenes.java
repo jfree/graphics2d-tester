@@ -7,9 +7,9 @@ import java.util.TreeMap;
 
 public class Scenes {
 
-    public static TreeMap<String, Scene> scenes;
+    public static final TreeMap<String, Scene> scenes;
     public static String currentScene = "Empty";
-    public static HUD hud = new HUD();
+    public static final HUD hud = new HUD();
     public static boolean stats = true;
 
     static {
@@ -23,8 +23,8 @@ public class Scenes {
         String className = "org.jfree.graphics2d.tester.skija.jwm." + name.replaceAll(" ", "") + "Scene";
         try {
             @SuppressWarnings("unchecked")
-            Class<Scene> cls = (Class<Scene>) Scenes.class.forName(className);
-            return cls.newInstance();
+            Class<Scene> cls = (Class<Scene>) Class.forName(className);
+            return cls.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -72,5 +72,9 @@ public class Scenes {
         } else {
             hud.log();
         }
+    }
+
+    private Scenes() {
+        // no-op
     }
 }

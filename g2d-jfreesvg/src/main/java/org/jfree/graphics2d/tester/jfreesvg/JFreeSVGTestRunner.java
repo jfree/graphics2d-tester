@@ -14,15 +14,30 @@ import java.io.IOException;
 
 public class JFreeSVGTestRunner {
 
+    private final static int REPEATS = 10;
+
     public static void testJFreeSVG(String filename, boolean single) throws IOException {
-        SVGGraphics2D g2 = new SVGGraphics2D(Tester.getTestSheetWidth(), Tester.getTestSheetHeight());
-        Tester.drawTestOutput(g2, "JFree/SVGGraphics2D", "https://github.com/jfree/jfreesvg", single);
         if (single) {
             filename += "-single.svg";
         } else {
             filename += ".svg";
         }
-        SVGUtils.writeToSVG(new File(filename), g2.getSVGElement());
+
+        // Prepare context:
+        final Tester.TesterContext tc = Tester.prepareTestOutput("JFree/PDFGraphics2D (v2.0.1)", single);
+
+        for (int i = 0; i < REPEATS; i++) {
+            final long startTime = System.nanoTime();
+
+            final SVGGraphics2D g2 = new SVGGraphics2D(Tester.getTestSheetWidth(), Tester.getTestSheetHeight());
+
+            Tester.drawTestOutput(tc, g2, "https://github.com/jfree/jfreesvg", single);
+
+            SVGUtils.writeToSVG(new File(filename), g2.getSVGElement());
+
+            final double elapsedTime = 1e-6d * (System.nanoTime() - startTime);
+            System.out.println("drawTestOutput(SVGGraphics2D) duration = " + elapsedTime + " ms.");
+        }
     }
 
     /**

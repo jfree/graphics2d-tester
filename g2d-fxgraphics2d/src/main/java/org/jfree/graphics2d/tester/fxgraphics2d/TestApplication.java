@@ -16,12 +16,18 @@ import javax.imageio.ImageIO;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
+import javafx.animation.AnimationTimer;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.transform.Transform;
 
 public class TestApplication extends Application {
 
     static final class MyCanvas extends Canvas {
+
+        private final boolean single = false;
+
+        private final Tester.TesterContext tc;
+        private boolean saveFirst = true;
 
         private final FXGraphics2D g2;
 
@@ -30,24 +36,36 @@ public class TestApplication extends Application {
             this.g2 = new FXGraphics2D(getGraphicsContext2D());
             this.g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
-            // Redraw canvas when size changes.
-            draw();
+
+            // Prepare context:
+            this.tc = Tester.prepareTestOutput("JFree/FXGraphics2D (2.1.3)", single);
         }
 
-        private void draw() {
+        void draw() {
+            final long startTime = System.nanoTime();
+
             final int width = (int) Math.ceil(getWidth());
             final int height = (int) Math.ceil(getHeight());
             getGraphicsContext2D().clearRect(0, 0, width, height);
 
-            Tester.drawTestSheet(this.g2, "FXGraphics2D", "https://github.com/jfree/fxgraphics2d");
+            Tester.drawTestOutput(tc, g2, "https://github.com/jfree/fxgraphics2d", single);
 
-            final WritableImage writableImage = pixelScaleAwareCanvasSnapshot(this, 1.0);
+            // TODO: sync ?
+            // image is ready
+            final double elapsedTime = 1e-6d * (System.nanoTime() - startTime);
+            System.out.println("drawTestOutput(SkijaGraphics2D) duration = " + elapsedTime + " ms.");
 
-            final RenderedImage renderedImage = SwingFXUtils.fromFXImage(writableImage, null);
-            try {
-                ImageIO.write(renderedImage, "png", new File("fxgraphics2d.png"));
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (saveFirst) {
+                saveFirst = false;
+
+                final WritableImage writableImage = pixelScaleAwareCanvasSnapshot(this, 1.0);
+
+                final RenderedImage renderedImage = SwingFXUtils.fromFXImage(writableImage, null);
+                try {
+                    ImageIO.write(renderedImage, "png", new File("fxgraphics2d.png"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -81,6 +99,7 @@ public class TestApplication extends Application {
         StackPane stackPane = new StackPane();
         MyCanvas canvas = new MyCanvas();
         ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setCache(false);
         scrollPane.setContent(canvas);
         stackPane.getChildren().add(scrollPane);
         // Bind canvas size to stack pane size.
@@ -91,6 +110,36 @@ public class TestApplication extends Application {
         stage.setWidth(Tester.getTestSheetWidth());
         stage.setHeight(Tester.getTestSheetHeight());
         stage.show();
+
+        final AnimationTimer timer = new AnimationTimer() {
+            private int nbFrames = 0;
+            private long lastTime = System.nanoTime();
+            private long lastInstant = lastTime;
+            private long nextInstant = lastTime + 500_000_000L;
+
+            @Override
+            public void handle(long startNanos) {
+                final long elapsed = startNanos - lastTime;
+                lastTime = startNanos;
+
+                canvas.draw();
+
+                nbFrames++;
+
+                if (startNanos > nextInstant) {
+                    System.out.println(String.format("Elapsed: %.3f", 1e-6 * elapsed));
+                    System.out.println(String.format("FPS: %.3f", 5e8 * nbFrames / (startNanos - lastInstant)));
+
+                    // reset
+                    nbFrames = 0;
+                    lastInstant = startNanos;
+                    nextInstant = startNanos + 500_000_000L;
+                }
+            }
+        };
+
+        timer.start();
+
     }
 
     /**

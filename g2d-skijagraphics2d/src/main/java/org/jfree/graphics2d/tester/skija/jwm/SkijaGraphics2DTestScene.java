@@ -10,55 +10,59 @@ import org.jfree.skija.SkijaGraphics2D;
 
 public class SkijaGraphics2DTestScene extends Scene {
 
-    private SkijaGraphics2D g2 = null;
+    private final boolean single = false;
+
+    private final Tester.TesterContext tc;
     private boolean saveFirst = true;
 
+    /**
+     * Public constructor used by introspection
+     */
+    public SkijaGraphics2DTestScene() {
+        // Prepare context:
+        this.tc = Tester.prepareTestOutput("SkijaGraphics2D 1.0.5", single);
+    }
+
     @Override
-    public void draw(Canvas canvas, int width, int height, float dpi, int xpos, int ypos) {
+    public void draw(final Canvas canvas, int width, int height, float dpi, int xpos, int ypos) {
         String fileName = "SkijaGraphics2D";
-        final boolean single = false;
 
         final long startTime = System.nanoTime();
 
-        if ((g2 == null) || !g2.isCompatibleCanvas(canvas)) {
-            if (g2 != null) {
-                g2.dispose();
+        final SkijaGraphics2D g2 = new SkijaGraphics2D(canvas);
+        try {
+            Tester.drawTestOutput(tc, g2, "https://github.com/jfree/skijagraphics2d", single);
+
+            // Sync CPU / GPU:
+            final Surface surface = canvas.getSurface();
+            if (surface != null) {
+                surface.flushAndSubmit(true); // full SYNC (GPU)
             }
-            g2 = new SkijaGraphics2D(canvas);
-        }
-        /*
-        g2.setBackground(Color.WHITE);
-        g2.clearRect(0, 0, width, height);
-         */
-        Tester.drawTestOutput(g2, "SkijaGraphics2D 1.0.5", "https://github.com/jfree/skijagraphics2d", single);
+            // image is ready
 
-        // Sync CPU / GPU:
-        final Surface surface = canvas.getSurface();
-        if (surface != null) {
-            surface.flushAndSubmit(false); // full SYNC (GPU)
-        }
-        // image is ready
+            final double elapsedTime = 1e-6d * (System.nanoTime() - startTime);
+            System.out.println("drawTestOutput(SkijaGraphics2D) duration = " + elapsedTime + " ms.");
 
-        final double elapsedTime = 1e-6d * (System.nanoTime() - startTime);
-        System.out.println("drawTestOutput(SkijaGraphics2D) duration = " + elapsedTime + " ms.");
+            if (saveFirst) {
+                saveFirst = false;
 
-        if (saveFirst) {
-            saveFirst = false;
-
-            final io.github.humbleui.skija.Image image = surface.makeImageSnapshot();
-            final Data pngData = image.encodeToData(EncodedImageFormat.PNG);
-            final byte[] pngBytes = pngData.getBytes();
-            try {
-                if (single) {
-                    fileName += "-single.png";
-                } else {
-                    fileName += ".png";
+                final io.github.humbleui.skija.Image image = surface.makeImageSnapshot();
+                final Data pngData = image.encodeToData(EncodedImageFormat.PNG);
+                final byte[] pngBytes = pngData.getBytes();
+                try {
+                    if (single) {
+                        fileName += "-single.png";
+                    } else {
+                        fileName += ".png";
+                    }
+                    java.nio.file.Path path = java.nio.file.Path.of(fileName);
+                    java.nio.file.Files.write(path, pngBytes);
+                } catch (IOException e) {
+                    System.err.println(e);
                 }
-                java.nio.file.Path path = java.nio.file.Path.of(fileName);
-                java.nio.file.Files.write(path, pngBytes);
-            } catch (IOException e) {
-                System.err.println(e);
             }
+        } finally {
+            g2.dispose();
         }
     }
 }

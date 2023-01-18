@@ -109,35 +109,45 @@ public class Tester {
         g2.setTransform(t);
     }
 
-    private static void drawSwingUI(Graphics2D g2, Rectangle2D bounds) {
-        JComponent content = createContent();
-        JFrame frame = new JFrame("Title");
+    private static void prepareSwingUI(final TesterContext tc, final Rectangle2D bounds) {
+        final JComponent content = createContent();
+        final JFrame frame = new JFrame("Title");
         frame.getContentPane().add(content);
         frame.setBounds((int) bounds.getX(), (int) bounds.getY(), (int) bounds.getWidth(), (int) bounds.getHeight());
         frame.pack();
-        content.paint(g2);
+        tc.frame = frame;
     }
 
-    private static void drawOrsonChartSample(Graphics2D g2, Rectangle2D bounds) {
-        Function3D function = (double x, double z) -> Math.cos(x) * Math.sin(z);
+    private static void drawSwingUI(final JFrame frame, final Graphics2D g2) {
+        frame.getContentPane().paint(g2);
+    }
 
-        Chart3D chart = Chart3DFactory.createSurfaceChart(
+    private static void prepareOrsonChartSample(final TesterContext tc) {
+        final Function3D function = (double x, double z) -> Math.cos(x) * Math.sin(z);
+
+        final Chart3D chart = Chart3DFactory.createSurfaceChart(
                 "SurfaceRendererDemo1",
                 "y = cos(x) * sin(z)",
                 function, "X", "Y", "Z");
 
-        XYZPlot plot = (XYZPlot) chart.getPlot();
+        final XYZPlot plot = (XYZPlot) chart.getPlot();
         plot.setDimensions(new Dimension3D(10, 5, 10));
-        ValueAxis3D xAxis = plot.getXAxis();
+
+        final ValueAxis3D xAxis = plot.getXAxis();
         xAxis.setRange(-Math.PI, Math.PI);
-        ValueAxis3D zAxis = plot.getZAxis();
+        final ValueAxis3D zAxis = plot.getZAxis();
         zAxis.setRange(-Math.PI, Math.PI);
-        SurfaceRenderer renderer = (SurfaceRenderer) plot.getRenderer();
+
+        final SurfaceRenderer renderer = (SurfaceRenderer) plot.getRenderer();
         renderer.setDrawFaceOutlines(false);
         renderer.setColorScale(new GradientColorScale(new Range(-1.0, 1.0),
                 Color.RED, Color.YELLOW));
         chart.setViewPoint(ViewPoint3D.createAboveLeftViewPoint(70.0));
-        chart.draw(g2, bounds);
+        tc.orsonChart = chart;
+    }
+
+    private static void drawOrsonChartSample(final TesterContext tc, Graphics2D g2, Rectangle2D bounds) {
+        tc.orsonChart.draw(g2, bounds);
     }
 
     /**
@@ -186,11 +196,11 @@ public class Tester {
     }
 
     /**
-     * Creates a JFreeChart sample chart.
+     * Creates a JFreeChart sample jfreeChart.
      *
      * @param dataset  the dataset.
      *
-     * @return A sample chart.
+     * @return A sample jfreeChart.
      */
     private static JFreeChart createChart(FlowDataset dataset) {
         FlowPlot plot = new FlowPlot(dataset);
@@ -218,19 +228,44 @@ public class Tester {
         return result;
     }
 
-    private static void drawJFreeChartSample(Graphics2D g2, Rectangle2D bounds) {
-        JFreeChart chart = createChart(createDataset());
-        chart.draw(g2, bounds);
+    private static void prepareJFreeChartSample(final TesterContext tc) {
+        tc.jfreeChart = createChart(createDataset());
+    }
+
+    private static void drawJFreeChartSample(final TesterContext tc, Graphics2D g2, Rectangle2D bounds) {
+        tc.jfreeChart.draw(g2, bounds);
+    }
+
+    /**
+     * Prepare test sheets
+     * @param tc  the tester context.
+     * @param qrLink  the link text to put in the QR code
+     */
+    public static void prepareTestSheet(final TesterContext tc, final String qrLink) {
+        try {
+            ImageTests.prepareQRCodeImage(tc, qrLink);
+
+            prepareJFreeChartSample(tc);
+
+            prepareOrsonChartSample(tc);
+
+            ImageTests.prepareImage(tc);
+
+            prepareSwingUI(tc, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * Draws a test sheet consisting of a number of tiles, each one testing one or
      * more features of Java2D and Graphics2D.
      *
+     * @param tc
      * @param g2  the graphics target.
-     * @param qrLink  the link text to put in the QR code
+     * @param g2UnderTest  a description of the Graphics2D implementation under test.
      */
-    public static void drawTestSheet(Graphics2D g2, String g2UnderTest, String qrLink) {
+    private static void drawTestSheet(final TesterContext tc, final Graphics2D g2, final String g2UnderTest) {
         int row = -1;
         Rectangle2D bounds = new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT);
 
@@ -259,23 +294,19 @@ public class Tester {
         // QR CODE AT RIGHT SIDE
         row += 4;
         moveTo(TILE_COUNT_H - 4, row, g2);
-        try {
-            ImageTests.drawQRCodeImage(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2), 5, qrLink);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ImageTests.drawQRCodeImage(tc, g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 2, TILE_HEIGHT * 2), 5);
         row -= 4;
 
         // JFREECHART AT RIGHT SIDE
         row += 7;
         moveTo(TILE_COUNT_H - 4, row, g2);
-        drawJFreeChartSample(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
+        drawJFreeChartSample(tc, g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
         row -= 7;
 
         // ORSON CHARTS AT RIGHT SIDE
         row += 12;
         moveTo(TILE_COUNT_H - 4, row, g2);
-        drawOrsonChartSample(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
+        drawOrsonChartSample(tc, g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
         row -= 12;
 
         row++;  // ***** LINES SPECIAL
@@ -789,13 +820,13 @@ public class Tester {
         row++;  // ***** IMAGE
         moveTo(0, row, g2);
         Rectangle2D imageBounds = new Rectangle2D.Double(0, 0, TILE_WIDTH * 3, TILE_WIDTH * 2);
-        ImageTests.drawImage(g2, imageBounds, 5);
+        ImageTests.drawImage(tc, g2, imageBounds, 5);
 
         moveTo(4, row, g2);
         imageBounds = new Rectangle2D.Double(0, 0, TILE_WIDTH * 3, TILE_WIDTH * 2);
         Shape saved = g2.getClip();
         g2.clip(new Ellipse2D.Double(15, 15, TILE_WIDTH * 3 - 30, TILE_WIDTH * 2 - 30));
-        ImageTests.drawImage(g2, imageBounds, 5);
+        ImageTests.drawImage(tc, g2, imageBounds, 5);
         g2.setClip(saved);
 
         moveTo(8, row, g2);
@@ -806,12 +837,12 @@ public class Tester {
         g2.translate(TILE_WIDTH * 1.5, TILE_WIDTH);
         g2.rotate(Math.PI / 4);
         g2.translate(-TILE_WIDTH * 1.5, -TILE_WIDTH);
-        ImageTests.drawImage(g2, imageBounds, 5);
+        ImageTests.drawImage(tc, g2, imageBounds, 5);
         g2.setClip(savedClip);
         g2.setTransform(savedTransform);
 
         moveTo(TILE_COUNT_H - 2, 20, g2);
-        drawSwingUI(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
+        drawSwingUI(tc.frame, g2);
     }
 
     /**
@@ -820,7 +851,7 @@ public class Tester {
      * @param g2  the graphics target.
      * @param g2Implementation  a description of the Graphics2D implementation under test.
      */
-    public static void drawTestProperties(Graphics2D g2, String g2Implementation) {
+    private static void drawTestProperties(Graphics2D g2, String g2Implementation) {
         g2.setPaint(Color.BLACK);
         g2.setFont(new Font("Courier New", Font.PLAIN, 14));
         int y = 20;
@@ -834,28 +865,53 @@ public class Tester {
         g2.drawString("java.vendor.version -> " + System.getProperty("java.vendor.version"), 10, y += 16);// Graphics2D Implementation : SkijaGraphics2D 1.0.1 (-> Skija 0.92.18)
     }
 
+    private static void prepareTestSingle(final TesterContext tc) {
+        prepareSwingUI(tc, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
+    }
+
     /**
      * Draws a single tile - useful for testing just one feature.
      *
+     * @param tc  the tester context.
      * @param g2  the graphics target.
      */
-    private static void drawTestSingle(Graphics2D g2) {
+    private static void drawTestSingle(final TesterContext tc, Graphics2D g2) {
         moveTo(0, 0, g2);
-        drawSwingUI(g2, new Rectangle2D.Double(0, 0, TILE_WIDTH * 4, TILE_HEIGHT * 4));
+        drawSwingUI(tc.frame, g2);
     }
 
     /**
      * Renders the test output (checks whether generating the whole test
      * sheet or just one single test).
      *
+     * @param qrLink  the link text to put in the QR code
+     * @param single  set to true if just generating a single test
+     * @return TesterContext instance
+     */
+    public static TesterContext prepareTestOutput(final String qrLink, boolean single) {
+        final TesterContext tc = new TesterContext();
+        if (single) {
+            prepareTestSingle(tc);
+        } else {
+            prepareTestSheet(tc, qrLink);
+        }
+        return tc;
+    }
+
+    /**
+     * Renders the test output (checks whether generating the whole test
+     * sheet or just one single test).
+     *
+     * @param tc  the tester context.
      * @param g2  the graphics target.
+     * @param g2UnderTest  a description of the Graphics2D implementation under test.
      * @param single  set to true if just generating a single test
      */
-    public static void drawTestOutput(Graphics2D g2, String g2UnderTest, String qrLink, boolean single) {
+    public static void drawTestOutput(final TesterContext tc, final Graphics2D g2, final String g2UnderTest, boolean single) {
         if (single) {
-            drawTestSingle(g2);
+            drawTestSingle(tc, g2);
         } else {
-            drawTestSheet(g2, g2UnderTest, qrLink);
+            drawTestSheet(tc, g2, g2UnderTest);
         }
     }
 
@@ -864,18 +920,35 @@ public class Tester {
      * the results to the specified file.
      *
      * @param fileName  the PNG file name.
+     * @param single  set to true if just generating a single test
      *
      * @throws IOException if there is an I/O problem.
      */
-    public static void testJava2D(String fileName, boolean single) throws IOException {
+    private static void testJava2D(String fileName, boolean single) throws IOException {
+        if (single) {
+            fileName += "-single.png";
+        } else {
+            fileName += ".png";
+        }
+        // Prepare context:
+        final TesterContext tc = prepareTestOutput("Java2D/BufferedImage", single);
+
+        final int width = Tester.getTestSheetWidth();
+        final int height = Tester.getTestSheetHeight();
+
+        final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
         for (int i = 0; i < REPEATS; i++) {
+            final Graphics2D g2 = image.createGraphics();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+            g2.setBackground(Color.WHITE);
+            g2.clearRect(0, 0, i, i);
+
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             final long startTime = System.nanoTime();
 
-            final BufferedImage image = new BufferedImage(getTestSheetWidth(), getTestSheetHeight(), BufferedImage.TYPE_INT_ARGB);
-            final Graphics2D g2 = image.createGraphics();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             try {
-                drawTestOutput(g2, "Java2D/BufferedImage", "https://github.com/jfree", single);
+                drawTestOutput(tc, g2, "https://github.com/jfree", single);
 
                 // Sync CPU / GPU:
                 Toolkit.getDefaultToolkit().sync();
@@ -886,10 +959,6 @@ public class Tester {
 
                 if (i == 0) {
                     try {
-                        if (single) {
-                            fileName += "-single";
-                        }
-                        fileName += ".png";
                         ImageIO.write(image, "png", new File(fileName));
                     } catch (IOException e) {
                         System.err.println(e);
@@ -950,6 +1019,10 @@ public class Tester {
         return TILE_HEIGHT * TILE_COUNT_V;
     }
 
+    private Tester() {
+        // no-op
+    }
+
     /**
      * Creates Java2D output that exercises many features of the API.
      *
@@ -962,5 +1035,14 @@ public class Tester {
         boolean single = false;
         testJava2D("java2D", single);
         System.exit(0);
+    }
+
+    public final static class TesterContext {
+
+        JFrame frame;
+        BufferedImage qrCodeImage;
+        BufferedImage TRIUMPH_IMAGE;
+        JFreeChart jfreeChart;
+        Chart3D orsonChart;
     }
 }

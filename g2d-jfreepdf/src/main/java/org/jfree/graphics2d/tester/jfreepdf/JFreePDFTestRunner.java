@@ -17,17 +17,30 @@ import java.io.IOException;
 
 public class JFreePDFTestRunner {
 
+    private final static int REPEATS = 10;
+
     public static void testJFreePDF(String filename, boolean single) throws IOException {
         if (single) {
             filename += "-single.pdf";
         } else {
             filename += ".pdf";
         }
-        PDFDocument pdfDoc = new PDFDocument();
-        Page page = pdfDoc.createPage(new Rectangle(Tester.getTestSheetWidth(), Tester.getTestSheetHeight()));
-        PDFGraphics2D g2 = page.getGraphics2D();
-        Tester.drawTestOutput(g2, "JFree/PDFGraphics2D (v2.0.1)", "https://github.com/jfree/jfreepdf", single);
-        pdfDoc.writeToFile(new File(filename));
+        // Prepare context:
+        final Tester.TesterContext tc = Tester.prepareTestOutput("JFree/PDFGraphics2D (v2.0.1)", single);
+
+        for (int i = 0; i < REPEATS; i++) {
+            final long startTime = System.nanoTime();
+
+            final PDFDocument pdfDoc = new PDFDocument();
+            final Page page = pdfDoc.createPage(new Rectangle(Tester.getTestSheetWidth(), Tester.getTestSheetHeight()));
+            final PDFGraphics2D g2 = page.getGraphics2D();
+
+            Tester.drawTestOutput(tc, g2, "https://github.com/jfree/jfreepdf", single);
+            pdfDoc.writeToFile(new File(filename));
+
+            final double elapsedTime = 1e-6d * (System.nanoTime() - startTime);
+            System.out.println("drawTestOutput(PDFGraphics2D) duration = " + elapsedTime + " ms.");
+        }
     }
 
     /**
