@@ -53,7 +53,7 @@ public class TestApplication extends Application {
             // TODO: sync ?
             // image is ready
             final double elapsedTime = 1e-6d * (System.nanoTime() - startTime);
-            System.out.println("drawTestOutput(SkijaGraphics2D) duration = " + elapsedTime + " ms.");
+            System.out.println("drawTestOutput(FXGraphics2D) duration = " + elapsedTime + " ms.");
 
             if (saveFirst) {
                 saveFirst = false;
