@@ -1,7 +1,7 @@
 /*
  * Graphics2D Tester
  *
- * (C)opyright 2021, 2022, by David Gilbert.
+ * (C)opyright 2021-present, by David Gilbert.
  */
 package org.jfree.graphics2d.tester.jfreesvg;
 
@@ -24,7 +24,7 @@ public class JFreeSVGTestRunner {
         }
 
         // Prepare context:
-        final Tester.TesterContext tc = Tester.prepareTestOutput("JFree/PDFGraphics2D (v2.0.1)", single);
+        final Tester.TesterContext tc = Tester.prepareTestOutput("JFree/SVGGraphics2D (v5.0.3)", single);
 
         for (int i = 0; i < REPEATS; i++) {
             final long startTime = System.nanoTime();
