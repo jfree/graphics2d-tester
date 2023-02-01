@@ -20,7 +20,9 @@ public class SkijaGraphics2DTestScene extends Scene {
      */
     public SkijaGraphics2DTestScene() {
         // Prepare context:
-        this.tc = Tester.prepareTestOutput("SkijaGraphics2D 1.0.5", single);
+        this.tc = Tester.prepareTestOutput(
+                "JFree/" + SkijaGraphics2D.VERSION,
+                "https://github.com/jfree/skijagraphics2d", single);
     }
 
     @Override
@@ -31,7 +33,7 @@ public class SkijaGraphics2DTestScene extends Scene {
 
         final SkijaGraphics2D g2 = new SkijaGraphics2D(canvas);
         try {
-            Tester.drawTestOutput(tc, g2, "https://github.com/jfree/skijagraphics2d", single);
+            Tester.drawTestOutput(tc, g2);
 
             // Sync CPU / GPU:
             final Surface surface = canvas.getSurface();

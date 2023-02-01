@@ -5,7 +5,11 @@
  */
 package org.jfree.graphics2d;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
 import java.awt.font.LineMetrics;
 import java.awt.font.TextAttribute;
 import java.awt.geom.Line2D;
@@ -72,7 +76,7 @@ public class FontTests {
         FontMetrics fm = g2.getFontMetrics();
         Rectangle2D strBounds = fm.getStringBounds(str, g2);
         g2.setPaint(Color.RED);
-        g2.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 4f, new float[] {2f, 2f}, 0f));
+        g2.setStroke(new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 4f, new float[]{2f, 2f}, 0f));
         g2.draw(new Line2D.Double(x, y, x + strBounds.getWidth(), y));
         g2.setPaint(Color.BLACK);
         g2.setFont(new Font(Font.SERIF, Font.PLAIN, 36));
@@ -233,5 +237,8 @@ public class FontTests {
         g2.drawString(test1.getIterator(), (float) bounds.getX() + 5f, (float) bounds.getY() + 20f);
         g2.drawString(test2.getIterator(), (float) bounds.getX() + 5f, (float) bounds.getY() + 40f);
         g2.drawString(test3.getIterator(), (float) bounds.getX() + 5f, (float) bounds.getY() + 60f);
+    }
+
+    private FontTests() {
     }
 }

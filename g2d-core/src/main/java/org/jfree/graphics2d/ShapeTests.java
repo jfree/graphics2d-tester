@@ -5,8 +5,23 @@
  */
 package org.jfree.graphics2d;
 
-import java.awt.*;
-import java.awt.geom.*;
+import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.Shape;
+import java.awt.Stroke;
+import java.awt.geom.Arc2D;
+import java.awt.geom.Area;
+import java.awt.geom.CubicCurve2D;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.QuadCurve2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  * Tests relating to drawing and filling shapes.
@@ -201,6 +216,7 @@ public class ShapeTests {
         line = new Line2D.Double(left, midY + deltaY, right, midY + deltaY);
         g2.draw(line);
     }
+
     /**
      * Draws three lines with different CAP settings (BUTT, ROUND and SQUARE).
      *
@@ -292,7 +308,7 @@ public class ShapeTests {
                 a1.exclusiveOr(a2);
                 break;
             default:
-                // do nothing
+            // do nothing
         }
         return a1;
     }
@@ -350,5 +366,8 @@ public class ShapeTests {
         g2.setComposite(ac);
         g2.setPaint(Color.BLUE);
         g2.fill(rectangle);
+    }
+
+    private ShapeTests() {
     }
 }

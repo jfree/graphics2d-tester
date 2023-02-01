@@ -38,17 +38,30 @@ public class TestApplication extends Application {
                     RenderingHints.VALUE_ANTIALIAS_ON);
 
             // Prepare context:
-            this.tc = Tester.prepareTestOutput("JFree/FXGraphics2D (2.1.3)", single);
+            this.tc = Tester.prepareTestOutput(
+                    "JFree/FXGraphics2D (2.1.3)",
+                    "https://github.com/jfree/fxgraphics2d", single);
         }
+
+        int nFrame = 0;
 
         void draw() {
             final long startTime = System.nanoTime();
 
-            final int width = (int) Math.ceil(getWidth());
-            final int height = (int) Math.ceil(getHeight());
-            getGraphicsContext2D().clearRect(0, 0, width, height);
+            final GraphicsContext gc = getGraphicsContext2D();
+            gc.save();
 
-            Tester.drawTestOutput(tc, g2, "https://github.com/jfree/fxgraphics2d", single);
+            if (true) {
+                final int width = (int) Math.ceil(getWidth());
+                final int height = (int) Math.ceil(getHeight());
+
+                gc.setFill(((nFrame++) % 2 == 0) ? Color.WHITE : Color.GREEN);
+                gc.fillRect(0, 0, width, height);
+            }
+
+            Tester.drawTestOutput(tc, g2);
+
+            gc.restore();
 
             // TODO: sync ?
             // image is ready
@@ -94,6 +107,8 @@ public class TestApplication extends Application {
         }
     }
 
+    private AnimationTimer timer = null;
+
     @Override
     public void start(Stage stage) throws Exception {
         StackPane stackPane = new StackPane();
@@ -111,11 +126,11 @@ public class TestApplication extends Application {
         stage.setHeight(Tester.getTestSheetHeight());
         stage.show();
 
-        final AnimationTimer timer = new AnimationTimer() {
+        timer = new AnimationTimer() {
             private int nbFrames = 0;
             private long lastTime = System.nanoTime();
             private long lastInstant = lastTime;
-            private long nextInstant = lastTime + 500_000_000L;
+            private long nextInstant = lastTime + 1000_000_000L;
 
             @Override
             public void handle(long startNanos) {
@@ -126,26 +141,38 @@ public class TestApplication extends Application {
 
                 nbFrames++;
 
+                if (elapsed > 0L) {
+                    System.out.println(String.format("Elapsed: %.3f ms", 1e-6 * elapsed));
+                }
                 if (startNanos > nextInstant) {
-                    System.out.println(String.format("Elapsed: %.3f", 1e-6 * elapsed));
-                    System.out.println(String.format("FPS: %.3f", 5e8 * nbFrames / (startNanos - lastInstant)));
+                    System.out.println(String.format(">>> FPS: %.3f", 5e8 * nbFrames / (startNanos - lastInstant)));
 
                     // reset
                     nbFrames = 0;
                     lastInstant = startNanos;
-                    nextInstant = startNanos + 500_000_000L;
+                    nextInstant = startNanos + 1000_000_000L;
                 }
             }
         };
 
         timer.start();
+    }
 
+    @Override
+    public void stop() {
+        System.out.println("Stop application ...");
+        timer.stop();
+        Platform.runLater(() -> System.exit(0));
+        Platform.exit();
     }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        // Set the default locale to en-US locale (for Numerical Fields "." ",")
+        Locale.setDefault(Locale.US);
+
         // ensure no hi-dpi to ensure scale = 1.0:
         System.out.println("Use 'java -Dprism.verbose=true -Dprism.allowhidpi=false -Dprism.order=sw -Dglass.gtk.uiScale=1.0 -Dsun.java2d.uiScale=1.0 ...' ");
         // -Dprism.order=es2

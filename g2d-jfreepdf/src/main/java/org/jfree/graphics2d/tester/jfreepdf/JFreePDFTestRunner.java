@@ -26,7 +26,9 @@ public class JFreePDFTestRunner {
             filename += ".pdf";
         }
         // Prepare context:
-        final Tester.TesterContext tc = Tester.prepareTestOutput("JFree/PDFGraphics2D (v2.0.1)", single);
+        final Tester.TesterContext tc = Tester.prepareTestOutput(
+                "JFree/PDFGraphics2D (v2.0.1)",
+                "https://github.com/jfree/jfreepdf", single);
 
         for (int i = 0; i < REPEATS; i++) {
             final long startTime = System.nanoTime();
@@ -35,7 +37,8 @@ public class JFreePDFTestRunner {
             final Page page = pdfDoc.createPage(new Rectangle(Tester.getTestSheetWidth(), Tester.getTestSheetHeight()));
             final PDFGraphics2D g2 = page.getGraphics2D();
 
-            Tester.drawTestOutput(tc, g2, "https://github.com/jfree/jfreepdf", single);
+            Tester.drawTestOutput(tc, g2);
+
             pdfDoc.writeToFile(new File(filename));
 
             final double elapsedTime = 1e-6d * (System.nanoTime() - startTime);
