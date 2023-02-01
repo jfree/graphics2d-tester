@@ -16,8 +16,12 @@ import javax.imageio.ImageIO;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.transform.Transform;
 
 public class TestApplication extends Application {
@@ -39,7 +43,7 @@ public class TestApplication extends Application {
 
             // Prepare context:
             this.tc = Tester.prepareTestOutput(
-                    "JFree/FXGraphics2D (2.1.3)",
+                    "JFree/FXGraphics2D (2.1.4)",
                     "https://github.com/jfree/fxgraphics2d", single);
         }
 
