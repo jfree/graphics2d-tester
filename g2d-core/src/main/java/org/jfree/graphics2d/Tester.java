@@ -787,6 +787,27 @@ public class Tester {
 
         row++; // to cover the shearing above taking up two rows
 
+        row++;  // drawArc() / fillArc()
+        moveTo(0, row, g2);
+        g2.setColor(Color.BLUE);
+        g2.fillArc(5, 5, TILE_WIDTH - 10, TILE_HEIGHT - 10, 45, 270);
+
+        moveTo(1, row, g2);
+        g2.fillArc(5, 5, TILE_WIDTH - 10, TILE_HEIGHT -10, 90, 180);
+
+        moveTo(2, row, g2);
+        g2.fillArc(5, 5, TILE_WIDTH - 10, TILE_HEIGHT - 10, 135, 90);
+
+        g2.setColor(Color.RED);
+        moveTo(3, row, g2);
+        g2.drawArc(5, 5, TILE_WIDTH - 10, TILE_HEIGHT - 10, 45, 270);
+
+        moveTo(4, row, g2);
+        g2.drawArc(5, 5, TILE_WIDTH - 10, TILE_HEIGHT - 10, 90, 180);
+
+        moveTo(5, row, g2);
+        g2.drawArc(5, 5, TILE_WIDTH - 10, TILE_HEIGHT - 10, 135, 90);
+
         row++;  // ***** STRINGS & FONTS
         moveTo(0, row, g2);
         FontTests.drawString(g2, new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH * 2, TILE_HEIGHT));
