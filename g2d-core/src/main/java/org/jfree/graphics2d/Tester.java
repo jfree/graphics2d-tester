@@ -76,7 +76,7 @@ public class Tester {
 
     private static final int TILE_COUNT_H = 11;
 
-    private static final int TILE_COUNT_V = 32;
+    private static final int TILE_COUNT_V = 33;
 
     private static final int TILE_WIDTH = 100;
 
