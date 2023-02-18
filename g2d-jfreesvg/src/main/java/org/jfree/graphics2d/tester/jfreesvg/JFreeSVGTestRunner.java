@@ -24,14 +24,16 @@ public class JFreeSVGTestRunner {
         }
 
         // Prepare context:
-        final Tester.TesterContext tc = Tester.prepareTestOutput("JFree/SVGGraphics2D (v5.0.3)", single);
+        final Tester.TesterContext tc = Tester.prepareTestOutput(
+                "JFree/SVGGraphics2D (5.0.4)",
+                "https://github.com/jfree/jfreesvg", single);
 
         for (int i = 0; i < REPEATS; i++) {
             final long startTime = System.nanoTime();
 
             final SVGGraphics2D g2 = new SVGGraphics2D(Tester.getTestSheetWidth(), Tester.getTestSheetHeight());
 
-            Tester.drawTestOutput(tc, g2, "https://github.com/jfree/jfreesvg", single);
+            Tester.drawTestOutput(tc, g2);
 
             SVGUtils.writeToSVG(new File(filename), g2.getSVGElement());
 

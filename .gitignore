@@ -32,3 +32,7 @@ nb-configuration.xml
 /g2d-jfreesvg/target/
 /target/
 
+/test-*.sh
+/g2d-skijagraphics2d/prof-*.sh
+*.jfr
+

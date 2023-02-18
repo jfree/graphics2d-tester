@@ -26,7 +26,9 @@ public class SkijaGraphics2DTestRunner {
             fileName += ".png";
         }
         // Prepare context:
-        final Tester.TesterContext tc = prepareTestOutput("JFree/SkijaGraphics2D (1.0.5)", single);
+        final Tester.TesterContext tc = prepareTestOutput(
+                "JFree/" + SkijaGraphics2D.VERSION,
+                "https://github.com/jfree/skijagraphics2d", single);
 
         final int width = Tester.getTestSheetWidth();
         final int height = Tester.getTestSheetHeight();
@@ -36,7 +38,7 @@ public class SkijaGraphics2DTestRunner {
             for (int i = 0; i < REPEATS; i++) {
                 final long startTime = System.nanoTime();
 
-                Tester.drawTestOutput(tc, g2, "https://github.com/jfree/skijagraphics2d", single);
+                Tester.drawTestOutput(tc, g2);
 
                 // Sync CPU / GPU:
                 final Surface surface = g2.getSurface();

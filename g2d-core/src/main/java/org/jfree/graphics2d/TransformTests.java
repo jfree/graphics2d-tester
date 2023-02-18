@@ -3,11 +3,18 @@
  *
  * (C)opyright 2021, 2022, by David Gilbert.
  */
-
 package org.jfree.graphics2d;
 
-import java.awt.*;
-import java.awt.geom.*;
+import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Paint;
+import java.awt.Shape;
+import java.awt.Stroke;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 
 /**
  * A collection of tests that exercise transformations (translate, rotate, scale and shear).
@@ -116,6 +123,9 @@ public class TransformTests {
         g2.draw(shape);
         g2.setComposite(AlphaComposite.SrcOver);
         g2.setTransform(saved);
+    }
+
+    private TransformTests() {
     }
 
 }

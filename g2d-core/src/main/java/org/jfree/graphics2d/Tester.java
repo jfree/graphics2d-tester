@@ -72,6 +72,8 @@ public class Tester {
 
     private final static int REPEATS = 100;
 
+    final static boolean DO_CLIP = true;
+
     private static final int TILE_COUNT_H = 11;
 
     private static final int TILE_COUNT_V = 32;
@@ -239,11 +241,10 @@ public class Tester {
     /**
      * Prepare test sheets
      * @param tc  the tester context.
-     * @param qrLink  the link text to put in the QR code
      */
-    public static void prepareTestSheet(final TesterContext tc, final String qrLink) {
+    public static void prepareTestSheet(final TesterContext tc) {
         try {
-            ImageTests.prepareQRCodeImage(tc, qrLink);
+            ImageTests.prepareQRCodeImage(tc);
 
             prepareJFreeChartSample(tc);
 
@@ -263,9 +264,10 @@ public class Tester {
      *
      * @param tc
      * @param g2  the graphics target.
-     * @param g2UnderTest  a description of the Graphics2D implementation under test.
      */
-    private static void drawTestSheet(final TesterContext tc, final Graphics2D g2, final String g2UnderTest) {
+    private static void drawTestSheet(final TesterContext tc, final Graphics2D g2) {
+        // System.out.println("drawTestSheet: in ------");
+
         int row = -1;
         Rectangle2D bounds = new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT);
 
@@ -288,7 +290,7 @@ public class Tester {
 
         row++;
         moveTo(7, row, g2);
-        drawTestProperties(g2, g2UnderTest);
+        drawTestProperties(g2, tc.g2UnderTest);
         row--;
 
         // QR CODE AT RIGHT SIDE
@@ -843,27 +845,30 @@ public class Tester {
         Rectangle2D imageBounds = new Rectangle2D.Double(0, 0, TILE_WIDTH * 3, TILE_WIDTH * 2);
         ImageTests.drawImage(tc, g2, imageBounds, 5);
 
-        moveTo(4, row, g2);
-        imageBounds = new Rectangle2D.Double(0, 0, TILE_WIDTH * 3, TILE_WIDTH * 2);
-        Shape saved = g2.getClip();
-        g2.clip(new Ellipse2D.Double(15, 15, TILE_WIDTH * 3 - 30, TILE_WIDTH * 2 - 30));
-        ImageTests.drawImage(tc, g2, imageBounds, 5);
-        g2.setClip(saved);
+        if (DO_CLIP) {
+            moveTo(4, row, g2);
+            imageBounds = new Rectangle2D.Double(0, 0, TILE_WIDTH * 3, TILE_WIDTH * 2);
+            Shape savedClip = g2.getClip();
+            g2.clip(new Ellipse2D.Double(15, 15, TILE_WIDTH * 3 - 30, TILE_WIDTH * 2 - 30));
+            ImageTests.drawImage(tc, g2, imageBounds, 5);
+            g2.setClip(savedClip);
 
-        moveTo(8, row, g2);
-        imageBounds = new Rectangle2D.Double(0, 0, TILE_WIDTH * 3, TILE_WIDTH * 2);
-        AffineTransform savedTransform = g2.getTransform();
-        Shape savedClip = g2.getClip();
-        g2.clip(imageBounds);
-        g2.translate(TILE_WIDTH * 1.5, TILE_WIDTH);
-        g2.rotate(Math.PI / 4);
-        g2.translate(-TILE_WIDTH * 1.5, -TILE_WIDTH);
-        ImageTests.drawImage(tc, g2, imageBounds, 5);
-        g2.setClip(savedClip);
-        g2.setTransform(savedTransform);
-
+            moveTo(8, row, g2);
+            imageBounds = new Rectangle2D.Double(0, 0, TILE_WIDTH * 3, TILE_WIDTH * 2);
+            AffineTransform savedTransform = g2.getTransform();
+            savedClip = g2.getClip();
+            g2.clip(imageBounds);
+            g2.translate(TILE_WIDTH * 1.5, TILE_WIDTH);
+            g2.rotate(Math.PI / 4);
+            g2.translate(-TILE_WIDTH * 1.5, -TILE_WIDTH);
+            ImageTests.drawImage(tc, g2, imageBounds, 5);
+            g2.setClip(savedClip);
+            g2.setTransform(savedTransform);
+        }
         moveTo(TILE_COUNT_H - 2, 20, g2);
         drawSwingUI(tc.frame, g2);
+
+        // System.out.println("drawTestSheet: out ------");
     }
 
     /**
@@ -905,17 +910,19 @@ public class Tester {
      * Renders the test output (checks whether generating the whole test
      * sheet or just one single test).
      *
+     * @param g2UnderTest  a description of the Graphics2D implementation under test.
      * @param qrLink  the link text to put in the QR code
      * @param single  set to true if just generating a single test
      * @return TesterContext instance
      */
-    public static TesterContext prepareTestOutput(final String qrLink, boolean single) {
-        final TesterContext tc = new TesterContext();
-        if (single) {
+    public static TesterContext prepareTestOutput(final String g2UnderTest, final String qrLink, final boolean single) {
+        final TesterContext tc = new TesterContext(g2UnderTest, qrLink, single);
+        if (tc.single) {
             prepareTestSingle(tc);
         } else {
-            prepareTestSheet(tc, qrLink);
+            prepareTestSheet(tc);
         }
+        System.out.println("DO_CLIP: " + DO_CLIP);
         return tc;
     }
 
@@ -925,14 +932,12 @@ public class Tester {
      *
      * @param tc  the tester context.
      * @param g2  the graphics target.
-     * @param g2UnderTest  a description of the Graphics2D implementation under test.
-     * @param single  set to true if just generating a single test
      */
-    public static void drawTestOutput(final TesterContext tc, final Graphics2D g2, final String g2UnderTest, boolean single) {
-        if (single) {
+    public static void drawTestOutput(final TesterContext tc, final Graphics2D g2) {
+        if (tc.single) {
             drawTestSingle(tc, g2);
         } else {
-            drawTestSheet(tc, g2, g2UnderTest);
+            drawTestSheet(tc, g2);
         }
     }
 
@@ -952,7 +957,9 @@ public class Tester {
             fileName += ".png";
         }
         // Prepare context:
-        final TesterContext tc = prepareTestOutput("Java2D/BufferedImage", single);
+        final TesterContext tc = prepareTestOutput(
+                "Java2D/BufferedImage",
+                "https://github.com/jfree", single);
 
         final int width = Tester.getTestSheetWidth();
         final int height = Tester.getTestSheetHeight();
@@ -963,13 +970,13 @@ public class Tester {
             final Graphics2D g2 = image.createGraphics();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
             g2.setBackground(Color.WHITE);
-            g2.clearRect(0, 0, i, i);
+            g2.clearRect(0, 0, width, height);
 
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             final long startTime = System.nanoTime();
 
             try {
-                drawTestOutput(tc, g2, "https://github.com/jfree", single);
+                drawTestOutput(tc, g2);
 
                 // Sync CPU / GPU:
                 Toolkit.getDefaultToolkit().sync();
@@ -982,7 +989,8 @@ public class Tester {
                     try {
                         ImageIO.write(image, "png", new File(fileName));
                     } catch (IOException e) {
-                        System.err.println(e);
+                        System.err.println(e.getMessage());
+                        e.printStackTrace(System.err);
                     }
                 }
             } finally {
@@ -1001,6 +1009,8 @@ public class Tester {
             }
         } catch (Exception e) {
             // just take the default look and feel
+            System.err.println(e.getMessage());
+            e.printStackTrace(System.err);
         }
 
         JPanel content = new JPanel(new BorderLayout());
@@ -1058,12 +1068,28 @@ public class Tester {
         System.exit(0);
     }
 
+    /**
+     * Basic container class to hold the test preparation state
+     */
     public final static class TesterContext {
 
+        // test case:
+        final String g2UnderTest;
+        String qrLink;
+        boolean single;
+
+        // preparation state
         JFrame frame;
         BufferedImage qrCodeImage;
         BufferedImage TRIUMPH_IMAGE;
         JFreeChart jfreeChart;
         Chart3D orsonChart;
+
+        TesterContext(final String g2UnderTest, final String qrLink, final boolean single) {
+            this.g2UnderTest = g2UnderTest;
+            this.qrLink = qrLink;
+            this.single = single;
+        }
     }
+
 }
