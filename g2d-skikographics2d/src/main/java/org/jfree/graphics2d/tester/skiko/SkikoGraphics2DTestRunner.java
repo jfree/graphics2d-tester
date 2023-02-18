@@ -34,7 +34,7 @@ public class SkikoGraphics2DTestRunner {
         }
         // Prepare context:
         final Tester.TesterContext tc = prepareTestOutput("JFree/SkikoGraphics2D (1.0.0)",
-                "https://github.com/jfree/skijagraphics2d", single);
+                "https://github.com/jfree/skikographics2d", single);
 
         final int width = Tester.getTestSheetWidth();
         final int height = Tester.getTestSheetHeight();
