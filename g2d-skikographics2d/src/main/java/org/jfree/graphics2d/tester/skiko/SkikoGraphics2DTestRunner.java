@@ -33,7 +33,8 @@ public class SkikoGraphics2DTestRunner {
             fileName += ".png";
         }
         // Prepare context:
-        final Tester.TesterContext tc = prepareTestOutput("JFree/SkikoGraphics2D (1.0.0)", single);
+        final Tester.TesterContext tc = prepareTestOutput("JFree/SkikoGraphics2D (1.0.0)",
+                "https://github.com/jfree/skijagraphics2d", single);
 
         final int width = Tester.getTestSheetWidth();
         final int height = Tester.getTestSheetHeight();
@@ -43,7 +44,7 @@ public class SkikoGraphics2DTestRunner {
             for (int i = 0; i < REPEATS; i++) {
                 final long startTime = System.nanoTime();
 
-                Tester.drawTestOutput(tc, g2, "jfree/skikographics2d", single);
+                Tester.drawTestOutput(tc, g2);
 
                 // Sync CPU / GPU:
                 final Surface surface = g2.getSurface();
@@ -62,8 +63,8 @@ public class SkikoGraphics2DTestRunner {
                     try {
                         java.nio.file.Path path = java.nio.file.Path.of(fileName);
                         java.nio.file.Files.write(path, pngBytes);
-                    } catch (IOException e) {
-                        System.err.println(e);
+                    } catch (IOException ioe) {
+                        throw new RuntimeException(ioe);
                     }
                 }
             }
@@ -75,13 +76,11 @@ public class SkikoGraphics2DTestRunner {
     /**
      * Creates Java2D output that exercises many features of the API.
      *
-     * @param args
+     * @param args the command line arguments (ignored)
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         boolean single = false;
         testSkikoGraphics2D("SkikoGraphics2D", single);
         System.exit(0);
     }
-
-
 }

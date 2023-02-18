@@ -262,8 +262,8 @@ public class Tester {
      * Draws a test sheet consisting of a number of tiles, each one testing one or
      * more features of Java2D and Graphics2D.
      *
-     * @param tc
-     * @param g2  the graphics target.
+     * @param tc the test context.
+     * @param g2 the graphics target.
      */
     private static void drawTestSheet(final TesterContext tc, final Graphics2D g2) {
         // System.out.println("drawTestSheet: in ------");
