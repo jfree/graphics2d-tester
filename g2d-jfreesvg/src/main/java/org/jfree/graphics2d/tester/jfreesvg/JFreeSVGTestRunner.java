@@ -25,7 +25,7 @@ public class JFreeSVGTestRunner {
 
         // Prepare context:
         final Tester.TesterContext tc = Tester.prepareTestOutput(
-                "JFree/SVGGraphics2D (5.0.4)",
+                "JFree/SVGGraphics2D (5.0.5)",
                 "https://github.com/jfree/jfreesvg", single);
 
         for (int i = 0; i < REPEATS; i++) {
@@ -45,12 +45,11 @@ public class JFreeSVGTestRunner {
     /**
      * Creates Java2D output that exercises many features of the API.
      *
-     * @param args
+     * @param args the command line arguments (ignored)
      */
     public static void main(String[] args) throws IOException {
         boolean single = false;
         testJFreeSVG("jfreesvg", single);
         System.exit(0);
     }
-
 }

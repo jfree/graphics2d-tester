@@ -198,13 +198,13 @@ public class Tester {
     }
 
     /**
-     * Creates a JFreeChart sample jfreeChart.
+     * Creates a JFreeChart instance to draw as test output.
      *
-     * @param dataset  the dataset.
+     * @param dataset the dataset.
      *
-     * @return A sample jfreeChart.
+     * @return A JFreeChart instance.
      */
-    private static JFreeChart createChart(FlowDataset dataset) {
+    private static JFreeChart createChart(FlowDataset<String> dataset) {
         FlowPlot plot = new FlowPlot(dataset);
         plot.setBackgroundPaint(Color.BLACK);
         plot.setDefaultNodeLabelPaint(Color.WHITE);
@@ -605,7 +605,7 @@ public class Tester {
         ShapeTests.fillAndStrokeShape(g2, roundRect, gp, null, null);
 
         // here we change the gradient to start one quarter of the way across the shape
-Co        // and finish at the three-quarter mark - the default should be non-cyclic
+        // and finish at the three-quarter mark - the default should be non-cyclic
         moveTo(1, row, g2);
         float p = TILE_WIDTH / 4.0f;
         GradientPaint gp2 = new GradientPaint(p, 0f, Color.YELLOW, p * 3, 0f, Color.RED);

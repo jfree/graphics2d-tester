@@ -13,7 +13,7 @@ public class Scenes {
     public static boolean stats = true;
 
     static {
-        scenes = new TreeMap<>(Comparator.comparing(s -> s.toLowerCase()));
+        scenes = new TreeMap<>(Comparator.comparing(String::toLowerCase));
         scenes.put("Empty", null);
         scenes.put("SkijaGraphics2DTest", null);
         setScene(currentScene);

@@ -70,7 +70,7 @@ public class SkijaGraphics2DTestRunner {
     /**
      * Creates Java2D output that exercises many features of the API.
      *
-     * @param args
+     * @param args ignored
      */
     public static void main(String[] args) throws IOException {
         boolean single = false;
