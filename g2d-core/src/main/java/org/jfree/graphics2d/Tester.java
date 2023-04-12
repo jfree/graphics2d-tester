@@ -517,7 +517,7 @@ public class Tester {
         moveTo(5, row, g2);
         ShapeTests.fillAndStrokeShape(g2, areaIntersect, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
 
-        row++; // ***** Area - intersect
+        row++; // ***** Area - subtract
         Area areaSubtract = ShapeTests.createCombinedArea("subtract", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
         moveTo(0, row, g2);
         ShapeTests.fillAndStrokeShape(g2, areaSubtract, Color.BLUE, null, null);
@@ -532,7 +532,7 @@ public class Tester {
         moveTo(5, row, g2);
         ShapeTests.fillAndStrokeShape(g2, areaSubtract, Color.LIGHT_GRAY, OUTLINE_3, Color.BLACK);
 
-        row++; // ***** Area - intersect
+        row++; // ***** Area - XOR
         Area areaXOR = ShapeTests.createCombinedArea("exclusiveOr", new Rectangle2D.Double(0.0, 0.0, TILE_WIDTH, TILE_HEIGHT), 5.0);
         moveTo(0, row, g2);
         ShapeTests.fillAndStrokeShape(g2, areaXOR, Color.BLUE, null, null);
@@ -605,7 +605,7 @@ public class Tester {
         ShapeTests.fillAndStrokeShape(g2, roundRect, gp, null, null);
 
         // here we change the gradient to start one quarter of the way across the shape
-        // and finish at the three quarter mark - the default should be non-cyclic
+Co        // and finish at the three-quarter mark - the default should be non-cyclic
         moveTo(1, row, g2);
         float p = TILE_WIDTH / 4.0f;
         GradientPaint gp2 = new GradientPaint(p, 0f, Color.YELLOW, p * 3, 0f, Color.RED);
