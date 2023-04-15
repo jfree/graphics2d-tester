@@ -6,22 +6,9 @@
 package org.jfree.graphics2d;
 
 import eu.hansolo.steelseries.gauges.Radial;
-import java.awt.AlphaComposite;
-import java.awt.BasicStroke;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.GradientPaint;
-import java.awt.Graphics2D;
-import java.awt.LinearGradientPaint;
-import java.awt.MultipleGradientPaint;
-import java.awt.RadialGradientPaint;
-import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.Stroke;
-import java.awt.Toolkit;
+
+import java.awt.*;
+
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.flow.FlowPlot;
 import org.jfree.chart.title.TextTitle;
@@ -76,7 +63,7 @@ public class Tester {
 
     private static final int TILE_COUNT_H = 11;
 
-    private static final int TILE_COUNT_V = 33;
+    private static final int TILE_COUNT_V = 34;
 
     private static final int TILE_WIDTH = 100;
 
@@ -681,6 +668,37 @@ public class Tester {
         moveTo(5, row, g2);
         RadialGradientPaint rgp6 = new RadialGradientPaint(center, (float) (TILE_HEIGHT / 2.0 - 5), focus, new float[]{0.0f, 0.75f, 1.0f}, new Color[]{Color.YELLOW, Color.RED, Color.LIGHT_GRAY}, MultipleGradientPaint.CycleMethod.REFLECT);
         ShapeTests.fillAndStrokeShape(g2, roundRect, rgp6, null, null);
+
+        row++;  // ***** TexturePaint
+        moveTo(0, row, g2);
+        int w = 5;
+        int h = 3;
+        BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        Graphics2D tpg = image.createGraphics();
+        tpg.setColor(Color.YELLOW);
+        tpg.drawLine(0, 0, w - 1, 0);
+        tpg.drawLine(0, 0, 0, h - 1);
+        tpg.setColor(Color.RED);
+        tpg.drawLine(1, h - 1, w - 1, h - 1);
+        tpg.drawLine(w - 1, 1, w - 1, h - 1);
+        Paint tp = new TexturePaint(image, new Rectangle(5, 5, w, h));
+        ShapeTests.fillAndStrokeShape(g2, rect, tp, null, null);
+
+        moveTo(1, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, roundRect, tp, null, null);
+
+        moveTo(2, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, ellipse, tp, new BasicStroke(1.0f), Color.BLACK);
+
+        moveTo(3, row, g2);
+        tp = new TexturePaint(image, new Rectangle(0, 0, w * 2, h * 2));
+        ShapeTests.fillAndStrokeShape(g2, rect, tp, null, null);
+
+        moveTo(4, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, roundRect, tp, null, null);
+
+        moveTo(5, row, g2);
+        ShapeTests.fillAndStrokeShape(g2, ellipse, tp, new BasicStroke(2.0f), Color.BLACK);
 
         row++; // ***** TRANSLATION
         moveTo(0, row, g2);
