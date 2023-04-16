@@ -1,7 +1,7 @@
 /**
- * Graphics2D Tester
+ * JFree Graphics2D Tester
  *
- * (C)opyright 2021, 2022, by David Gilbert.
+ * (C)opyright 2021-2023, by David Gilbert.
  */
 package org.jfree.graphics2d;
 

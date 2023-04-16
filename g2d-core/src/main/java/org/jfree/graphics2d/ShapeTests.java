@@ -1,27 +1,15 @@
 /**
- * Graphics2D Tester
- *
- * (C)opyright 2021, 2022, by David Gilbert.
+ * JFree Graphics2D Tester
+ * <p>
+ * (C)opyright 2021-2023, by David Gilbert.
  */
 package org.jfree.graphics2d;
 
-import java.awt.AlphaComposite;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Paint;
-import java.awt.Shape;
-import java.awt.Stroke;
-import java.awt.geom.Arc2D;
-import java.awt.geom.Area;
-import java.awt.geom.CubicCurve2D;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.QuadCurve2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.*;
+import java.awt.geom.*;
+
+import static java.awt.BasicStroke.*;
+import static java.awt.Color.*;
 
 /**
  * Tests relating to drawing and filling shapes.
@@ -31,9 +19,8 @@ public class ShapeTests {
     /**
      * Creates a sample {@code QuadCurve2D} instance fitting within the specified bounds.
      *
-     * @param bounds  the bounds.
-     * @param margin  the margin.
-     *
+     * @param bounds the bounds.
+     * @param margin the margin.
      * @return A sample {@code QuadCurve2D}.
      */
     static QuadCurve2D createQuadCurve2D1(Rectangle2D bounds, double margin) {
@@ -48,9 +35,8 @@ public class ShapeTests {
     /**
      * Creates a quad curve instance (in this case, occupying only the top half of the bounds).
      *
-     * @param bounds  the bounds.
-     * @param margin  the margin.
-     *
+     * @param bounds the bounds.
+     * @param margin the margin.
      * @return A quad curve.
      */
     static QuadCurve2D createQuadCurve2D2(Rectangle2D bounds, double margin) {
@@ -65,9 +51,8 @@ public class ShapeTests {
     /**
      * Creates a sample {@code CubicCurve2D} instance fitting within the specified bounds.
      *
-     * @param bounds  the bounds.
-     * @param margin  the margin.
-     *
+     * @param bounds the bounds.
+     * @param margin the margin.
      * @return A sample {@code CubicCurve2D}.
      */
     static CubicCurve2D createCubicCurve2D(Rectangle2D bounds, double margin) {
@@ -86,12 +71,12 @@ public class ShapeTests {
     /**
      * Fill and/or strokes a QuadCurve2D instance.
      *
-     * @param g2  the graphics target.
-     * @param bounds  the bounds.
-     * @param margin  the margin.
-     * @param paint  the fill paint (no fill if {@code null}).
-     * @param stroke  the outline stroke (no outline if {@code null}).
-     * @param outlinePaint  the outline paint (no outline if {@code null}).
+     * @param g2 the graphics target.
+     * @param bounds the bounds.
+     * @param margin the margin.
+     * @param paint the fill paint (no fill if {@code null}).
+     * @param stroke the outline stroke (no outline if {@code null}).
+     * @param outlinePaint the outline paint (no outline if {@code null}).
      */
     static void fillAndStrokeQuadCurve2D(Graphics2D g2, Rectangle2D bounds, double margin, Paint paint, Stroke stroke, Paint outlinePaint) {
         double w = bounds.getWidth();
@@ -100,9 +85,9 @@ public class ShapeTests {
         Point2D pt1 = new Point2D.Double(w - margin, h - margin);
         Point2D cp = new Point2D.Double(w / 2.0, margin);
 
-        // draw guide lines
+        // draw guidelines
         g2.setStroke(new BasicStroke(0.5f));
-        g2.setPaint(Color.GRAY);
+        g2.setPaint(GRAY);
         g2.drawLine((int) pt0.getX(), (int) pt0.getY(), (int) cp.getX(), (int) cp.getY());
         g2.drawLine((int) pt1.getX(), (int) pt1.getY(), (int) cp.getX(), (int) cp.getY());
         QuadCurve2D curve = new QuadCurve2D.Double(pt0.getX(), pt0.getY(), cp.getX(), cp.getY(), pt1.getX(), pt1.getY());
@@ -120,12 +105,12 @@ public class ShapeTests {
     /**
      * Fill and/or strokes a CubicCurve2D instance.
      *
-     * @param g2  the graphics target.
-     * @param bounds  the bounds.
-     * @param margin  the margin.
-     * @param paint  the fill paint (no fill if {@code null}).
-     * @param stroke  the outline stroke (no outline if {@code null}).
-     * @param outlinePaint  the outline paint (no outline if {@code null}).
+     * @param g2 the graphics target.
+     * @param bounds the bounds.
+     * @param margin the margin.
+     * @param paint the fill paint (no fill if {@code null}).
+     * @param stroke the outline stroke (no outline if {@code null}).
+     * @param outlinePaint the outline paint (no outline if {@code null}).
      */
     static void fillAndStrokeCubicCurve2D(Graphics2D g2, Rectangle2D bounds, double margin, Paint paint, Stroke stroke, Paint outlinePaint) {
         double w = bounds.getWidth();
@@ -138,7 +123,7 @@ public class ShapeTests {
 
         // draw guide lines
         g2.setStroke(new BasicStroke(0.5f));
-        g2.setPaint(Color.GRAY);
+        g2.setPaint(GRAY);
         g2.drawLine((int) pt0.getX(), (int) pt0.getY(), (int) cp1.getX(), (int) cp1.getY());
         g2.drawLine((int) pt1.getX(), (int) pt1.getY(), (int) cp2.getX(), (int) cp2.getY());
 
@@ -158,12 +143,11 @@ public class ShapeTests {
     /**
      * Creates an Arc2D instance with the specified style.
      *
-     * @param style  the arc style.
-     * @param start  the start angle.
-     * @param extent  the arc extent.
-     * @param bounds  the bounds.
-     * @param margin  the margin.
-     *
+     * @param style the arc style.
+     * @param start the start angle.
+     * @param extent the arc extent.
+     * @param bounds the bounds.
+     * @param margin the margin.
      * @return An Arc2D instance.
      */
     static Arc2D createArc2D(int style, double start, double extent, Rectangle2D bounds, int margin) {
@@ -173,11 +157,11 @@ public class ShapeTests {
     /**
      * Draws a shape with the specified stroke and fill.
      *
-     * @param g2  the graphics target
-     * @param shape  the shape ({@code null} not permitted)
-     * @param paint  the paint (if {@code null}, then the shape is not filled).
-     * @param stroke  the stroke (if {@code null}, then the shape is not stroked).
-     * @param outlinePaint  the outline paint (if {@code null}, then the shape is not stroked).
+     * @param g2 the graphics target
+     * @param shape the shape ({@code null} not permitted)
+     * @param paint the paint (if {@code null}, then the shape is not filled).
+     * @param stroke the stroke (if {@code null}, then the shape is not stroked).
+     * @param outlinePaint the outline paint (if {@code null}, then the shape is not stroked).
      */
     static void fillAndStrokeShape(Graphics2D g2, Shape shape, Paint paint, Stroke stroke, Paint outlinePaint) {
         if (paint != null) {
@@ -194,11 +178,11 @@ public class ShapeTests {
     /**
      * Draws three lines with different CAP settings (BUTT, ROUND and SQUARE).
      *
-     * @param g2  the graphics target.
-     * @param bounds  the bounds.
-     * @param strokeWidth  the stroke width.
-     * @param margin  the margin.
-     * @param paint  the paint.
+     * @param g2 the graphics target.
+     * @param bounds the bounds.
+     * @param strokeWidth the stroke width.
+     * @param margin the margin.
+     * @param paint the paint.
      */
     public static void drawLineCaps(Graphics2D g2, Rectangle2D bounds, double margin, float strokeWidth, Paint paint) {
         g2.setPaint(paint);
@@ -207,12 +191,12 @@ public class ShapeTests {
         double left = bounds.getX() + 2 * margin;
         double right = bounds.getWidth() - 2 * margin;
         Line2D line = new Line2D.Double(left, midY - deltaY, right, midY - deltaY);
-        g2.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND));
+        g2.setStroke(new BasicStroke(strokeWidth, CAP_BUTT, JOIN_ROUND));
         g2.draw(line);
         line = new Line2D.Double(left, midY, right, midY);
-        g2.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+        g2.setStroke(new BasicStroke(strokeWidth, CAP_ROUND, JOIN_ROUND));
         g2.draw(line);
-        g2.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND));
+        g2.setStroke(new BasicStroke(strokeWidth, CAP_SQUARE, JOIN_ROUND));
         line = new Line2D.Double(left, midY + deltaY, right, midY + deltaY);
         g2.draw(line);
     }
@@ -220,12 +204,12 @@ public class ShapeTests {
     /**
      * Draws three lines with different CAP settings (BUTT, ROUND and SQUARE).
      *
-     * @param g2  the graphics target.
-     * @param bounds  the bounds.
-     * @param margin  the margin.
-     * @param strokeWidth  the stroke width.
-     * @param dashPhase  the dash phase for the stroke.
-     * @param paint  the color for the line.
+     * @param g2 the graphics target.
+     * @param bounds the bounds.
+     * @param margin the margin.
+     * @param strokeWidth the stroke width.
+     * @param dashPhase the dash phase for the stroke.
+     * @param paint the color for the line.
      */
     public static void drawLineCapAndDash(Graphics2D g2, Rectangle2D bounds, double margin, float strokeWidth, float[] dashPhase, Paint paint) {
         g2.setPaint(paint);
@@ -234,12 +218,12 @@ public class ShapeTests {
         double left = bounds.getX() + 2 * margin;
         double right = bounds.getWidth() - 2 * margin;
         Line2D line = new Line2D.Double(left, midY - deltaY, right, midY - deltaY);
-        g2.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 10f, dashPhase, 0f));
+        g2.setStroke(new BasicStroke(strokeWidth, CAP_BUTT, JOIN_ROUND, 10f, dashPhase, 0f));
         g2.draw(line);
         line = new Line2D.Double(left, midY, right, midY);
-        g2.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10f, dashPhase, 0f));
+        g2.setStroke(new BasicStroke(strokeWidth, CAP_ROUND, JOIN_ROUND, 10f, dashPhase, 0f));
         g2.draw(line);
-        g2.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND, 10f, dashPhase, 0f));
+        g2.setStroke(new BasicStroke(strokeWidth, CAP_SQUARE, JOIN_ROUND, 10f, dashPhase, 0f));
         line = new Line2D.Double(left, midY + deltaY, right, midY + deltaY);
         g2.draw(line);
     }
@@ -247,11 +231,11 @@ public class ShapeTests {
     /**
      * Draws a fan-out of lines to show line rendering.
      *
-     * @param g2  the graphics target.
-     * @param bounds  the bounds.
-     * @param margin  the margin.
-     * @param stroke  the line stroke.
-     * @param paint  the line color.
+     * @param g2 the graphics target.
+     * @param bounds the bounds.
+     * @param margin the margin.
+     * @param stroke the line stroke.
+     * @param paint the line color.
      */
     public static void drawLines(Graphics2D g2, Rectangle2D bounds, double margin, Stroke stroke, Paint paint) {
         double maxX = bounds.getWidth() - margin;
@@ -272,10 +256,9 @@ public class ShapeTests {
     /**
      * Creates an area from two shapes.
      *
-     * @param operation  the operation ("add", "intersect", "subtract" or "exclusiveOr")
-     * @param bounds  the bounds (controls the size of the shapes).
-     * @param margin  the margin.
-     *
+     * @param operation the operation ("add", "intersect", "subtract" or "exclusiveOr")
+     * @param bounds the bounds (controls the size of the shapes).
+     * @param margin the margin.
      * @return An area.
      */
     static Area createCombinedArea(String operation, Rectangle2D bounds, double margin) {
@@ -308,7 +291,7 @@ public class ShapeTests {
                 a1.exclusiveOr(a2);
                 break;
             default:
-            // do nothing
+                // do nothing
         }
         return a1;
     }
@@ -316,9 +299,8 @@ public class ShapeTests {
     /**
      * Creates a path that is used for some tests.
      *
-     * @param bounds  the cell bounds.
-     * @param margin  the margin.
-     *
+     * @param bounds the cell bounds.
+     * @param margin the margin.
      * @return A new path instance.
      */
     static Path2D createPath2D(Rectangle2D bounds, double margin) {
@@ -360,11 +342,11 @@ public class ShapeTests {
         Rectangle2D rectangle = new Rectangle2D.Double(bounds.getWidth() - margin - w, bounds.getHeight() - margin - h, w, h);
 
         g2.setComposite(AlphaComposite.SrcOver);
-        g2.setPaint(Color.RED);
+        g2.setPaint(RED);
         g2.fill(ellipse);
 
         g2.setComposite(ac);
-        g2.setPaint(Color.BLUE);
+        g2.setPaint(BLUE);
         g2.fill(rectangle);
     }
 

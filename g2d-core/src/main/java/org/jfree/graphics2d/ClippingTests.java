@@ -1,16 +1,18 @@
 /**
- * Graphics2D Tester
+ * JFree Graphics2D Tester
  *
- * (C)opyright 2021, 2022, by David Gilbert.
+ * (C)opyright 2021-2023, by David Gilbert.
  */
 package org.jfree.graphics2d;
 
-import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Rectangle2D;
+
+import static java.awt.Color.*;
+import static org.jfree.graphics2d.ShapeTests.createArc2D;
 
 /**
  * Checks for clipping operations.
@@ -33,23 +35,23 @@ public class ClippingTests {
 
         // set a region in the top left
         g2.clipRect(margin, margin, (int) (w / 2) - margin, (int) (h / 2) - margin);
-        g2.setPaint(Color.BLUE);
+        g2.setPaint(BLUE);
         g2.fill(new Rectangle2D.Double(0.0, 0.0, w, h));
 
         if (Tester.DO_CLIP) {
             // set a region in the bottom right
             g2.setClip(new Rectangle2D.Double(w / 2, h / 2, w / 2 - margin, h / 2 - margin));
-            g2.setPaint(Color.RED);
+            g2.setPaint(RED);
             g2.fill(new Rectangle2D.Double(0.0, 0.0, w, h));
 
             // set a region in the top right
             g2.setClip((int) (w / 2), margin, (int) (w / 2) - margin, (int) (h / 2) - margin);
-            g2.setPaint(new GradientPaint(0f, 0f, Color.YELLOW, (float) w, (float) h, Color.GREEN));
+            g2.setPaint(new GradientPaint(0f, 0f, YELLOW, (float) w, (float) h, GREEN));
             g2.fill(new Rectangle2D.Double(0.0, 0.0, w, h));
 
             // set a region in the bottom left
             g2.setClip(new Rectangle2D.Double(margin, h / 2, w / 2 - margin, h / 2 - margin));
-            g2.setPaint(new GradientPaint((float) w, 0f, Color.YELLOW, (float) -w, (float) h, Color.GRAY));
+            g2.setPaint(new GradientPaint((float) w, 0f, YELLOW, (float) -w, (float) h, GRAY));
             g2.fill(new Rectangle2D.Double(0.0, 0.0, w, h));
         }
         g2.setClip(savedClip);
@@ -65,10 +67,10 @@ public class ClippingTests {
     static void drawArc2DWithRectangularClip(Graphics2D g2, Rectangle2D bounds, int margin) {
         Shape savedClip = g2.getClip();
         g2.clipRect(margin + 10, margin + 10, (int) bounds.getWidth() - 2 * (margin + 10), (int) bounds.getHeight() - 2 * (margin + 10));
-        Arc2D arc = ShapeTests.createArc2D(Arc2D.PIE, 45, 270, bounds, margin);
-        g2.setPaint(Color.DARK_GRAY);
+        Arc2D arc = createArc2D(Arc2D.PIE, 45, 270, bounds, margin);
+        g2.setPaint(DARK_GRAY);
         g2.fill(arc);
-        g2.setPaint(Color.RED);
+        g2.setPaint(RED);
         g2.draw(arc);
         g2.setClip(savedClip);
     }
