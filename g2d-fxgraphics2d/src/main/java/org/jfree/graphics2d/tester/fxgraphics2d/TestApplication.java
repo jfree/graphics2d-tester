@@ -43,7 +43,7 @@ public class TestApplication extends Application {
 
             // Prepare context:
             this.tc = Tester.prepareTestOutput(
-                    "JFree/FXGraphics2D (2.1.4)",
+                    "JFree/FXGraphics2D (2.1.5)",
                     "https://github.com/jfree/fxgraphics2d", single);
         }
 
