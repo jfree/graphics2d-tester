@@ -38,6 +38,7 @@ import java.awt.geom.QuadCurve2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.VolatileImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -959,33 +960,94 @@ public class Tester {
         }
     }
 
+    private interface G2DProvider {
+
+        void create(int width, int height);
+
+        Graphics2D createGraphics();
+
+        BufferedImage getSnapshot();
+
+        String getName();
+    }
+
+    private final static class BufferedImageG2DProvider implements G2DProvider {
+        public final static G2DProvider INSTANCE =  new BufferedImageG2DProvider();
+        private BufferedImage image = null;
+
+        @Override
+        public void create(int width, int height) {
+            this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        }
+
+        @Override
+        public Graphics2D createGraphics() {
+            return image.createGraphics();
+        }
+
+        @Override
+        public BufferedImage getSnapshot() {
+            return image;
+        }
+
+        @Override
+        public String getName() {
+            return "Java2D-BufferedImage";
+        }
+    }
+
+    private final static class VolatileImageG2DProvider implements G2DProvider {
+        public static final G2DProvider INSTANCE =  new VolatileImageG2DProvider();
+        private final static GraphicsConfiguration gc =
+                GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+
+        private VolatileImage image = null;
+
+        VolatileImageG2DProvider() {}
+
+        @Override
+        public void create(int width, int height) {
+            this.image = gc.createCompatibleVolatileImage(width, height, Transparency.TRANSLUCENT);
+        }
+
+        @Override
+        public Graphics2D createGraphics() {
+            return image.createGraphics();
+        }
+
+        @Override
+        public BufferedImage getSnapshot() {
+            return image.getSnapshot();
+        }
+
+        @Override
+        public String getName() {
+            return "Java2D-VolatileImage";
+        }
+    }
+
     /**
      * Run the tests with a Graphics2D from a Java2D BufferedImage and save
      * the results to the specified file.
      *
-     * @param fileName  the PNG file name.
-     * @param single  set to true if just generating a single test
-     *
      * @throws IOException if there is an I/O problem.
      */
-    private static void testJava2D(String fileName, boolean single) throws IOException {
-        if (single) {
-            fileName += "-single.png";
-        } else {
-            fileName += ".png";
-        }
+    private static void testJava2D(G2DProvider provider) throws IOException {
+        final String test = provider.getName();
+        final String fileName = test + ".png";
+
         // Prepare context:
         final TesterContext tc = prepareTestOutput(
-                "Java2D/BufferedImage",
-                "https://github.com/jfree", single);
+                provider.getName(),
+                "https://github.com/jfree", false);
 
         final int width = Tester.getTestSheetWidth();
         final int height = Tester.getTestSheetHeight();
 
-        final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        provider.create(width, height);
 
         for (int i = 0; i < REPEATS; i++) {
-            final Graphics2D g2 = image.createGraphics();
+            final Graphics2D g2 = provider.createGraphics();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
             g2.setBackground(Color.WHITE);
             g2.clearRect(0, 0, width, height);
@@ -1001,9 +1063,10 @@ public class Tester {
                 // image is ready
 
                 final double elapsedTime = 1e-6d * (System.nanoTime() - startTime);
-                System.out.println("drawTestOutput(Java2D) duration = " + elapsedTime + " ms.");
+                System.out.println("drawTestOutput("+test+") duration = " + elapsedTime + " ms.");
 
                 if (i == 0) {
+                    final BufferedImage image = provider.getSnapshot();
                     try {
                         ImageIO.write(image, "png", new File(fileName));
                     } catch (IOException e) {
@@ -1014,7 +1077,7 @@ public class Tester {
             } finally {
                 g2.dispose();
             }
-        }
+        } // loop
     }
 
     private static JComponent createContent() {
@@ -1081,8 +1144,9 @@ public class Tester {
         // ensure no hi-dpi to ensure scale = 1.0:
         System.out.println("Use 'java -Dsun.java2d.uiScale=1.0 ...' ");
 
-        boolean single = false;
-        testJava2D("java2D", single);
+        testJava2D(BufferedImageG2DProvider.INSTANCE);
+        testJava2D(VolatileImageG2DProvider.INSTANCE);
+
         System.exit(0);
     }
 
