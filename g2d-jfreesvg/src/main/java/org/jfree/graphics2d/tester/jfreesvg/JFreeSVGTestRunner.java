@@ -25,7 +25,7 @@ public class JFreeSVGTestRunner {
 
         // Prepare context:
         final Tester.TesterContext tc = Tester.prepareTestOutput(
-                "JFree/SVGGraphics2D (5.0.5)",
+                "JFree/SVGGraphics2D (5.0.7)",
                 "https://github.com/jfree/jfreesvg", single);
 
         for (int i = 0; i < REPEATS; i++) {
